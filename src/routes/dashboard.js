@@ -5,8 +5,6 @@ import {Link} from 'react-static'
 import Ink from 'react-ink'
 import {Col, Row, Icon} from 'antd'
 
-import Dashboard from '../components/Dashboard'
-
 import {logout} from '../ducks/user'
 
 const Menu = styled.div`
@@ -54,7 +52,7 @@ const MenuItem = ({to = '/', onClick, icon, title, style, s = 12}) => (
 )
 
 const Landing = ({username, logout}) => (
-  <Dashboard>
+  <div>
     <h1>ผู้ทำรายการ: {username}</h1>
 
     <Row gutter={32} style={{marginTop: '1.5em'}}>
@@ -78,7 +76,7 @@ const Landing = ({username, logout}) => (
     <Row gutter={32} style={{marginTop: '1em'}}>
       <MenuItem onClick={logout} icon="logout" title="ออกจากระบบ" />
     </Row>
-  </Dashboard>
+  </div>
 )
 
 const mapStateToProps = state => ({
