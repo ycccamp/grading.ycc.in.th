@@ -3,7 +3,7 @@ import {extractCritical} from 'emotion-server'
 
 import webpack from './webpack.config.js'
 
-const siteRoot = 'https://auto-transact.firebaseapp.com'
+const siteRoot = 'https://jwcx-grading.netlify.com'
 
 class Document extends Component {
   render() {
@@ -30,7 +30,7 @@ export default {
   webpack,
   siteRoot,
   getSiteProps: () => ({
-    title: 'Auto Transact',
+    title: 'JWCx Grading',
     siteRoot,
   }),
   getRoutes: async () => [
