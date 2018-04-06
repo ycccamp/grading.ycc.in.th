@@ -1,11 +1,11 @@
 import React from 'react'
 
 import Container from '../components/Container'
-import {Total, Filter, Record} from '../components/Members'
+import {Total, Filter, Record} from '../components/Campers'
 
-const Members = () => (
+const Campers = () => (
   <div>
-    <h1>สมาชิกทั้งหมด</h1>
+    <h1>ผู้สมัครทั้งหมด</h1>
     <Total />
 
     <Container>
@@ -16,4 +16,4 @@ const Members = () => (
   </div>
 )
 
-export default Members
+export default Campers

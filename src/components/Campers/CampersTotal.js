@@ -2,7 +2,7 @@ import React from 'react'
 
 import {TotalContainer, Title, Currency} from '../Total'
 
-const MembersTotal = () => (
+const CampersTotal = () => (
   <TotalContainer>
     <Title>ยอดสรุป</Title>
     <div>
@@ -11,4 +11,4 @@ const MembersTotal = () => (
   </TotalContainer>
 )
 
-export default MembersTotal
+export default CampersTotal

@@ -47,6 +47,10 @@ export default {
       component: 'src/routes/campers',
     },
     {
+      path: '/grading',
+      component: 'src/routes/grading',
+    },
+    {
       path: '/verify',
       component: 'src/routes/verify',
     },

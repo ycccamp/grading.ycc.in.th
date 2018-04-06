@@ -10,7 +10,7 @@ const FilterField = ({s = 8, label, style}) => (
   </Col>
 )
 
-const MembersFilter = () => (
+const CampersFilter = () => (
   <div>
     <Row gutter={16}>
       <FilterField label="ชื่อสมาชิก" />
@@ -28,4 +28,4 @@ const MembersFilter = () => (
   </div>
 )
 
-export default MembersFilter
+export default CampersFilter

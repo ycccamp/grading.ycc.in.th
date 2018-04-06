@@ -7,7 +7,11 @@ import user, {reauthSaga, userWatcherSaga} from './user'
 import member, {memberWatcherSaga} from './member'
 import filter, {filterWatcherSaga} from './filter'
 
-const config = {key: 'root', storage}
+const config = {
+  key: 'root',
+  storage,
+  throttle: 2000,
+}
 
 export const reducers = persistCombineReducers(config, {
   user,

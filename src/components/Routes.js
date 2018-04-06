@@ -9,6 +9,7 @@ import Layout from '../components/Dashboard'
 import Login from '../routes/login'
 import Dashboard from '../routes/dashboard'
 import Campers from '../routes/campers'
+import Grading from '../routes/grading'
 import NotFound from '../routes/404'
 
 import history from '../core/history'
@@ -23,24 +24,47 @@ const Page = styled.div`
   min-height: 100vh;
 `
 
+const Notice = styled.h1`
+  font-size: 2.8em;
+  font-weight: 500;
+
+  color: #555;
+  text-align: center;
+  width: 100%;
+`
+
+const graderRoles = ['core', 'design', 'marketing', 'programming', 'content']
+
+function getByRole(role) {
+  if (role === 'admin') {
+    return Dashboard
+  }
+
+  if (graderRoles.includes(role)) {
+    return Grading
+  }
+
+  return () => <Notice>สิทธิในการเข้าถึงไม่เพียงพอ</Notice>
+}
+
 const AuthRoutes = ({user}) => {
-  if (user.loading) {
+  if (user.uid) {
     return (
-      <Page>
-        <Spin size="large" />
-      </Page>
+      <Layout>
+        <Route path="/" component={getByRole(user.role)} exact />
+        <Route path="/campers" component={Campers} />
+      </Layout>
     )
   }
 
-  if (!user.uid) {
+  if (!user.loading) {
     return <Login />
   }
 
   return (
-    <Layout>
-      <Route path="/" component={Dashboard} exact />
-      <Route path="/campers" component={Campers} />
-    </Layout>
+    <Page>
+      <Spin size="large" />
+    </Page>
   )
 }
 

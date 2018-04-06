@@ -33,12 +33,12 @@ const fields = {
   },
 }
 
-const WithdrawRecord = ({members, ...props}) => (
-  <Records fields={fields} data={members} rowKey="id" {...props} />
+const WithdrawRecord = ({campers, ...props}) => (
+  <Records fields={fields} data={campers} rowKey="id" {...props} />
 )
 
 const mapStateToProps = state => ({
-  members: state.member.members,
+  campers: state.member.campers,
 })
 
 const enhance = connect(mapStateToProps)

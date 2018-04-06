@@ -11,59 +11,26 @@ import logo from '../assets/notebook.svg'
 
 import {logout} from '../ducks/user'
 
+import roleName from '../core/roles'
+
 const menus = [
   {
     title: 'ภาพรวม',
     path: '/',
     icon: 'dashboard',
+    role: 'admin',
   },
   {
-    title: 'รายการทั้งหมด',
-    icon: 'book',
-    children: [
-      {
-        title: 'รายการฝาก',
-        path: '/transactions/deposit',
-        icon: 'plus-square-o',
-      },
-      {
-        title: 'รายการถอน',
-        path: '/transactions/withdraw',
-        icon: 'minus-square-o',
-      },
-    ],
+    title: 'ตรวจคำถามสาขา',
+    path: '/',
+    icon: 'file-text',
+    role: 'grader',
   },
   {
-    title: 'ทำรายการ',
-    icon: 'wallet',
-    children: [
-      {
-        title: 'นำฝาก',
-        path: '/deposit',
-        icon: 'plus-square-o',
-      },
-      {
-        title: 'ถอนเงิน',
-        path: '/withdraw',
-        icon: 'minus-square-o',
-      },
-    ],
-  },
-  {
-    title: 'สมาชิก',
-    icon: 'team',
-    children: [
-      {
-        title: 'ข้อมูลสมาชิก',
-        path: '/members',
-        icon: 'contacts',
-      },
-      {
-        title: 'เพิ่มสมาชิก',
-        path: '/members/add',
-        icon: 'user-add',
-      },
-    ],
+    title: 'สรุปรายชื่อ',
+    path: '/campers',
+    icon: 'contacts',
+    role: 'grader',
   },
 ]
 
@@ -89,27 +56,12 @@ const MenuItem = ({path, icon, title}) => (
   </Link>
 )
 
-const SubMenuItem = ({icon, title}) => (
-  <span>
-    <Icon type={icon} />
-    <span>{title}</span>
-  </span>
-)
-
-const renderMenu = menu =>
-  menu.children ? (
-    <Menu.SubMenu key={menu.title} title={<SubMenuItem {...menu} />}>
-      {menu.children.map(renderMenuItem)}
-    </Menu.SubMenu>
-  ) : (
-    renderMenuItem(menu)
+const renderMenuItem = role => menu =>
+  menu.role === role && (
+    <Menu.Item key={menu.path}>
+      <MenuItem {...menu} />
+    </Menu.Item>
   )
-
-const renderMenuItem = menu => (
-  <Menu.Item key={menu.path}>
-    <MenuItem {...menu} />
-  </Menu.Item>
-)
 
 const Name = styled.div`
   color: #efefef;
@@ -126,29 +78,31 @@ class SideBar extends Component {
 
   render = () => {
     const {collapsed} = this.state
-    const {username, logout} = this.props
+    const {username, role = 'none', logout} = this.props
 
     return (
       <Sider collapsible collapsed={collapsed} onCollapse={this.handleCollapse}>
         <Logo src={logo} />
 
         <Name hidden={collapsed}>
-          ผู้ทำรายการ: <code>{username}</code>
+          <div>
+            <span>ชื่อผู้ใช้: </span>
+            <code>{username}</code>
+          </div>
+          <div>
+            <small>({roleName(role)})</small>
+          </div>
         </Name>
 
         <Menu theme="dark" defaultSelectedKeys={[path]} mode="inline">
-          {menus.map(renderMenu)}
+          {menus.map(renderMenuItem(role))}
 
-          <Menu.SubMenu
-            key={'/account'}
-            title={<SubMenuItem icon="idcard" title="บัญชีผู้ใช้" />}>
-            <Menu.Item key="logout">
-              <div onClick={() => logout()}>
-                <Icon type="logout" />
-                <span>ออกจากระบบ</span>
-              </div>
-            </Menu.Item>
-          </Menu.SubMenu>
+          <Menu.Item key="logout">
+            <div onClick={() => logout()}>
+              <Icon type="logout" />
+              <span>ออกจากระบบ</span>
+            </div>
+          </Menu.Item>
         </Menu>
       </Sider>
     )
@@ -157,6 +111,7 @@ class SideBar extends Component {
 
 const mapStateToProps = state => ({
   username: state.user.email && state.user.email.replace('@jwc.in.th', ''),
+  role: state.user.role,
 })
 
 const enhance = compose(connect(mapStateToProps, {logout}), withRouter)

@@ -15,7 +15,7 @@ const Input = ({label, placeholder = label, ...props}) => (
   </div>
 )
 
-const MemberForm = ({handleSubmit, admin}) => (
+const CamperForm = ({handleSubmit, admin}) => (
   <Form onSubmit={handleSubmit}>
     <Row gutter={16}>
       <Col span={12}>
@@ -111,4 +111,4 @@ const enhance = compose(
   reduxForm({form: 'member', validate}),
 )
 
-export default enhance(MemberForm)
+export default enhance(CamperForm)

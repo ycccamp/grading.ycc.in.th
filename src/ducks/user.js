@@ -5,7 +5,7 @@ import {untouch} from 'redux-form'
 import {takeEvery, call, put, fork, select} from 'redux-saga/effects'
 
 import {createReducer, Creator} from './helper'
-import {syncMembers} from './member'
+import {syncCampers} from './member'
 
 import rsf, {app} from '../core/fire'
 
@@ -47,7 +47,6 @@ export function* loginSaga({payload: {username, password}}) {
 
     yield call(hide)
     yield call(message.success, `${WelcomeNotice}, ${username}!`)
-
     yield fork(authRoutineSaga, user, true)
   } catch (err) {
     yield call(hide)
@@ -80,31 +79,25 @@ export function* logoutSaga() {
   }
 }
 
-const locationProps = R.pick(['lat', 'lon', 'isp'])
-
-export function* reportTelemetrySaga() {
-  const email = yield select(s => s.user.email)
-  const username = email.replace('@jwc.in.th', '')
-
-  const updatedAt = new Date()
-
-  const {data} = yield call(axios.get, 'http://ip-api.com/json')
-  const info = {ip: data.query, updatedAt, ...locationProps(data)}
-
-  const docRef = db.collection('telemetry').doc(username)
-  yield call(rsf.firestore.setDocument, docRef, info, {merge: true})
-
-  console.info('Telemetry Information Sent:', info)
-}
-
 // Routines to perform when the user begins or resumes their session
-export function* authRoutineSaga(user, isFreshLogin) {
-  yield put(storeUser(user))
-  yield put(syncMembers())
+export function* authRoutineSaga(user) {
+  try {
+    const docRef = db.collection('staffs').doc(user.uid)
+    const doc = yield call(rsf.firestore.getDocument, docRef)
 
-  // NOTE: Only perform telemetry update upon actual login
-  if (isFreshLogin) {
-    yield fork(reportTelemetrySaga)
+    if (!doc.exists) {
+      yield call(message.error, `ไม่พบข้อมูลสำหรับบัญชีของคุณในระบบ`)
+      return
+    }
+
+    // Merge the user's record with their credentials
+    const record = doc.data()
+    const data = {...userProps(user), ...record}
+
+    yield put(storeUser(data))
+    yield put(syncCampers())
+  } catch (err) {
+    message.error(err.message)
   }
 }
 
@@ -140,6 +133,6 @@ const initial = {
 
 export default createReducer(initial, state => ({
   [SET_LOADING]: loading => ({...state, loading}),
-  [STORE_USER]: user => user && userProps(user),
+  [STORE_USER]: user => user,
   [CLEAR_USER]: () => ({}),
 }))

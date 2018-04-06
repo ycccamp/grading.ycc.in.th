@@ -7,6 +7,8 @@ import {Col, Row, Icon} from 'antd'
 
 import {logout} from '../ducks/user'
 
+import roleName from '../core/roles'
+
 const Menu = styled.div`
   display: flex;
   align-items: center;
@@ -51,26 +53,15 @@ const MenuItem = ({to = '/', onClick, icon, title, style, s = 12}) => (
   </Col>
 )
 
-const Landing = ({username, logout}) => (
+const Landing = ({username, role = 'none', logout}) => (
   <div>
-    <h1>ผู้ทำรายการ: {username}</h1>
-
-    <Row gutter={32} style={{marginTop: '1.5em'}}>
-      <MenuItem to="/transactions/deposit" icon="book" title="รายการฝาก" />
-
-      <MenuItem to="/transactions/withdraw" icon="copy" title="รายการถอน" />
-    </Row>
+    <h1 style={{marginBottom: '1.5em'}}>
+      ผู้ใช้ปัจจุบัน: {username} ({roleName(role)})
+    </h1>
 
     <Row gutter={32} style={{marginTop: '1em'}}>
-      <MenuItem to="/deposit" icon="bank" title="นำฝาก" />
-
-      <MenuItem to="/withdraw" icon="wallet" title="ถอนเงิน" />
-    </Row>
-
-    <Row gutter={32} style={{marginTop: '1em'}}>
-      <MenuItem to="/members" icon="contacts" title="ข้อมูลสมาชิก" />
-
-      <MenuItem to="/members/add" icon="user-add" title="เพิ่มสมาชิก" />
+      <MenuItem to="/grading" icon="file-text" title="ตรวจคำถามสาขา" />
+      <MenuItem to="/campers" icon="contacts" title="สรุปรายชื่อ" />
     </Row>
 
     <Row gutter={32} style={{marginTop: '1em'}}>
@@ -81,6 +72,7 @@ const Landing = ({username, logout}) => (
 
 const mapStateToProps = state => ({
   username: state.user.email && state.user.email.replace('@jwc.in.th', ''),
+  role: state.user.role,
 })
 
 const enhance = connect(mapStateToProps, {logout})

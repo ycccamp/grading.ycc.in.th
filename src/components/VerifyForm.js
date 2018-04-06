@@ -8,7 +8,7 @@ import {TextField, TextAreaField} from 'redux-form-antd'
 
 import Button from '../components/Button'
 
-import {fetchMember, storeMember} from '../ducks/member'
+import {fetchCamper, storeCamper} from '../ducks/member'
 
 const Label = styled.div`
   color: #555;
@@ -102,13 +102,13 @@ const mapStateToProps = state => ({
 })
 
 const enhance = compose(
-  connect(mapStateToProps, {change, storeMember}),
+  connect(mapStateToProps, {change, storeCamper}),
   lifecycle({
     async componentDidMount() {
       const {id} = this.props
     },
     async componentDidUpdate(props) {
-      const {change, record, storeMember} = this.props
+      const {change, record, storeCamper} = this.props
 
       if (record.amount !== props.record.amount) {
         await change('verify', 'amountPromo', record.amount)
@@ -116,11 +116,11 @@ const enhance = compose(
 
       if (record.member !== props.record.member) {
         try {
-          const member = await fetchMember(record.member)
+          const member = await fetchCamper(record.member)
 
-          await storeMember(member)
+          await storeCamper(member)
         } catch (err) {
-          console.info('Member Lookup Error:', err)
+          console.info('Camper Lookup Error:', err)
         }
       }
     },
