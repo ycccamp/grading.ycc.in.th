@@ -51,6 +51,13 @@ const Code = styled.code`
   white-space: pre-wrap;
 `
 
+const Small = styled.small`
+  font-size: 0.65em;
+  margin-left: 0.35em;
+
+  text-transform: capitalize;
+`
+
 const imageStyle = css`
   position: relative;
   z-index: 2;
@@ -105,7 +112,10 @@ const PreviewAnswer = ({data, role, index}) => {
 
 const Grading = ({data, role}) => (
   <div>
-    <h1>ตรวจคำถาม</h1>
+    <h1>
+      <span>ตรวจคำถาม</span>
+      {role === 'core' && <Small> สาขา: {data.major}</Small>}
+    </h1>
 
     {getQuestions(role).map((item, index) => (
       <Card key={index}>
