@@ -71,7 +71,7 @@ const Landing = ({username, role = 'none', logout}) => (
 )
 
 const mapStateToProps = state => ({
-  username: state.user.name
+  username: state.user.name,
   role: state.user.role,
 })
 

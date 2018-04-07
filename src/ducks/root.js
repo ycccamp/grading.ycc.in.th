@@ -4,7 +4,7 @@ import {persistCombineReducers} from 'redux-persist'
 import {reducer as form} from 'redux-form'
 
 import user, {reauthSaga, userWatcherSaga} from './user'
-import camper, {camperWatcherSaga} from './camper'
+import camper, {camperWatcherSaga} from './campers'
 import filter, {filterWatcherSaga} from './filter'
 
 const config = {

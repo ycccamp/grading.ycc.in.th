@@ -5,7 +5,7 @@ import {untouch} from 'redux-form'
 import {takeEvery, call, put, fork, select} from 'redux-saga/effects'
 
 import {createReducer, Creator} from './helper'
-import {syncCampers} from './camper'
+import {syncCampers} from './campers'
 
 import rsf, {app} from '../core/fire'
 

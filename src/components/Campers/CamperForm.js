@@ -99,7 +99,7 @@ const validate = values => {
 
 const mapStateToProps = state => ({
   camper: state.camper,
-  admin: state.user.name
+  admin: state.user.name,
   initialValues: {
     note: '-',
     bank: 'scb',
