@@ -10,6 +10,8 @@ const Frame = styled.iframe`
   height: 100vh;
 
   border: none;
+  box-shadow: rgba(0, 0, 0, 0.13) 0px 1px 5.5px 2px;
+  margin-bottom: 2em;
 `
 
 export default class WebPreview extends Component {

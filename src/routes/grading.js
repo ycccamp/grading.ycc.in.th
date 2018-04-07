@@ -22,7 +22,7 @@ const Card = styled.section`
   margin-bottom: 1.5em;
 
   &:hover {
-    box-shadow: rgba(0, 0, 0, 0.18) 0px 3px 18.5px 2px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 9.5px 2px;
   }
 `
 
