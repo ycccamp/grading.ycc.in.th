@@ -27,7 +27,8 @@ const Card = styled.section`
 `
 
 const Question = styled.p`
-  font-size: 1.05em;
+  color: #666;
+  font-size: 0.98em;
 
   white-space: pre-line;
   word-break: break-word;
@@ -35,6 +36,7 @@ const Question = styled.p`
 `
 
 const Answer = styled.p`
+  color: #555;
   font-size: 1.28em;
   font-weight: bold;
   margin-bottom: 0;
