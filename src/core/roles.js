@@ -10,7 +10,8 @@ const roleNames = {
 
 const roleName = role => roleNames[role] || role
 
-const graderRoles = ['core', 'marketing', 'content', 'programming', 'design']
+export const majorRoles = ['marketing', 'content', 'programming', 'design']
+export const graderRoles = ['core', ...majorRoles]
 
 export const isGrader = role => graderRoles.includes(role)
 
