@@ -11,6 +11,7 @@ const config = {
   key: 'root',
   storage,
   throttle: 2000,
+  blacklist: ['user'],
 }
 
 export const reducers = persistCombineReducers(config, {

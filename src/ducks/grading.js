@@ -21,7 +21,6 @@ const db = app.firestore()
 // Fields: account bank fullname line note phone username
 export function* updateGradingSaga({payload}) {
   const name = yield select(s => s.user.name)
-  console.log('Updated Grading:', payload)
 
   payload.gradedAt = new Date()
   payload.gradedBy = name
@@ -32,16 +31,15 @@ export function* updateGradingSaga({payload}) {
 
     yield call(message.info, `Grading ${payload.username} is added.`)
   } catch (err) {
+    console.warn('Update Grading', err)
     message.error(err.message)
   }
 }
 
-const None = 'ไม่พบข้อมูล'
-
 export function* syncGradingSaga() {
-  const cols = db.collection('grading')
+  const records = db.collection('grading')
 
-  yield fork(rsf.firestore.syncCollection, cols, {
+  yield fork(rsf.firestore.syncCollection, records, {
     successActionCreator: storeGrading,
   })
 }

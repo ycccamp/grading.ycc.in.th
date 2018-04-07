@@ -47,7 +47,7 @@ export function* loginSaga({payload: {username, password}}) {
 
     yield call(hide)
     yield call(message.success, `${WelcomeNotice}, ${username}!`)
-    yield fork(authRoutineSaga, user, true)
+    yield fork(authRoutineSaga, user)
   } catch (err) {
     yield call(hide)
     yield put(untouch('login', 'username', 'password'))
@@ -68,11 +68,10 @@ export function* logoutSaga() {
 
   try {
     yield call(rsf.auth.signOut)
+    yield put(clearUser())
 
     yield call(hide)
     yield call(message.success, 'คุณได้ออกจากระบบเรียบร้อยแล้ว')
-
-    yield put(clearUser())
   } catch (err) {
     yield call(hide)
     message.error(err.message)
@@ -92,15 +91,19 @@ export function* authRoutineSaga(user) {
 
     // Merge the user's record with their credentials
     const record = doc.data()
+
     const data = {
-      name: user.name,
       ...userProps(user),
       ...record,
+      name: user.email.replace('@jwc.in.th', ''),
     }
 
     yield put(storeUser(data))
     yield put(syncCampers())
+
+    yield put(setLoading(false))
   } catch (err) {
+    console.warn('Authentication Routine Failed:', err)
     message.error(err.message)
   }
 }
@@ -118,12 +121,14 @@ export function* reauthSaga() {
     if (user) {
       yield call(message.info, `ยินดีต้อนรับกลับ, ${user.email}!`)
       yield fork(authRoutineSaga, user)
+
+      return
     }
   } catch (err) {
     message.warn(err.message)
-  } finally {
-    yield put(setLoading(false))
   }
+
+  yield put(setLoading(false))
 }
 
 export function* userWatcherSaga() {

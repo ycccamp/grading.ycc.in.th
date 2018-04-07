@@ -22,41 +22,10 @@ export const storeCampers = Creator(STORE_CAMPERS)
 
 const db = app.firestore()
 
-const None = 'ไม่พบข้อมูล'
-
-export async function fetchCamper(username, dispatch) {
-  let camper = {}
-
-  try {
-    const docRef = db.collection('campers').doc(username)
-    const snapshot = await docRef.get()
-
-    camper = {id: snapshot.id, ...snapshot.data()}
-  } catch (err) {
-    message.error(err.message)
-  }
-
-  console.log('Fetching Camper:', username, '->', camper)
-
-  if (!camper.name) {
-    message.warn('ไม่พบผู้สมัครดังกล่าวในระบบ')
-
-    await dispatch(storeCamper({name: None, account: None}))
-
-    throw {camper: 'ไม่พบผู้สมัครดังกล่าวในระบบ'}
-  }
-
-  if (dispatch) {
-    await dispatch(storeCamper(camper))
-  }
-
-  return camper
-}
-
 export function* syncCampersSaga() {
-  const cols = db.collection('campers')
+  const records = db.collection('campers')
 
-  yield fork(rsf.firestore.syncCollection, cols, {
+  yield fork(rsf.firestore.syncCollection, records, {
     successActionCreator: storeCampers,
   })
 }
