@@ -27,7 +27,7 @@ const fields = {
   totalScore: 'คะแนนเฉลี่ยรวม',
   updatedAt: {
     title: 'เวลาที่สมัคร',
-    render: text => text.toLocaleString(),
+    render: time => time && time.toLocaleString(),
   },
   action: {
     title: 'ตรวจให้คะแนน',

@@ -107,6 +107,15 @@ const PreviewAnswer = ({data, role, index}) => {
     )
   }
 
+  if (role === 'content' && index === 1) {
+    return (
+      <div>
+        <Answer>{data.majorAnswer2}</Answer>
+        <Answer style={{marginTop: '0.8em'}}>{data.majorAnswer3}</Answer>
+      </div>
+    )
+  }
+
   return <Answer>{answer}</Answer>
 }
 
