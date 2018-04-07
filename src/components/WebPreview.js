@@ -14,7 +14,7 @@ export default class WebPreview extends Component {
     return (
       <div>
         <Button style={{marginBottom: '1em'}} onClick={this.toggle}>
-          ดูผลลัพธ์ของเว็บไซต์
+          ดูผลลัพธ์ของโค้ด HTML
         </Button>
 
         {open && (

@@ -10,9 +10,8 @@ import roleOf from '../core/roles'
 const Submissions = ({graded, total, user}) => (
   <div>
     <h1>
-      <span>{roleOf(user.role)} </span>
       <span>
-        (ตรวจแล้ว {graded} จาก {total} คน)
+        รายชื่อตรวจคำถาม (ตรวจแล้ว {graded} จาก {total} คน)
       </span>
     </h1>
 

@@ -77,7 +77,7 @@ class SideBar extends Component {
 
   render = () => {
     const {collapsed} = this.state
-    const {username, role = 'none', logout} = this.props
+    const {username, nick, role = 'none', logout} = this.props
 
     return (
       <Sider collapsible collapsed={collapsed} onCollapse={this.handleCollapse}>
@@ -85,8 +85,9 @@ class SideBar extends Component {
 
         <Name hidden={collapsed}>
           <div>
-            <span>ชื่อผู้ใช้: </span>
+            <span>ผู้ใช้ปัจจุบัน: </span>
             <code>{username}</code>
+            <span> ({nick})</span>
           </div>
           <div>
             <small>({roleName(role)})</small>
@@ -110,6 +111,7 @@ class SideBar extends Component {
 
 const mapStateToProps = state => ({
   username: state.user.name,
+  nick: state.user.nick,
   role: state.user.role,
 })
 

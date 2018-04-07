@@ -15,9 +15,15 @@ const Card = styled.section`
 
   padding: 1.5em;
   background: white;
-  box-shadow: rgba(0, 0, 0, 0.18) 0px 3px 18.5px 2px;
+
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 1.5px 1px;
+  transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
 
   margin-bottom: 1.5em;
+
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 3px 18.5px 2px;
+  }
 `
 
 const Question = styled.p`
@@ -29,8 +35,9 @@ const Question = styled.p`
 `
 
 const Answer = styled.p`
-  font-size: 1.05em;
+  font-size: 1.28em;
   font-weight: bold;
+  margin-bottom: 0;
 
   white-space: pre-line;
   word-break: break-word;
