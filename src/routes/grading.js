@@ -3,7 +3,22 @@ import {connect} from 'react-redux'
 import {createSelector} from 'reselect'
 import styled from 'react-emotion'
 
+import WebPreview from '../components/WebPreview'
+
 import {getQuestions} from '../core/grading'
+
+const Card = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding: 1.5em;
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 3px 18.5px 2px;
+
+  margin-bottom: 1.5em;
+`
 
 const Question = styled.p`
   font-size: 1.05em;
@@ -35,17 +50,38 @@ function getAnswer(data, role, index) {
   return data[field]
 }
 
+const PreviewAnswer = ({data, role, index}) => {
+  const answer = getAnswer(data, role, index)
+
+  if (role === 'programming' && index === 2) {
+    return (
+      <div>
+        <WebPreview src={answer} />
+        <code>
+          <pre>{answer}</pre>
+        </code>
+      </div>
+    )
+  }
+
+  if (role === 'design' && index === 2) {
+    return <img src={answer} />
+  }
+
+  return <Answer>{answer}</Answer>
+}
+
 const Grading = ({data, role}) => (
   <div>
     <h1>ตรวจคำถาม</h1>
 
     {getQuestions(role).map((item, index) => (
-      <div key={index}>
+      <Card key={index}>
         <Question>
           {item.question} (Points: {item.max})
         </Question>
-        <Answer>{getAnswer(data, role, index)}</Answer>
-      </div>
+        <PreviewAnswer data={data} role={role} index={index} />
+      </Card>
     ))}
   </div>
 )
