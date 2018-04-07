@@ -1,7 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {createSelector} from 'reselect'
-import styled from 'react-emotion'
+import styled, {css} from 'react-emotion'
+import Image from 'react-medium-image-zoom'
 
 import WebPreview from '../components/WebPreview'
 
@@ -50,10 +51,19 @@ const Code = styled.code`
   white-space: pre-wrap;
 `
 
-const Image = styled.img`
+const imageStyle = css`
+  position: relative;
+  z-index: 2;
+
   width: 100%;
+  min-height: 500px;
   max-width: 100%;
-  box-shadow: rgba(0, 0, 0, 0.13) 0px 1px 5.5px 2px;
+
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+  box-shadow: 0 1px 1.5px 1px rgba(0, 0, 0, 0.12);
+
+  background-color: #fbfcff;
 `
 
 const coreFields = ['generalAnswer1', 'generalAnswer2', 'generalAnswer3']
@@ -82,7 +92,12 @@ const PreviewAnswer = ({data, role, index}) => {
   }
 
   if (role === 'design' && index === 2) {
-    return <Image src={answer} />
+    return (
+      <Image
+        image={{src: answer, className: imageStyle}}
+        imageZoom={{src: answer}}
+      />
+    )
   }
 
   return <Answer>{answer}</Answer>
