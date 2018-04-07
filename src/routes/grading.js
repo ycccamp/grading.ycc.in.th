@@ -46,6 +46,10 @@ const Answer = styled.p`
   word-wrap: break-word;
 `
 
+const Code = styled.code`
+  white-space: pre-wrap;
+`
+
 const coreFields = ['generalAnswer1', 'generalAnswer2', 'generalAnswer3']
 const majorFields = ['majorAnswer1', 'majorAnswer2', 'majorAnswer3']
 
@@ -66,9 +70,7 @@ const PreviewAnswer = ({data, role, index}) => {
     return (
       <div>
         <WebPreview src={answer} />
-        <code>
-          <pre>{answer}</pre>
-        </code>
+        <Code>{answer}</Code>
       </div>
     )
   }
