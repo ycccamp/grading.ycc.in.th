@@ -32,30 +32,28 @@ const maxScores = {
 
 const zipQuestion = R.zipWith((q, m) => ({question: q, max: m}))
 
-const getQuestions = (type = 'core') =>
-  zipQuestion(questions[type], maxScores[type])
-
-function assertMax(section, scores) {
+// Validate if all the given score is below the maximum score
+export function assertMax(scores, section = 'core') {
   const max = maxScores[section]
 
   for (const i in max) {
     if (scores[i] > max[i]) {
-      throw new Error('given score exceeds maximum score')
+      throw new Error('Given score cannot exceed maximum score.')
     }
   }
 }
 
-function average(results, section = 'core') {
-  // TODO: Filter out unfinished graders
+export const getQuestions = (type = 'core') =>
+  zipQuestion(questions[type], maxScores[type])
+
+const average = R.converge(R.divide, [R.sum, R.length])
+
+// TODO: Filter out unfinished graders
+function computeScore(results) {
   const scores = results.map(result => R.sum(result.scores))
-  assertMax(section, scores)
 
-  return R.sum(scores) / scores.length
+  return average(scores)
 }
 
-function finalScore(grade, camper) {
-  const core = average(grade.core)
-  const major = average(grade.major, camper.major)
-
-  return core + major
-}
+export const finalScore = grade =>
+  computeScore(grade.core) + computeScore(grade.major)
