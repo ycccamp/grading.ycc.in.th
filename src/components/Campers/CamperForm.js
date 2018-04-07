@@ -98,8 +98,8 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
-  member: state.member,
-  admin: state.user.email && state.user.email.replace('@jwc.in.th', ''),
+  camper: state.camper,
+  admin: state.user.name
   initialValues: {
     note: '-',
     bank: 'scb',
@@ -108,7 +108,7 @@ const mapStateToProps = state => ({
 
 const enhance = compose(
   connect(mapStateToProps),
-  reduxForm({form: 'member', validate}),
+  reduxForm({form: 'camper', validate}),
 )
 
 export default enhance(CamperForm)

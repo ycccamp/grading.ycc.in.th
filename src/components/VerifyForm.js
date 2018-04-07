@@ -8,7 +8,7 @@ import {TextField, TextAreaField} from 'redux-form-antd'
 
 import Button from '../components/Button'
 
-import {fetchCamper, storeCamper} from '../ducks/member'
+import {fetchCamper, storeCamper} from '../ducks/camper'
 
 const Label = styled.div`
   color: #555;
@@ -18,7 +18,7 @@ const Label = styled.div`
 const locale = text => text && text.toLocaleString()
 const currency = amount => amount && locale(parseFloat(amount))
 
-const VerifyForm = ({id, record, username, member, handleSubmit}) => (
+const VerifyForm = ({id, record, username, camper, handleSubmit}) => (
   <Form onSubmit={handleSubmit}>
     <Row gutter={16}>
       <Col span={12}>
@@ -28,10 +28,10 @@ const VerifyForm = ({id, record, username, member, handleSubmit}) => (
           </small>
         </div>
         <Label>
-          ชื่อสมาชิก: <strong>{record.member}</strong>
+          ชื่อสมาชิก: <strong>{record.camper}</strong>
         </Label>
         <Label>
-          ชื่อ - นามสกุล: <strong>{member.name}</strong>
+          ชื่อ - นามสกุล: <strong>{camper.name}</strong>
         </Label>
         <Label style={{marginTop: '1.3em'}}>
           วันที่ - เวลา: <strong>{locale(record.timestamp)}</strong>
@@ -92,9 +92,9 @@ const validate = values => {
 }
 
 const mapStateToProps = state => ({
-  member: state.member.member,
+  camper: state.camper.camper,
   record: state.tx.record,
-  username: state.user.email.replace('@jwc.in.th', ''),
+  username: state.user.name,
   initialValues: {
     amountPromo: state.tx.record.amount,
     note: '-',
@@ -114,11 +114,11 @@ const enhance = compose(
         await change('verify', 'amountPromo', record.amount)
       }
 
-      if (record.member !== props.record.member) {
+      if (record.camper !== props.record.camper) {
         try {
-          const member = await fetchCamper(record.member)
+          const camper = await fetchCamper(record.camper)
 
-          await storeCamper(member)
+          await storeCamper(camper)
         } catch (err) {
           console.info('Camper Lookup Error:', err)
         }

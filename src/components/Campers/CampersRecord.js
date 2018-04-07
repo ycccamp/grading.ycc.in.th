@@ -38,7 +38,7 @@ const WithdrawRecord = ({campers, ...props}) => (
 )
 
 const mapStateToProps = state => ({
-  campers: state.member.campers,
+  campers: state.camper.campers,
 })
 
 const enhance = connect(mapStateToProps)

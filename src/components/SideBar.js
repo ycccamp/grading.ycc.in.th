@@ -110,7 +110,7 @@ class SideBar extends Component {
 }
 
 const mapStateToProps = state => ({
-  username: state.user.email && state.user.email.replace('@jwc.in.th', ''),
+  username: state.user.name
   role: state.user.role,
 })
 

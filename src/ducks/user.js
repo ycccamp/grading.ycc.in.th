@@ -5,7 +5,7 @@ import {untouch} from 'redux-form'
 import {takeEvery, call, put, fork, select} from 'redux-saga/effects'
 
 import {createReducer, Creator} from './helper'
-import {syncCampers} from './member'
+import {syncCampers} from './camper'
 
 import rsf, {app} from '../core/fire'
 
@@ -92,7 +92,11 @@ export function* authRoutineSaga(user) {
 
     // Merge the user's record with their credentials
     const record = doc.data()
-    const data = {...userProps(user), ...record}
+    const data = {
+      name: user.name,
+      ...userProps(user),
+      ...record,
+    }
 
     yield put(storeUser(data))
     yield put(syncCampers())

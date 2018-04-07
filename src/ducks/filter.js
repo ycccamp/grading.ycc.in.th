@@ -43,11 +43,11 @@ export const createFilter = (selector, fields) => createSelector(
   },
 )
 
-const depositFields = ['ref', 'recordedBy', 'confirmedBy', 'member', 'status']
+const depositFields = ['ref', 'recordedBy', 'confirmedBy', 'camper', 'status']
 
 export const depositFilter = createFilter(s => s.tx.deposit, depositFields)
 
-const withdrawFields = ['ref', 'recordedBy', 'member']
+const withdrawFields = ['ref', 'recordedBy', 'camper']
 
 export const withdrawFilter = createFilter(s => s.tx.withdraw, withdrawFields)
 
