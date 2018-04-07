@@ -3,6 +3,7 @@ import * as R from 'ramda'
 import {DateTime} from 'luxon'
 import styled from 'react-emotion'
 import {connect} from 'react-redux'
+import {Link} from 'react-static'
 
 import Button from './Button'
 import Records from './Records'
@@ -19,7 +20,7 @@ const fields = {
     title: 'คะแนนที่ฉันให้',
     render: list => list && `${R.sum(list)} (${list.join(' + ')})`,
   },
-  notes: 'ข้อมูลเพิ่มเติม',
+  notes: 'จดบันทึก',
   coreScore: 'เฉลี่ยคำถามกลาง',
   majorScore: 'เฉลี่ยคำถามสาขา',
   totalScore: 'คะแนนเฉลี่ยรวม',
@@ -28,8 +29,13 @@ const fields = {
     render: text => text.toLocaleString(),
   },
   action: {
-    title: 'ทำรายการ',
-    render: text => <Button>ตรวจให้คะแนน</Button>,
+    title: 'ตรวจให้คะแนน',
+    render: (text, record) => (
+      <Link to={`/grade/${record.id}`}>
+        <Button>ตรวจให้คะแนน</Button>
+      </Link>
+    ),
+    fixed: 'right',
   },
 }
 
