@@ -10,8 +10,7 @@ import axios from 'axios'
 import logo from '../assets/notebook.svg'
 
 import {logout} from '../ducks/user'
-
-import roleName from '../core/roles'
+import roleName, {isAllowed} from '../core/roles'
 
 const menus = [
   {
@@ -30,7 +29,7 @@ const menus = [
     title: 'สรุปรายชื่อ',
     path: '/campers',
     icon: 'contacts',
-    role: 'grader',
+    role: 'admin',
   },
 ]
 
@@ -57,7 +56,7 @@ const MenuItem = ({path, icon, title}) => (
 )
 
 const renderMenuItem = role => menu =>
-  menu.role === role && (
+  isAllowed(menu.role, role) && (
     <Menu.Item key={menu.path}>
       <MenuItem {...menu} />
     </Menu.Item>

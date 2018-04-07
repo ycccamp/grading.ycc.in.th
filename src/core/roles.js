@@ -10,4 +10,18 @@ const roleNames = {
 
 const roleName = role => roleNames[role] || role
 
+const graderRoles = ['core', 'marketing', 'content', 'programming', 'design']
+
+export const isGrader = role => graderRoles.includes(role)
+
+export function isAllowed(targetRole, currentRole) {
+  if (targetRole === 'grader') {
+    return isGrader(currentRole)
+  }
+
+  if (currentRole === targetRole) {
+    return true
+  }
+}
+
 export default roleName
