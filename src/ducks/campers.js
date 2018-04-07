@@ -23,6 +23,8 @@ export const storeCampers = Creator(STORE_CAMPERS)
 
 const db = app.firestore()
 
+console.log('DB', db)
+
 function getCollection(role) {
   let campers = db.collection('campers').where('submitted', '==', true)
 

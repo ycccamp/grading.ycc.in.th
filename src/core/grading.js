@@ -1,25 +1,46 @@
-import R from 'ramda'
+import * as R from 'ramda'
 
+import {app} from '../core/fire'
 import questions from '../core/questions'
 
-const sample = {
-  core: [
-    {
-      gradedBy: 'A',
+/*
+  core: {
+    tul: {
       scores: [7, 10, 8],
-      notes: 'Good',
     },
-    {
-      gradedBy: 'B',
+  },
+  major: {
+    chun: {
       scores: [10, 9, 15],
-    },
-  ],
-  major: [
-    {
-      gradedBy: 'C',
-      scores: [10, 10, 10],
-    },
-  ],
+      notes: 'GG EZ',
+    }
+  }
+*/
+
+const db = app.firestore()
+
+/**
+ * updateGrading - Update the grading information
+ *
+ * @param  {type} id       ID of the answer
+ * @param  {type} payload  Grading Data
+ * @param  {type} gradedBy Name of the grader
+ * @param  {type} type     Type of the answer
+ * @return {type}          description
+ */
+export async function updateGrading(id, payload, gradedBy, type = 'major') {
+  const docRef = db.collection('grading').doc(id)
+  // payload.gradedAt = new Date()
+
+  await db.runTransaction(async transaction => {
+    const data = {
+      [type]: {
+        [gradedBy]: payload,
+      },
+    }
+
+    transaction.set(docRef, data, {merge: true})
+  })
 }
 
 const maxScores = {
@@ -48,12 +69,50 @@ export const getQuestions = (type = 'core') =>
 
 const average = R.converge(R.divide, [R.sum, R.length])
 
+window.average = average
+
+// const listOf = obj =>
+//   Object.entries(obj).map(([gradedBy, payload]) => ({
+//     gradedBy,
+//     ...payload,
+//   }))
+
 // TODO: Filter out unfinished graders
 function computeScore(results) {
-  const scores = results.map(result => R.sum(result.scores))
+  if (results) {
+    const scores = Object.values(results).map(result => R.sum(result.scores))
 
-  return average(scores)
+    console.log('Scores:', scores)
+
+    return average(scores)
+  }
+
+  return 0
 }
 
-export const finalScore = grade =>
-  computeScore(grade.core) + computeScore(grade.major)
+export function computeGrading(grading, name, role) {
+  if (grading) {
+    const {core, major} = grading
+    console.log('Grading:', grading)
+
+    const coreScore = computeScore(core)
+    const majorScore = computeScore(major)
+    const totalScore = coreScore + majorScore
+
+    if (role && role !== 'admin') {
+      const type = role === 'core' ? 'core' : 'major'
+      const grades = grading[type]
+
+      if (grades) {
+        const grade = grades[name]
+
+        if (grade) {
+          grading.notes = grade.notes
+          grading.scores = grade.scores
+        }
+      }
+    }
+
+    return {coreScore, majorScore, totalScore, ...grading}
+  }
+}

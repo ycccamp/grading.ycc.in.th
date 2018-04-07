@@ -1,35 +1,56 @@
+import * as R from 'ramda'
 import axios from 'axios'
 import {takeEvery, call, put, fork, select, all} from 'redux-saga/effects'
 import {notification, message} from 'antd'
 import {SubmissionError} from 'redux-form'
+import {createSelector} from 'reselect'
 
 import {createReducer, Creator} from './helper'
 import rsf, {app} from '../core/fire'
+import {updateGrading, computeGrading} from '../core/grading'
 
-export const UPDATE_GRADING = 'UPDATE_GRADING'
+export const SUBMIT_GRADING = 'SUBMIT_GRADING'
 
 export const SYNC_GRADING = 'SYNC_GRADING'
 export const STORE_GRADING = 'STORE_GRADING'
 
-export const updateGrading = Creator(UPDATE_GRADING)
+export const submitGrading = Creator(SUBMIT_GRADING)
 
 export const syncGrading = Creator(SYNC_GRADING)
 export const storeGrading = Creator(STORE_GRADING)
 
 const db = app.firestore()
 
-// Fields: account bank fullname line note phone username
-export function* updateGradingSaga({payload}) {
-  const name = yield select(s => s.user.name)
+export const submissionSelector = createSelector(
+  s => s.camper.campers,
+  s => s.grading.data,
+  s => s.user.name,
+  s => s.user.role,
+  (campers, grades, name, role) => {
+    return campers.map(camper => {
+      const grading = grades.find(entry => entry.id === camper.id)
 
-  payload.gradedAt = new Date()
-  payload.gradedBy = name
+      return {
+        ...camper,
+        ...computeGrading(grading, name, role),
+      }
+    })
+  },
+)
+
+window.updateGrading = updateGrading
+
+// Fields: account bank fullname line note phone username
+export function* submitGradingSaga({payload}) {
+  const {name, role} = yield select(s => s.user)
+  const type = role === 'core' ? 'core' : 'major'
+
+  const {id, ...data} = payload
 
   try {
-    const docRef = db.collection('grading').doc(payload.username)
-    yield call(rsf.firestore.setDocument, docRef, payload, {merge: true})
+    yield call(updateGrading, id, data, name, type)
 
-    yield call(message.info, `Grading ${payload.username} is added.`)
+    yield call(message.info, `Updated Grading for ${id}!`)
   } catch (err) {
     console.warn('Update Grading', err)
     message.error(err.message)
@@ -49,13 +70,15 @@ export function* gradingWatcherSaga() {
 }
 
 const initial = {
-  grading: [],
+  data: [],
 }
 
 export default createReducer(initial, state => ({
   [STORE_GRADING]: ({docs}) => {
-    const grading = docs.map(doc => ({id: doc.id, ...doc.data()}))
+    const data = docs.map(doc => ({id: doc.id, ...doc.data()}))
 
-    return {...state, grading}
+    console.log('Grading Record:', data)
+
+    return {...state, data}
   },
 }))

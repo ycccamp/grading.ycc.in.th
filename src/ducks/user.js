@@ -6,6 +6,7 @@ import {takeEvery, call, put, fork, select} from 'redux-saga/effects'
 
 import {createReducer, Creator} from './helper'
 import {syncCampers} from './campers'
+import {syncGrading} from './grading'
 
 import rsf, {app} from '../core/fire'
 
@@ -100,6 +101,7 @@ export function* authRoutineSaga(user) {
 
     yield put(storeUser(data))
     yield put(syncCampers())
+    yield put(syncGrading())
 
     yield put(setLoading(false))
   } catch (err) {

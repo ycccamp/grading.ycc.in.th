@@ -5,6 +5,7 @@ import {reducer as form} from 'redux-form'
 
 import user, {reauthSaga, userWatcherSaga} from './user'
 import camper, {camperWatcherSaga} from './campers'
+import grading, {gradingWatcherSaga} from './grading'
 import filter, {filterWatcherSaga} from './filter'
 
 const config = {
@@ -19,6 +20,7 @@ export const reducers = persistCombineReducers(config, {
   camper,
   filter,
   form,
+  grading,
 })
 
 export function* rootSaga() {
@@ -26,6 +28,7 @@ export function* rootSaga() {
     reauthSaga(),
     userWatcherSaga(),
     camperWatcherSaga(),
+    gradingWatcherSaga(),
     filterWatcherSaga(),
   ])
 }

@@ -33,7 +33,7 @@ const fields = {
   },
 }
 
-const WithdrawRecord = ({campers, ...props}) => (
+const CampersRecord = ({campers, ...props}) => (
   <Records fields={fields} data={campers} rowKey="id" {...props} />
 )
 
@@ -43,4 +43,4 @@ const mapStateToProps = state => ({
 
 const enhance = connect(mapStateToProps)
 
-export default enhance(WithdrawRecord)
+export default enhance(CampersRecord)

@@ -9,6 +9,7 @@ import Layout from '../components/Dashboard'
 import Login from '../routes/login'
 import Dashboard from '../routes/dashboard'
 import Campers from '../routes/campers'
+import Submissions from '../routes/submissions'
 import Grading from '../routes/grading'
 import NotFound from '../routes/404'
 
@@ -41,7 +42,7 @@ function getByRole(role) {
   }
 
   if (graderRoles.includes(role)) {
-    return Grading
+    return Submissions
   }
 
   return () => <Notice>สิทธิในการเข้าถึงไม่เพียงพอ</Notice>
@@ -52,6 +53,7 @@ const AuthRoutes = ({user}) => {
     return (
       <Layout>
         <Route path="/" component={getByRole(user.role)} exact />
+        <Route path="/grade/:id" component={Grading} />
         <Route path="/campers" component={Campers} />
       </Layout>
     )

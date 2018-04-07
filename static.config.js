@@ -43,18 +43,6 @@ export default {
       component: 'src/routes/login',
     },
     {
-      path: '/campers',
-      component: 'src/routes/campers',
-    },
-    {
-      path: '/grading',
-      component: 'src/routes/grading',
-    },
-    {
-      path: '/verify',
-      component: 'src/routes/verify',
-    },
-    {
       is404: true,
       component: 'src/routes/404',
     },
