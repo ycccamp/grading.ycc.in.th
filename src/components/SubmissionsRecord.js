@@ -15,6 +15,7 @@ const Time = styled.div`
 `
 
 const fields = {
+  number: 'ลำดับที่',
   id: 'รหัสอ้างอิง',
   scores: {
     title: 'คะแนนที่ฉันให้',
