@@ -111,7 +111,9 @@ const PreviewAnswer = ({data, role, index}) => {
     return (
       <div>
         <Answer>{data.majorAnswer2}</Answer>
-        <Answer style={{marginTop: '0.8em'}}>{data.majorAnswer3}</Answer>
+        {data.majorAnswer3 && (
+          <Answer style={{marginTop: '0.8em'}}>{data.majorAnswer3}</Answer>
+        )}
       </div>
     )
   }
