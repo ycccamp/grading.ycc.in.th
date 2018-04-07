@@ -50,6 +50,12 @@ const Code = styled.code`
   white-space: pre-wrap;
 `
 
+const Image = styled.img`
+  width: 100%;
+  max-width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.13) 0px 1px 5.5px 2px;
+`
+
 const coreFields = ['generalAnswer1', 'generalAnswer2', 'generalAnswer3']
 const majorFields = ['majorAnswer1', 'majorAnswer2', 'majorAnswer3']
 
@@ -76,7 +82,7 @@ const PreviewAnswer = ({data, role, index}) => {
   }
 
   if (role === 'design' && index === 2) {
-    return <img src={answer} />
+    return <Image src={answer} />
   }
 
   return <Answer>{answer}</Answer>
