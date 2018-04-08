@@ -9,6 +9,8 @@ import Records from './Records'
 
 import {setPage, submissionSelector} from '../ducks/grading'
 
+import {grades, genders} from '../core/options'
+
 const Note = styled.span`
   font-size: 0.95em;
   word-break: break-word;
@@ -39,6 +41,20 @@ const fields = {
   gradedAt: {
     title: 'เวลาที่ตรวจให้คะแนน',
     render: time => time && <Note>{time.toLocaleString()}</Note>,
+  },
+  age: {
+    title: 'อายุ',
+    width: 60,
+  },
+  class: {
+    title: 'ระดับชั้น',
+    render: text => grades[text] && <Note>{grades[text]}</Note>,
+    width: 130,
+  },
+  gender: {
+    title: 'เพศ',
+    render: text => genders[text] && <Note>{genders[text]}</Note>,
+    width: 80,
   },
   status: {
     title: 'สถานะ',

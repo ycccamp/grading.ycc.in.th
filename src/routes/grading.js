@@ -7,6 +7,8 @@ import GradingForm from '../components/GradingForm'
 
 import {submit, delist, entrySelector, gradingSelector} from '../ducks/grading'
 
+import {grades, genders} from '../core/options'
+
 const Heading = styled.h1`
   margin: 0;
 `
@@ -20,21 +22,6 @@ const SubHeading = styled.h2`
 
   text-transform: capitalize;
 `
-
-export const grades = {
-  m3: 'มัธยมศึกษาปีที่ 3',
-  m4: 'มัธยมศึกษาปีที่ 4',
-  m5: 'มัธยมศึกษาปีที่ 5',
-  m6: 'มัธยมศึกษาปีที่ 6',
-  other: 'อื่นๆ',
-}
-
-export const genders = {
-  male: 'ชาย',
-  female: 'หญิง',
-  other: 'เพศอื่นๆ',
-  none: 'ไม่ระบุ',
-}
 
 const Grading = ({data, role, delist, submit, initial}) => {
   if (data) {

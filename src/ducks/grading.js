@@ -107,7 +107,7 @@ export function* delistSaga({payload: id}) {
   try {
     const name = yield select(s => s.user.name)
     const doc = db.collection('grading').doc(id)
-    const payload = {delisted: true, delistedBy: name}
+    const payload = {delisted: true, delistedBy: name, gradedAt: new Date()}
 
     yield call(rsf.firestore.setDocument, doc, payload, {merge: true})
     yield call(message.success, `คัดผู้สมัครออกจากรายชื่อแล้ว`)
