@@ -4,7 +4,7 @@ import styled from 'react-emotion'
 
 import GradingForm from '../components/GradingForm'
 
-import {submit, delist, entrySelector} from '../ducks/grading'
+import {submit, delist, entrySelector, gradingSelector} from '../ducks/grading'
 
 const Heading = styled.h1`
   margin: 0;
@@ -35,7 +35,7 @@ export const genders = {
   none: 'ไม่ระบุ',
 }
 
-const Grading = ({data, role, delist, submit}) => (
+const Grading = ({data, role, delist, submit, initial}) => (
   <div>
     <Heading>
       <span>ตรวจให้คะแนน: ผู้สมัคร #{data.number}</span>
@@ -47,13 +47,22 @@ const Grading = ({data, role, delist, submit}) => (
       {genders[data.gender]}
     </SubHeading>
 
-    <GradingForm role={role} data={data} delist={delist} onSubmit={submit} />
+    {console.log('Initial Values:', initial)}
+
+    <GradingForm
+      role={role}
+      data={data}
+      delist={delist}
+      onSubmit={submit}
+      initialValues={initial}
+    />
   </div>
 )
 
 const mapStateToProps = (state, props) => ({
   role: state.user.role,
   data: entrySelector(state, props),
+  initial: gradingSelector(state, props),
 })
 
 const mapDispatchToProps = (dispatch, {match}) => {

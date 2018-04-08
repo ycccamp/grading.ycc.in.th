@@ -96,7 +96,7 @@ export function computeGrading(grading, name, role) {
         const grade = grades[name]
 
         if (grade) {
-          grading.notes = grade.notes
+          grading.notes = grade.notes || null
           grading.scores = grade.scores
           grading.gradedAt = grade.gradedAt
         }

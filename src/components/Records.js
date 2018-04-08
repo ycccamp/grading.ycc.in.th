@@ -20,6 +20,7 @@ const Records = ({data, scrollX, scrollY = 460, cols, ...props}) => (
     dataSource={data}
     columns={cols}
     scroll={{x: scrollX, y: scrollY}}
+    pagination={{showQuickJumper: true}}
     {...props}
   />
 )

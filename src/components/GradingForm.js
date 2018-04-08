@@ -132,6 +132,12 @@ function onSubmitFail() {
   message.error('กรุณากรอกคะแนนให้ครบถ้วน')
 }
 
-const enhance = reduxForm({form: 'grading', validate, onSubmitFail})
+const enhance = reduxForm({
+  form: 'grading',
+  validate,
+  onSubmitFail,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: true,
+})
 
 export default enhance(GradingForm)

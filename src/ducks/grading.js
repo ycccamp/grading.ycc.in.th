@@ -26,8 +26,18 @@ const db = app.firestore()
 export const entrySelector = createSelector(
   s => s.camper.campers,
   (s, p) => p.match.params.id,
-  (entries, id) => {
-    return entries.find(camper => camper.id === id)
+  (entries, id) => entries.find(camper => camper.id === id),
+)
+
+export const gradingSelector = createSelector(
+  s => s.grading.data,
+  (s, p) => p.match.params.id,
+  s => s.user.name,
+  s => s.user.role,
+  (entries, id, name, role) => {
+    const grading = entries.find(grading => grading.id === id)
+
+    return computeGrading(grading, name, role)
   },
 )
 
