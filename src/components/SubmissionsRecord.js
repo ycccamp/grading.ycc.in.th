@@ -42,11 +42,17 @@ const fields = {
   },
   action: {
     title: 'ตรวจให้คะแนน',
-    render: (text, record) => (
-      <Link to={`/grade/${record.id}`}>
-        <Button>ตรวจให้คะแนน</Button>
-      </Link>
-    ),
+    render: (text, record) => {
+      if (record.delisted) {
+        return `ถูกคัดออกโดย ${record.delistedBy}`
+      }
+
+      return (
+        <Link to={`/grade/${record.id}`}>
+          <Button>ตรวจให้คะแนน</Button>
+        </Link>
+      )
+    },
     fixed: 'right',
   },
 }
