@@ -2,6 +2,7 @@ import * as R from 'ramda'
 import {takeEvery, call, put, fork, select, all} from 'redux-saga/effects'
 import {message} from 'antd'
 import {createSelector} from 'reselect'
+import {reset} from 'redux-form'
 
 import rsf, {app} from '../core/fire'
 import history from '../core/history'
@@ -22,6 +23,14 @@ export const storeGrading = Creator(STORE_GRADING)
 
 const db = app.firestore()
 
+export const entrySelector = createSelector(
+  s => s.camper.campers,
+  (s, p) => p.match.params.id,
+  (entries, id) => {
+    return entries.find(camper => camper.id === id)
+  },
+)
+
 export const submissionSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
@@ -39,6 +48,17 @@ export const submissionSelector = createSelector(
   },
 )
 
+// Proceed to next entries
+export function* proceedSaga(id) {
+  const entries = yield select(state => submissionSelector(state))
+  yield put(reset('grading'))
+
+  const index = entries.findIndex(x => x.id === id)
+  const {id: next} = entries[index + 1]
+
+  yield call(history.push, `/grade/${next}`)
+}
+
 export function* submitGradingSaga({payload: {id, data}}) {
   const {name, role} = yield select(s => s.user)
   const type = role === 'core' ? 'core' : 'major'
@@ -46,18 +66,16 @@ export function* submitGradingSaga({payload: {id, data}}) {
 
   try {
     data.scores = data.scores.map(score => parseInt(score))
-
     console.info('Submitting Grading for', id, 'as', data)
+
     yield call(updateGrading, id, data, name, type)
-
-    yield call(history.push, '/')
-
     yield call(message.success, `บันทึกผลการให้คะแนนเรียบร้อยแล้ว`)
   } catch (err) {
     console.warn('Grading Submission Error', err)
     message.error(err.message)
   } finally {
     hide()
+    yield fork(proceedSaga, id)
   }
 }
 
@@ -70,14 +88,13 @@ export function* delistSaga({payload: id}) {
     const payload = {delisted: true, delistedBy: name}
 
     yield call(rsf.firestore.setDocument, doc, payload, {merge: true})
-
-    yield call(history.push, '/')
     yield call(message.success, `คัดผู้สมัครออกจากรายชื่อแล้ว`)
   } catch (err) {
     console.warn('Delisting Error', err)
     message.error(err.message)
   } finally {
     hide()
+    yield fork(proceedSaga, id)
   }
 }
 

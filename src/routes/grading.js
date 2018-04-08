@@ -1,11 +1,10 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import styled from 'react-emotion'
-import {createSelector} from 'reselect'
 
 import GradingForm from '../components/GradingForm'
 
-import {submit, delist} from '../ducks/grading'
+import {submit, delist, entrySelector} from '../ducks/grading'
 
 const Small = styled.small`
   font-size: 0.65em;
@@ -23,14 +22,6 @@ const Grading = ({data, role, delist, submit}) => (
 
     <GradingForm role={role} data={data} delist={delist} onSubmit={submit} />
   </div>
-)
-
-const entrySelector = createSelector(
-  s => s.camper.campers,
-  (s, p) => p.match.params.id,
-  (entries, id) => {
-    return entries.find(camper => camper.id === id)
-  },
 )
 
 const mapStateToProps = (state, props) => ({
