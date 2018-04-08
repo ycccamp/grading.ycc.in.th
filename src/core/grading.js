@@ -69,8 +69,6 @@ export const getQuestions = (type = 'core') =>
 
 const average = R.converge(R.divide, [R.sum, R.length])
 
-window.average = average
-
 // const listOf = obj =>
 //   Object.entries(obj).map(([gradedBy, payload]) => ({
 //     gradedBy,

@@ -39,8 +39,6 @@ export const submissionSelector = createSelector(
   },
 )
 
-window.updateGrading = updateGrading
-
 export function* submitGradingSaga({payload: {id, data}}) {
   const {name, role} = yield select(s => s.user)
   const type = role === 'core' ? 'core' : 'major'

@@ -22,7 +22,6 @@ export const syncCampers = Creator(SYNC_CAMPERS)
 export const storeCampers = Creator(STORE_CAMPERS)
 
 const db = app.firestore()
-window.db = db
 
 function getCollection(role) {
   let campers = db.collection('campers').where('submitted', '==', true)
