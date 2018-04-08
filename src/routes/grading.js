@@ -6,19 +6,46 @@ import GradingForm from '../components/GradingForm'
 
 import {submit, delist, entrySelector} from '../ducks/grading'
 
-const Small = styled.small`
-  font-size: 0.65em;
-  margin-left: 0.35em;
+const Heading = styled.h1`
+  margin: 0;
+`
+
+const SubHeading = styled.h2`
+  color: #666;
+  font-size: 1.08em;
+
+  margin-top: 0.3em;
+  margin-bottom: 0.95em;
 
   text-transform: capitalize;
 `
 
+export const grades = {
+  m3: 'มัธยมศึกษาปีที่ 3',
+  m4: 'มัธยมศึกษาปีที่ 4',
+  m5: 'มัธยมศึกษาปีที่ 5',
+  m6: 'มัธยมศึกษาปีที่ 6',
+  other: 'อื่นๆ',
+}
+
+export const genders = {
+  male: 'ชาย',
+  female: 'หญิง',
+  other: 'เพศอื่นๆ',
+  none: 'ไม่ระบุ',
+}
+
 const Grading = ({data, role, delist, submit}) => (
   <div>
-    <h1>
+    <Heading>
       <span>ตรวจให้คะแนน: ผู้สมัคร #{data.number}</span>
-      {role === 'core' && <Small> สาขา: {data.major}</Small>}
-    </h1>
+    </Heading>
+
+    <SubHeading>
+      {role === 'core' && <span> สาขา: {data.major} | </span>}
+      อายุ: {data.age} | ระดับชั้น: {grades[data.class]} | เพศ:{' '}
+      {genders[data.gender]}
+    </SubHeading>
 
     <GradingForm role={role} data={data} delist={delist} onSubmit={submit} />
   </div>
