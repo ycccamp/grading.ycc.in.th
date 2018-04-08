@@ -31,6 +31,9 @@ const db = app.firestore()
 export async function updateGrading(id, payload, gradedBy, type = 'major') {
   const docRef = db.collection('grading').doc(id)
 
+  // Prevent notes from being undefined
+  if (!payload.notes) payload.notes = ''
+
   await db.runTransaction(async transaction => {
     const data = {
       [type]: {
