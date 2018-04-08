@@ -10,7 +10,8 @@ import Records from './Records'
 
 import {submissionSelector} from '../ducks/grading'
 
-const Time = styled.div`
+const Note = styled.span`
+  font-size: 0.95em;
   word-break: break-word;
 `
 
@@ -21,10 +22,17 @@ const fields = {
     title: 'คะแนนที่ฉันให้',
     render: list => list && `${R.sum(list)} (${list.join(' + ')})`,
   },
-  notes: 'จดบันทึก',
+  notes: {
+    title: 'จดบันทึก',
+    render: text => <Note>{text}</Note>,
+  },
   updatedAt: {
-    title: 'เวลาที่สมัคร',
-    render: time => time && time.toLocaleString(),
+    title: 'เวลาที่สมัครเข้าค่าย',
+    render: time => time && <Note>{time.toLocaleString()}</Note>,
+  },
+  gradedAt: {
+    title: 'เวลาที่ตรวจให้คะแนน',
+    render: time => time && <Note>{time.toLocaleString()}</Note>,
   },
   status: {
     title: 'สถานะ',

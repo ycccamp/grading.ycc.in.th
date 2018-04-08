@@ -30,12 +30,14 @@ const db = app.firestore()
  */
 export async function updateGrading(id, payload, gradedBy, type = 'major') {
   const docRef = db.collection('grading').doc(id)
-  // payload.gradedAt = new Date()
 
   await db.runTransaction(async transaction => {
     const data = {
       [type]: {
-        [gradedBy]: payload,
+        [gradedBy]: {
+          ...payload,
+          gradedAt: new Date(),
+        },
       },
     }
 
@@ -96,6 +98,7 @@ export function computeGrading(grading, name, role) {
         if (grade) {
           grading.notes = grade.notes
           grading.scores = grade.scores
+          grading.gradedAt = grade.gradedAt
         }
       }
     }
