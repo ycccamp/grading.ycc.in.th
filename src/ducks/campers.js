@@ -35,7 +35,7 @@ function getCollection(role) {
 
 export function* syncCampersSaga() {
   const role = yield select(s => s.user.role)
-  const records = getCollection(role)
+  const records = yield call(getCollection, role)
 
   yield fork(rsf.firestore.syncCollection, records, {
     successActionCreator: storeCampers,
@@ -52,6 +52,7 @@ const initial = {
 }
 
 export default createReducer(initial, state => ({
+  [STORE_CAMPER]: camper => ({...state, camper}),
   [STORE_CAMPERS]: ({docs}) => {
     const campers = docs.map((doc, number) => ({
       number: number + 1,
@@ -63,5 +64,4 @@ export default createReducer(initial, state => ({
 
     return {...state, campers}
   },
-  [STORE_CAMPER]: camper => ({...state, camper}),
 }))

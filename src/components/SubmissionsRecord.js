@@ -1,6 +1,5 @@
 import React from 'react'
 import * as R from 'ramda'
-import {DateTime} from 'luxon'
 import styled, {css} from 'react-emotion'
 import {connect} from 'react-redux'
 import {Link} from 'react-static'
@@ -8,7 +7,7 @@ import {Link} from 'react-static'
 import Button from './Button'
 import Records from './Records'
 
-import {submissionSelector} from '../ducks/grading'
+import {setPage, submissionSelector} from '../ducks/grading'
 
 const Note = styled.span`
   font-size: 0.95em;
@@ -90,19 +89,21 @@ function highlightRows(record, index) {
   }
 }
 
-const SubmissionsRecord = ({...props}) => (
+const SubmissionsRecord = ({current, setPage, ...props}) => (
   <Records
     fields={fields}
     rowKey="id"
     rowClassName={highlightRows}
+    pagination={{showQuickJumper: true, current, onChange: setPage}}
     {...props}
   />
 )
 
 const mapStateToProps = state => ({
+  current: state.grading.page,
   data: submissionSelector(state),
 })
 
-const enhance = connect(mapStateToProps)
+const enhance = connect(mapStateToProps, {setPage})
 
 export default enhance(SubmissionsRecord)

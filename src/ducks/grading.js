@@ -9,11 +9,15 @@ import history from '../core/history'
 import {createReducer, Creator} from './helper'
 import {updateGrading, computeGrading} from '../core/grading'
 
+export const SET_PAGE = '@GRADING/SET_PAGE'
+
 export const SUBMIT = '@GRADING/SUBMIT'
 export const DELIST = '@GRADING/DELIST'
 
 export const SYNC_GRADING = '@GRADING/SYNC'
 export const STORE_GRADING = '@GRADING/STORE'
+
+export const setPage = Creator(SET_PAGE)
 
 export const submit = Creator(SUBMIT, 'id', 'data')
 export const delist = Creator(DELIST)
@@ -131,10 +135,12 @@ export function* gradingWatcherSaga() {
 }
 
 const initial = {
+  page: 1,
   data: [],
 }
 
 export default createReducer(initial, state => ({
+  [SET_PAGE]: page => ({...state, page}),
   [STORE_GRADING]: ({docs}) => {
     const data = docs.map(doc => ({id: doc.id, ...doc.data()}))
 
