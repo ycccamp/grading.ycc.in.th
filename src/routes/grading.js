@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import styled from 'react-emotion'
+import {Spin} from 'antd'
 
 import GradingForm from '../components/GradingForm'
 
@@ -35,29 +36,33 @@ export const genders = {
   none: 'ไม่ระบุ',
 }
 
-const Grading = ({data, role, delist, submit, initial}) => (
-  <div>
-    <Heading>
-      <span>ตรวจให้คะแนน: ผู้สมัคร #{data.number}</span>
-    </Heading>
+const Grading = ({data, role, delist, submit, initial}) => {
+  if (data) {
+    return (
+      <div>
+        <Heading>
+          <span>ตรวจให้คะแนน: ผู้สมัคร #{data.number}</span>
+        </Heading>
 
-    <SubHeading>
-      {role === 'core' && <span> สาขา: {data.major} | </span>}
-      อายุ: {data.age} | ระดับชั้น: {grades[data.class]} | เพศ:{' '}
-      {genders[data.gender]}
-    </SubHeading>
+        <SubHeading>
+          {role === 'core' && <span> สาขา: {data.major} | </span>}
+          อายุ: {data.age} | ระดับชั้น: {grades[data.class]} | เพศ:{' '}
+          {genders[data.gender]}
+        </SubHeading>
 
-    {console.log('Initial Values:', initial)}
+        <GradingForm
+          role={role}
+          data={data}
+          delist={delist}
+          onSubmit={submit}
+          initialValues={initial}
+        />
+      </div>
+    )
+  }
 
-    <GradingForm
-      role={role}
-      data={data}
-      delist={delist}
-      onSubmit={submit}
-      initialValues={initial}
-    />
-  </div>
-)
+  return <Spin />
+}
 
 const mapStateToProps = (state, props) => ({
   role: state.user.role,

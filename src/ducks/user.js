@@ -9,6 +9,7 @@ import {syncCampers} from './campers'
 import {syncGrading} from './grading'
 
 import rsf, {app} from '../core/fire'
+import history from '../core/history'
 
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
@@ -73,6 +74,8 @@ export function* logoutSaga() {
 
     yield call(hide)
     yield call(message.success, 'คุณได้ออกจากระบบเรียบร้อยแล้ว')
+
+    yield call(history.push, '/')
   } catch (err) {
     yield call(hide)
     message.error(err.message)

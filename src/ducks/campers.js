@@ -54,7 +54,7 @@ const initial = {
 export default createReducer(initial, state => ({
   [STORE_CAMPERS]: ({docs}) => {
     const campers = docs.map((doc, number) => ({
-      number,
+      number: number + 1,
       id: doc.id,
       ...doc.data(),
     }))
