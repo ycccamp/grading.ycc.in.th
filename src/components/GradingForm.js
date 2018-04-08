@@ -56,6 +56,7 @@ const GradingForm = ({handleSubmit, delist, data, role}) => (
           name={`scores.${index}`}
           component={TextField}
           placeholder={`คะแนน (เต็ม ${item.max})`}
+          autoFocus={index === 0}
         />
       </Card>
     ))}
