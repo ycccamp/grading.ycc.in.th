@@ -16,8 +16,15 @@ const Note = styled.span`
 `
 
 const fields = {
-  number: 'ลำดับที่',
-  id: 'รหัสอ้างอิง',
+  number: {
+    title: '　',
+    width: 60,
+    fixed: 'left',
+  },
+  id: {
+    title: 'รหัสอ้างอิง',
+    render: text => <small>{text}</small>,
+  },
   scores: {
     title: 'คะแนนที่ฉันให้',
     render: list => list && `${R.sum(list)} (${list.join(' + ')})`,
