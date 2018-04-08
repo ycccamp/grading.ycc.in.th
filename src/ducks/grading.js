@@ -54,9 +54,17 @@ export function* proceedSaga(id) {
   yield put(reset('grading'))
 
   const index = entries.findIndex(x => x.id === id)
-  const {id: next} = entries[index + 1]
 
-  yield call(history.push, `/grade/${next}`)
+  if (index) {
+    const entry = entries[index + 1]
+
+    if (entry) {
+      yield call(history.push, `/grade/${entry.id}`)
+      return
+    }
+  }
+
+  yield call(history.push, `/`)
 }
 
 export function* submitGradingSaga({payload: {id, data}}) {
