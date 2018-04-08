@@ -16,7 +16,7 @@ class Document extends Component {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <style dangerouslySetInnerHTML={{__html: renderMeta.css}} />
           <link
-            href="https://fonts.googleapis.com/css?family=Kanit:300,400"
+            href="https://fonts.googleapis.com/css?family=Kanit:300,400|Taviraj"
             rel="stylesheet"
           />
         </Head>

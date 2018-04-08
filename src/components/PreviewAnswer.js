@@ -6,8 +6,10 @@ import ImagePreview from '../components/ImagePreview'
 
 const Answer = styled.p`
   color: #555;
-  font-size: 1.28em;
-  font-weight: bold;
+  font-size: 1.38em;
+  font-weight: 500;
+  font-family: 'Taviraj';
+
   margin-bottom: 0;
 
   white-space: pre-line;
