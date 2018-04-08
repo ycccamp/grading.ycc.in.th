@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'react-emotion'
 import {Field, reduxForm} from 'redux-form'
 import {TextField, TextAreaField} from 'redux-form-antd'
-import {Icon, Popconfirm} from 'antd'
+import {message, Icon, Popconfirm} from 'antd'
 
 import Button from './Button'
 import PreviewAnswer from './PreviewAnswer'
@@ -83,6 +83,40 @@ const GradingForm = ({handleSubmit, delist, data, role}) => (
   </form>
 )
 
-const enhance = reduxForm({form: 'grading'})
+function validate(values) {
+  const errors = {
+    scores: [],
+  }
+
+  const fields = [0, 1, 2]
+
+  if (values.scores) {
+    console.log('Scores:', values.scores)
+
+    fields.forEach(index => {
+      const score = parseInt(values.scores[index])
+
+      if (isNaN(score)) {
+        errors.scores[index] = 'กรุณาระบุคะแนน'
+      }
+
+      if (score > 20) {
+        errors.scores[index] = 'คะแนนสูงเกินกว่าเกณฑ์'
+      }
+
+      if (score < 0) {
+        errors.scores[index] = 'คะแนนต้องมากกว่าศูนย์'
+      }
+    })
+  }
+
+  return errors
+}
+
+function onSubmitFail() {
+  message.error('กรุณากรอกคะแนนให้ครบถ้วน')
+}
+
+const enhance = reduxForm({form: 'grading', validate, onSubmitFail})
 
 export default enhance(GradingForm)
