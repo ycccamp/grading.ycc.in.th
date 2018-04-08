@@ -91,23 +91,26 @@ function validate(values, {role}) {
   const fields = role === 'content' ? [0, 1] : [0, 1, 2]
   const max = maxScores[role]
 
-  if (values.scores) {
-    fields.forEach(index => {
-      const score = parseInt(values.scores[index])
+  fields.forEach(index => {
+    if (!values.scores) {
+      errors.scores[index] = 'กรุณาระบุคะแนน'
+      return
+    }
 
-      if (isNaN(score)) {
-        errors.scores[index] = 'กรุณาระบุคะแนน'
-      }
+    const score = parseInt(values.scores[index])
 
-      if (score > max[index]) {
-        errors.scores[index] = 'คะแนนสูงเกินกว่าเกณฑ์'
-      }
+    if (isNaN(score)) {
+      errors.scores[index] = 'กรุณาระบุคะแนน'
+    }
 
-      if (score < 0) {
-        errors.scores[index] = 'คะแนนต้องเป็นจำนวนเต็มบวก'
-      }
-    })
-  }
+    if (score > max[index]) {
+      errors.scores[index] = 'คะแนนสูงเกินกว่าเกณฑ์'
+    }
+
+    if (score < 0) {
+      errors.scores[index] = 'คะแนนต้องเป็นจำนวนเต็มบวก'
+    }
+  })
 
   return errors
 }
