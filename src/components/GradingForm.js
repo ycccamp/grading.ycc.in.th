@@ -84,6 +84,18 @@ const GradingForm = ({handleSubmit, delist, data, role}) => (
   </form>
 )
 
+function allowExtra(role, index) {
+  if (role === 'marketing') {
+    return true
+  }
+
+  if (role === 'programming' && index === 2) {
+    return true
+  }
+
+  return false
+}
+
 function validate(values, {role}) {
   const errors = {
     scores: [],
@@ -104,7 +116,7 @@ function validate(values, {role}) {
       errors.scores[index] = 'กรุณาระบุคะแนน'
     }
 
-    if (score > max[index]) {
+    if (!allowExtra(role, index) && score > max[index]) {
       errors.scores[index] = 'คะแนนสูงเกินกว่าเกณฑ์'
     }
 
