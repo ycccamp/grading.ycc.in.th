@@ -16,7 +16,7 @@ const Small = styled.small`
 const Grading = ({data, role, delist, submit}) => (
   <div>
     <h1>
-      <span>ตรวจคำถาม</span>
+      <span>ตรวจให้คะแนน: ผู้สมัคร #{data.number}</span>
       {role === 'core' && <Small> สาขา: {data.major}</Small>}
     </h1>
 
