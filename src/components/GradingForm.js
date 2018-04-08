@@ -7,7 +7,7 @@ import {message, Icon, Popconfirm} from 'antd'
 import Button from './Button'
 import PreviewAnswer from './PreviewAnswer'
 
-import {getQuestions} from '../core/grading'
+import {getQuestions, maxScores} from '../core/grading'
 
 const Card = styled.section`
   display: flex;
@@ -83,16 +83,15 @@ const GradingForm = ({handleSubmit, delist, data, role}) => (
   </form>
 )
 
-function validate(values) {
+function validate(values, {role}) {
   const errors = {
     scores: [],
   }
 
-  const fields = [0, 1, 2]
+  const fields = role === 'content' ? [0, 1] : [0, 1, 2]
+  const max = maxScores[role]
 
   if (values.scores) {
-    console.log('Scores:', values.scores)
-
     fields.forEach(index => {
       const score = parseInt(values.scores[index])
 
@@ -100,12 +99,12 @@ function validate(values) {
         errors.scores[index] = 'กรุณาระบุคะแนน'
       }
 
-      if (score > 20) {
+      if (score > max[index]) {
         errors.scores[index] = 'คะแนนสูงเกินกว่าเกณฑ์'
       }
 
       if (score < 0) {
-        errors.scores[index] = 'คะแนนต้องมากกว่าศูนย์'
+        errors.scores[index] = 'คะแนนต้องเป็นจำนวนเต็มบวก'
       }
     })
   }

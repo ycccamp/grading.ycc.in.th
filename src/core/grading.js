@@ -43,7 +43,7 @@ export async function updateGrading(id, payload, gradedBy, type = 'major') {
   })
 }
 
-const maxScores = {
+export const maxScores = {
   core: [10, 15, 15],
   design: [20, 20, 20],
   content: [15, 45],
