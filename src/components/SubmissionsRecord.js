@@ -1,7 +1,7 @@
 import React from 'react'
 import * as R from 'ramda'
 import {DateTime} from 'luxon'
-import styled from 'react-emotion'
+import styled, {css} from 'react-emotion'
 import {connect} from 'react-redux'
 import {Link} from 'react-static'
 
@@ -26,6 +26,20 @@ const fields = {
     title: 'เวลาที่สมัคร',
     render: time => time && time.toLocaleString(),
   },
+  status: {
+    title: 'สถานะ',
+    render: (text, record) => {
+      if (record.delisted) {
+        return `ถูกคัดออกโดย ${record.delistedBy}`
+      }
+
+      if (record.scores) {
+        return 'ตรวจให้คะแนนแล้ว'
+      }
+
+      return 'รอการตรวจให้คะแนน'
+    },
+  },
   action: {
     title: 'ตรวจให้คะแนน',
     render: (text, record) => (
@@ -37,8 +51,31 @@ const fields = {
   },
 }
 
+const gradedStyle = css`
+  background: #7bed9f;
+`
+
+const delistedStyle = css`
+  background: #dfe4ea;
+`
+
+function highlightRows(record, index) {
+  if (record.delisted) {
+    return delistedStyle
+  }
+
+  if (record.scores) {
+    return gradedStyle
+  }
+}
+
 const SubmissionsRecord = ({...props}) => (
-  <Records fields={fields} rowKey="id" {...props} />
+  <Records
+    fields={fields}
+    rowKey="id"
+    rowClassName={highlightRows}
+    {...props}
+  />
 )
 
 const mapStateToProps = state => ({
