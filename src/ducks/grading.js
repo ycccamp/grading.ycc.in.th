@@ -8,12 +8,14 @@ import history from '../core/history'
 import {createReducer, Creator} from './helper'
 import {updateGrading, computeGrading} from '../core/grading'
 
-export const SUBMIT_GRADING = 'SUBMIT_GRADING'
+export const SUBMIT = '@GRADING/SUBMIT'
+export const DELIST = '@GRADING/DELIST'
 
-export const SYNC_GRADING = 'SYNC_GRADING'
-export const STORE_GRADING = 'STORE_GRADING'
+export const SYNC_GRADING = '@GRADING/SYNC'
+export const STORE_GRADING = '@GRADING/STORE'
 
-export const submitGrading = Creator(SUBMIT_GRADING, 'id', 'data')
+export const submit = Creator(SUBMIT, 'id', 'data')
+export const delist = Creator(DELIST)
 
 export const syncGrading = Creator(SYNC_GRADING)
 export const storeGrading = Creator(STORE_GRADING)
@@ -39,10 +41,10 @@ export const submissionSelector = createSelector(
 
 window.updateGrading = updateGrading
 
-// Fields: account bank fullname line note phone username
 export function* submitGradingSaga({payload: {id, data}}) {
   const {name, role} = yield select(s => s.user)
   const type = role === 'core' ? 'core' : 'major'
+  const hide = message.loading('กำลังบันทึกผลการให้คะแนน กรุณารอสักครู่...', 0)
 
   try {
     data.scores = data.scores.map(score => parseInt(score))
@@ -52,13 +54,32 @@ export function* submitGradingSaga({payload: {id, data}}) {
 
     yield call(history.push, '/')
 
-    yield call(
-      message.success,
-      `บันทึกผลการให้คะแนนสำหรับ ${id} เรียบร้อยแล้ว!`,
-    )
+    yield call(message.success, `บันทึกผลการให้คะแนนเรียบร้อยแล้ว`)
   } catch (err) {
-    console.warn('Update Grading', err)
+    console.warn('Grading Submission Error', err)
     message.error(err.message)
+  } finally {
+    hide()
+  }
+}
+
+export function* delistSaga({payload: id}) {
+  const hide = message.loading('กำลังคัดผู้สมัครออก กรุณารอสักครู่...', 0)
+
+  try {
+    const name = yield select(s => s.user.name)
+    const doc = db.collection('grading').doc(id)
+    const payload = {delisted: true, delistedBy: name}
+
+    yield call(rsf.firestore.setDocument, doc, payload, {merge: true})
+
+    yield call(history.push, '/')
+    yield call(message.success, `คัดผู้สมัครออกจากรายชื่อแล้ว`)
+  } catch (err) {
+    console.warn('Delisting Error', err)
+    message.error(err.message)
+  } finally {
+    hide()
   }
 }
 
@@ -72,7 +93,8 @@ export function* syncGradingSaga() {
 
 export function* gradingWatcherSaga() {
   yield takeEvery(SYNC_GRADING, syncGradingSaga)
-  yield takeEvery(SUBMIT_GRADING, submitGradingSaga)
+  yield takeEvery(SUBMIT, submitGradingSaga)
+  yield takeEvery(DELIST, delistSaga)
 }
 
 const initial = {

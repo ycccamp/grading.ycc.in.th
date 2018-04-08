@@ -5,7 +5,7 @@ import {createSelector} from 'reselect'
 
 import GradingForm from '../components/GradingForm'
 
-import {submitGrading} from '../ducks/grading'
+import {submit, delist} from '../ducks/grading'
 
 const Small = styled.small`
   font-size: 0.65em;
@@ -14,14 +14,14 @@ const Small = styled.small`
   text-transform: capitalize;
 `
 
-const Grading = ({data, role, submit}) => (
+const Grading = ({data, role, delist, submit}) => (
   <div>
     <h1>
       <span>ตรวจคำถาม</span>
       {role === 'core' && <Small> สาขา: {data.major}</Small>}
     </h1>
 
-    <GradingForm role={role} data={data} onSubmit={submit} />
+    <GradingForm role={role} data={data} delist={delist} onSubmit={submit} />
   </div>
 )
 
@@ -38,13 +38,14 @@ const mapStateToProps = (state, props) => ({
   data: entrySelector(state, props),
 })
 
-const mapDispatchToProps = (dispatch, {match}) => ({
-  submit: data => {
-    const {id} = match.params
+const mapDispatchToProps = (dispatch, {match}) => {
+  const {id} = match.params
 
-    dispatch(submitGrading(id, data))
-  },
-})
+  return {
+    submit: data => dispatch(submit(id, data)),
+    delist: () => dispatch(delist(id)),
+  }
+}
 
 const enhance = connect(mapStateToProps, mapDispatchToProps)
 

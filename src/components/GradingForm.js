@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'react-emotion'
 import {Field, reduxForm} from 'redux-form'
 import {TextField, TextAreaField} from 'redux-form-antd'
-import {Icon} from 'antd'
+import {Icon, Popconfirm} from 'antd'
 
 import Button from './Button'
 import PreviewAnswer from './PreviewAnswer'
@@ -42,7 +42,9 @@ const Question = styled.p`
   word-wrap: break-word;
 `
 
-const GradingForm = ({handleSubmit, data, role}) => (
+const posStyle = {marginRight: '1em', marginBottom: '1.5em'}
+
+const GradingForm = ({handleSubmit, delist, data, role}) => (
   <form onSubmit={handleSubmit}>
     {getQuestions(role).map((item, index) => (
       <Card key={index}>
@@ -65,9 +67,19 @@ const GradingForm = ({handleSubmit, data, role}) => (
       placeholder="บันทึกเพิ่มเติม"
     />
 
-    <Button htmlType="submit" size="large">
+    <Button htmlType="submit" size="large" type="primary" style={posStyle}>
       ยืนยันการให้คะแนน <Icon type="right" />
     </Button>
+
+    <Popconfirm
+      title="คุณต้องการคัดผู้สมัครดังกล่าวออกหรือไม่"
+      onConfirm={delist}
+      okText="คัดออก"
+      cancelText="ยกเลิก">
+      <Button size="large" type="danger">
+        คัดออก <Icon type="trash" />
+      </Button>
+    </Popconfirm>
   </form>
 )
 
