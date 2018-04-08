@@ -26,7 +26,7 @@ const Content = styled(Layout.Content)`
   padding: 0 24px;
 
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   min-height: 100vh;
 `
 

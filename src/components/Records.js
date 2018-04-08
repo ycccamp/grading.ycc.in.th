@@ -15,7 +15,7 @@ const RecordTable = styled(Table)`
   }
 `
 
-const Records = ({data, scrollX, scrollY = 300, cols, ...props}) => (
+const Records = ({data, scrollX, scrollY = 460, cols, ...props}) => (
   <RecordTable
     dataSource={data}
     columns={cols}
