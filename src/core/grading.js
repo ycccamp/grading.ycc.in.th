@@ -53,17 +53,6 @@ export const maxScores = {
 
 const zipQuestion = R.zipWith((q, m) => ({question: q, max: m}))
 
-// Validate if all the given score is below the maximum score
-export function assertMax(scores, section = 'core') {
-  const max = maxScores[section]
-
-  for (const i in max) {
-    if (scores[i] > max[i]) {
-      throw new Error('Given score cannot exceed maximum score.')
-    }
-  }
-}
-
 export const getQuestions = (type = 'core') =>
   zipQuestion(questions[type], maxScores[type])
 
