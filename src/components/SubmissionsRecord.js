@@ -22,9 +22,6 @@ const fields = {
     render: list => list && `${R.sum(list)} (${list.join(' + ')})`,
   },
   notes: 'จดบันทึก',
-  coreScore: 'เฉลี่ยคำถามกลาง',
-  majorScore: 'เฉลี่ยคำถามสาขา',
-  totalScore: 'คะแนนเฉลี่ยรวม',
   updatedAt: {
     title: 'เวลาที่สมัคร',
     render: time => time && time.toLocaleString(),
