@@ -134,18 +134,18 @@ export function* resumePaginationSaga() {
   const entries = yield select(state => submissionSelector(state))
   const {name, role} = yield select(state => state.user)
 
-  const getLastGraded = R.findLastIndex(entry => {
+  // Determine where the grader previously left off
+  const getLeftOff = R.findIndex(entry => {
     const grading = getGrading(entry, name, role)
 
-    return grading.scores
+    return !grading.scores
   })
 
-  const index = getLastGraded(entries)
-  console.log('Last Graded Entry was:', index)
+  const entry = getLeftOff(entries)
 
-  if (index > -1) {
-    const page = Math.ceil(index / PAGE_SIZE)
-    console.log('Resumed Pagination to page', page)
+  if (entry > -1) {
+    const page = Math.ceil(entry / PAGE_SIZE)
+    console.log('Resumed Pagination to page', page, 'at entry', entry)
 
     yield put(setPage(page))
   }
