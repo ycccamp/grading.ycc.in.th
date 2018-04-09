@@ -53,7 +53,7 @@ export const maxScores = {
   design: [30, 20, 25],
   content: [80, 70],
   marketing: [10, 25, 25],
-  programming: [20, 20, 20],
+  programming: [10, 10, 10],
 }
 
 const zipQuestion = R.zipWith((q, m) => ({question: q, max: m}))
