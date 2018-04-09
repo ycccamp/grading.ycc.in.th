@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import {takeEvery, call, put, fork, select, all} from 'redux-saga/effects'
+import {takeEvery, call, put, fork, select} from 'redux-saga/effects'
 import {message} from 'antd'
 import {createSelector} from 'reselect'
 import {reset} from 'redux-form'
@@ -7,7 +7,7 @@ import {reset} from 'redux-form'
 import rsf, {app} from '../core/fire'
 import history from '../core/history'
 import {createReducer, Creator} from './helper'
-import {updateGrading, computeGrading} from '../core/grading'
+import {updateGrading, computeGrading, getGrading} from '../core/grading'
 
 export const SET_PAGE = '@GRADING/SET_PAGE'
 
@@ -41,7 +41,7 @@ export const gradingSelector = createSelector(
   (entries, id, name, role) => {
     const grading = entries.find(grading => grading.id === id)
 
-    return computeGrading(grading, name, role)
+    return getGrading(grading, name, role)
   },
 )
 
@@ -128,6 +128,28 @@ export function* syncGradingSaga() {
   })
 }
 
+const PAGE_SIZE = 10
+
+export function* resumePaginationSaga() {
+  const entries = yield select(state => submissionSelector(state))
+  const {name, role} = yield select(state => state.user)
+
+  const getLastGraded = R.findLastIndex(entry => {
+    const grading = getGrading(entry, name, role)
+
+    return grading.scores
+  })
+
+  const index = getLastGraded(entries)
+
+  if (index > -1) {
+    const page = Math.ceil(index / PAGE_SIZE) + 1
+    console.log('Resumed Pagination to page', page)
+
+    yield put(setPage(page))
+  }
+}
+
 export function* gradingWatcherSaga() {
   yield takeEvery(SYNC_GRADING, syncGradingSaga)
   yield takeEvery(SUBMIT, submitGradingSaga)
@@ -143,8 +165,6 @@ export default createReducer(initial, state => ({
   [SET_PAGE]: page => ({...state, page}),
   [STORE_GRADING]: ({docs}) => {
     const data = docs.map(doc => ({id: doc.id, ...doc.data()}))
-
-    console.log('Grading Record:', data)
 
     return {...state, data}
   },

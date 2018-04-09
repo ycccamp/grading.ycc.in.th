@@ -63,18 +63,10 @@ export const getQuestions = (type = 'core') =>
 
 const average = R.converge(R.divide, [R.sum, R.length])
 
-// const listOf = obj =>
-//   Object.entries(obj).map(([gradedBy, payload]) => ({
-//     gradedBy,
-//     ...payload,
-//   }))
-
 // TODO: Filter out unfinished graders
 function computeScore(results) {
   if (results) {
     const scores = Object.values(results).map(result => R.sum(result.scores))
-
-    console.log('Scores:', scores)
 
     return average(scores)
   }
@@ -82,30 +74,37 @@ function computeScore(results) {
   return 0
 }
 
+const Evaluation = R.pick(['scores', 'notes', 'gradedAt'])
+
+export function getGrading(grading, name, role) {
+  if (role && role !== 'admin') {
+    const type = role === 'core' ? 'core' : 'major'
+    const grades = grading[type]
+
+    if (grades) {
+      const grade = grades[name]
+
+      if (grade) {
+        const result = Evaluation(grade)
+
+        return {...grading, ...result}
+      }
+    }
+  }
+
+  return grading
+}
+
 export function computeGrading(grading, name, role) {
   if (grading) {
     const {core, major} = grading
-    console.log('Grading:', grading)
 
     const coreScore = computeScore(core)
     const majorScore = computeScore(major)
     const totalScore = coreScore + majorScore
 
-    if (role && role !== 'admin') {
-      const type = role === 'core' ? 'core' : 'major'
-      const grades = grading[type]
+    const results = getGrading(grading, name, role)
 
-      if (grades) {
-        const grade = grades[name]
-
-        if (grade) {
-          grading.notes = grade.notes || null
-          grading.scores = grade.scores
-          grading.gradedAt = grade.gradedAt
-        }
-      }
-    }
-
-    return {coreScore, majorScore, totalScore, ...grading}
+    return {coreScore, majorScore, totalScore, ...results}
   }
 }
