@@ -69,7 +69,7 @@ export function* proceedSaga(id) {
 
   const index = entries.findIndex(x => x.id === id)
 
-  if (index) {
+  if (Number.isInteger(index)) {
     const entry = entries[index + 1]
 
     if (entry) {
