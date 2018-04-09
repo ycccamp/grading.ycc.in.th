@@ -142,7 +142,7 @@ export function* resumePaginationSaga() {
 
   // Determine where the grader previously left off
   const getLeftOff = R.findIndex(entry => {
-    const grading = getGrading(entry, name, role)
+    const grading = getGrading(entry, name, role, true)
 
     return !grading.scores
   })
