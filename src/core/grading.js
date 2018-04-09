@@ -50,8 +50,8 @@ export async function updateGrading(id, payload, gradedBy, type = 'major') {
 
 export const maxScores = {
   core: [10, 15, 15],
-  design: [20, 20, 20],
-  content: [15, 45],
+  design: [30, 20, 25],
+  content: [80, 70],
   marketing: [10, 25, 25],
   programming: [20, 20, 20],
 }
