@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'react-emotion'
-import {withRouter} from 'react-static'
+import {Link, withRouter} from 'react-static'
 import {Layout, Breadcrumb, BackTop} from 'antd'
 
 import SideBar from './SideBar'
@@ -12,7 +12,9 @@ const getPath = () =>
 
 const BreadcrumbNav = () => (
   <Breadcrumb style={{margin: '24px 0'}}>
-    <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
+    <Breadcrumb.Item>
+      <Link to="/">Dashboard</Link>
+    </Breadcrumb.Item>
     {getPath().map(s => (
       <Breadcrumb.Item key={s} style={{textTransform: 'capitalize'}}>
         {s}
