@@ -10,6 +10,7 @@ import {createReducer, Creator} from './helper'
 import {updateGrading, computeGrading, getGrading} from '../core/grading'
 
 export const SET_PAGE = '@GRADING/SET_PAGE'
+export const RESUME_PAGINATION = '@GRADING/RESUME_PAGINATION'
 
 export const SUBMIT = '@GRADING/SUBMIT'
 export const DELIST = '@GRADING/DELIST'
@@ -18,6 +19,7 @@ export const SYNC_GRADING = '@GRADING/SYNC'
 export const STORE_GRADING = '@GRADING/STORE'
 
 export const setPage = Creator(SET_PAGE)
+export const resumePagination = Creator(RESUME_PAGINATION)
 
 export const submit = Creator(SUBMIT, 'id', 'data')
 export const delist = Creator(DELIST)
@@ -153,6 +155,7 @@ export function* resumePaginationSaga() {
 
 export function* gradingWatcherSaga() {
   yield takeEvery(SYNC_GRADING, syncGradingSaga)
+  yield takeEvery(RESUME_PAGINATION, resumePaginationSaga)
   yield takeEvery(SUBMIT, submitGradingSaga)
   yield takeEvery(DELIST, delistSaga)
 }

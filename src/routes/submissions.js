@@ -1,11 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
-
+import {compose, lifecycle} from 'recompose'
 import {createSelector} from 'reselect'
 
 import Record from '../components/SubmissionsRecord'
 
-import roleOf from '../core/roles'
+import {resumePagination} from '../ducks/grading'
 
 const Submissions = ({graded, total, user}) => (
   <div>
@@ -36,6 +36,13 @@ const mapStateToProps = state => ({
   total: state.camper.campers.length,
 })
 
-const enhance = connect(mapStateToProps)
+const enhance = compose(
+  connect(mapStateToProps, {resumePagination}),
+  lifecycle({
+    componentDidMount() {
+      this.props.resumePagination()
+    },
+  }),
+)
 
 export default enhance(Submissions)
