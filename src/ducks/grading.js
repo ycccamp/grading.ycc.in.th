@@ -141,9 +141,10 @@ export function* resumePaginationSaga() {
   })
 
   const index = getLastGraded(entries)
+  console.log('Last Graded Entry was:', index)
 
   if (index > -1) {
-    const page = Math.ceil(index / PAGE_SIZE) + 1
+    const page = Math.ceil(index / PAGE_SIZE)
     console.log('Resumed Pagination to page', page)
 
     yield put(setPage(page))
