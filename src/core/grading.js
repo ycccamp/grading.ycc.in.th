@@ -76,7 +76,7 @@ function computeScore(results) {
 
 const Evaluation = R.pick(['scores', 'notes', 'gradedAt'])
 
-export function getGrading(grading, name, role) {
+export function getGrading(grading, name, role, resultOnly) {
   if (grading && role && role !== 'admin') {
     const type = role === 'core' ? 'core' : 'major'
     const grades = grading[type]
@@ -86,6 +86,10 @@ export function getGrading(grading, name, role) {
 
       if (grade) {
         const result = Evaluation(grade)
+
+        if (resultOnly) {
+          return result
+        }
 
         return {...grading, ...result}
       }

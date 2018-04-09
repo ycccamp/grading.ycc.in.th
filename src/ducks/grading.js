@@ -43,7 +43,11 @@ export const gradingSelector = createSelector(
   (entries, id, name, role) => {
     const grading = entries.find(grading => grading.id === id)
 
-    return getGrading(grading, name, role)
+    if (grading) {
+      return getGrading(grading, name, role, true)
+    }
+
+    return {}
   },
 )
 
