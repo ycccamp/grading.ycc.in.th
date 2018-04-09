@@ -52,7 +52,7 @@ export const maxScores = {
   core: [10, 15, 15],
   design: [20, 20, 20],
   content: [15, 45],
-  marketing: [20, 20, 20],
+  marketing: [10, 25, 25],
   programming: [20, 20, 20],
 }
 
