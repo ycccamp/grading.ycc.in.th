@@ -75,10 +75,16 @@ export const submissionSelector = createSelector(
   (campers, grades, name, role) => {
     return campers.map(camper => {
       const grading = grades.find(entry => entry.id === camper.id)
+      const evaluation = computeGrading(grading, name, role)
+
+      if (!evaluation) {
+        return camper
+      }
 
       return {
-        ...computeGrading(grading, name, role),
+        ...evaluation,
         ...camper,
+        majorEvaluation: evaluation.major,
       }
     })
   },
