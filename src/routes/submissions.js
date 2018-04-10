@@ -5,7 +5,7 @@ import {createSelector} from 'reselect'
 
 import Record from '../components/SubmissionsRecord'
 
-import {resumePagination} from '../ducks/grading'
+import {resumePagination, totalSelector} from '../ducks/grading'
 
 const Submissions = ({graded, total, delisted, user}) => (
   <div>
@@ -28,19 +28,6 @@ const gradedSelector = createSelector(
     const type = role === 'core' ? 'core' : 'major'
 
     return entries.filter(x => x[type] && x[type][name] && !x.delisted).length
-  },
-)
-
-const totalSelector = createSelector(
-  s => s.camper.campers,
-  s => s.grading.data,
-  (campers, entries) => {
-    const delisted = entries.filter(x => x.delisted)
-
-    return {
-      total: campers.length - delisted.length,
-      delisted: delisted.length,
-    }
   },
 )
 

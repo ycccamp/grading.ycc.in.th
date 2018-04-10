@@ -37,6 +37,19 @@ export const entrySelector = createSelector(
   (entries, id) => entries.find(camper => camper.id === id),
 )
 
+export const totalSelector = createSelector(
+  s => s.camper.campers,
+  s => s.grading.data,
+  (campers, entries) => {
+    const delisted = entries.filter(x => x.delisted)
+
+    return {
+      total: campers.length - delisted.length,
+      delisted: delisted.length,
+    }
+  },
+)
+
 export const delistedSelector = createSelector(
   s => s.grading.data,
   (s, p) => p.id || p.match.params.id,

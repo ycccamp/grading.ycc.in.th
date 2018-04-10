@@ -1,11 +1,16 @@
 import React from 'react'
+import {connect} from 'react-redux'
 
 import Container from '../components/Container'
 import {Filter, Record} from '../components/Campers'
 
-const Campers = () => (
+import {totalSelector} from '../ducks/grading'
+
+const Campers = ({total, delisted}) => (
   <div>
-    <h1>ผู้สมัครทั้งหมด</h1>
+    <h1>
+      ผู้สมัครทั้งหมด {total} คน | คัดออก {delisted} คน
+    </h1>
 
     <Container>
       <Filter />
@@ -15,4 +20,10 @@ const Campers = () => (
   </div>
 )
 
-export default Campers
+const mapStateToProps = state => ({
+  ...totalSelector(state),
+})
+
+const enhance = connect(mapStateToProps)
+
+export default enhance(Campers)
