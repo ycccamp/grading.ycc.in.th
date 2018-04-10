@@ -35,7 +35,7 @@ export async function updateGrading(id, payload, gradedBy, type = 'major') {
     const data = {
       [type]: {
         [gradedBy]: {
-          notes: payload.notes,
+          notes: payload.notes || '',
           scores: payload.scores,
           gradedAt: new Date(),
         },

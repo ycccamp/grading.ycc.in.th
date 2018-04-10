@@ -1,7 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import styled from 'react-emotion'
+import styled, {css} from 'react-emotion'
 import {Spin} from 'antd'
+import {createSelector} from 'reselect'
 
 import GradingForm from '../components/GradingForm'
 
@@ -9,8 +10,13 @@ import {submit, delist, entrySelector, gradingSelector} from '../ducks/grading'
 
 import {grades, genders} from '../core/options'
 
+// prettier-ignore
 const Heading = styled.h1`
   margin: 0;
+
+  ${props => props.center && css`
+    text-align: center;
+  `}
 `
 
 const SubHeading = styled.h2`
@@ -23,7 +29,17 @@ const SubHeading = styled.h2`
   text-transform: capitalize;
 `
 
-const Grading = ({data, role, delist, submit, initial}) => {
+const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
+  if (delistedBy) {
+    return (
+      <div>
+        <Heading center>
+          ผู้สมัครดังกล่าวถูกคัดออกไปแล้วโดย {delistedBy}
+        </Heading>
+      </div>
+    )
+  }
+
   if (data) {
     return (
       <div>
@@ -51,10 +67,23 @@ const Grading = ({data, role, delist, submit, initial}) => {
   return <Spin />
 }
 
+const delistedSelector = createSelector(
+  s => s.grading.data,
+  (s, p) => p.match.params.id,
+  (entries, id) => {
+    const entry = entries.find(grading => grading.id === id)
+
+    if (entry.delisted) {
+      return entry.delistedBy
+    }
+  },
+)
+
 const mapStateToProps = (state, props) => ({
   role: state.user.role,
   data: entrySelector(state, props),
   initial: gradingSelector(state, props),
+  delistedBy: delistedSelector(state, props),
 })
 
 const mapDispatchToProps = (dispatch, {match}) => {
