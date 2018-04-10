@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import * as R from 'ramda'
 import styled, {css} from 'react-emotion'
 import {connect} from 'react-redux'
+import {createSelector} from 'reselect'
 
 import Records from '../../components/Records'
 
@@ -171,6 +172,7 @@ const fields = {
   address: {
     title: 'ที่อยู่',
     render: text => <Answer>{text}</Answer>,
+    width: 200,
   },
   phone: 'เบอร์โทรศัพท์',
   email: 'อีเมล',
@@ -249,8 +251,16 @@ const CampersRecord = ({campers, ...props}) => (
   />
 )
 
+const campersSelector = createSelector(submissionSelector, submissions => {
+  const sorted = submissions.sort((a, b) => {
+    return (b.totalScore || 0) - (a.totalScore || 0)
+  })
+
+  return sorted
+})
+
 const mapStateToProps = state => ({
-  data: submissionSelector(state),
+  data: campersSelector(state),
 })
 
 const enhance = connect(mapStateToProps)
