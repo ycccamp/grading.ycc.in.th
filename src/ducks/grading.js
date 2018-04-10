@@ -43,8 +43,10 @@ export const delistedSelector = createSelector(
   (entries, id) => {
     const entry = entries.find(grading => grading.id === id)
 
-    if (entry.delisted) {
-      return entry.delistedBy
+    if (entry) {
+      if (entry.delisted) {
+        return entry.delistedBy
+      }
     }
   },
 )
