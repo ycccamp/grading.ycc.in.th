@@ -169,7 +169,7 @@ export function* resumePaginationSaga() {
   const getLeftOff = R.findIndex(entry => {
     const grading = getGrading(entry, name, role, true)
 
-    return !grading.scores
+    return !grading.delisted && !grading.scores
   })
 
   const entry = getLeftOff(entries)
