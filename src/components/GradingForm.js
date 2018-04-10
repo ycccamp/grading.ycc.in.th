@@ -44,22 +44,30 @@ const Question = styled.p`
 
 const posStyle = {marginRight: '1em', marginBottom: '1.5em'}
 
+function isIgnored(role, index) {
+  return role === 'design' && index === 2
+}
+
 const GradingForm = ({handleSubmit, delist, data, role}) => (
   <form onSubmit={handleSubmit}>
-    {getQuestions(role).map((item, index) => (
-      <Card key={index}>
-        <Question>
-          {item.question} (Points: {item.max})
-        </Question>
-        <PreviewAnswer data={data} role={role} index={index} />
-        <Field
-          name={`scores.${index}`}
-          component={TextField}
-          placeholder={`คะแนน (เต็ม ${item.max})`}
-          autoFocus={index === 0}
-        />
-      </Card>
-    ))}
+    {getQuestions(role).map((item, index) => {
+      if (isIgnored(role, index)) return null
+
+      return (
+        <Card key={index}>
+          <Question>
+            {item.question} (Points: {item.max})
+          </Question>
+          <PreviewAnswer data={data} role={role} index={index} />
+          <Field
+            name={`scores.${index}`}
+            component={TextField}
+            placeholder={`คะแนน (เต็ม ${item.max})`}
+            autoFocus={index === 0}
+          />
+        </Card>
+      )
+    })}
 
     <Field
       name="notes"
@@ -105,6 +113,8 @@ function validate(values, {role}) {
   const max = maxScores[role]
 
   fields.forEach(index => {
+    if (isIgnored(role, index)) return
+
     if (!values.scores) {
       errors.scores[index] = 'กรุณาระบุคะแนน'
       return
