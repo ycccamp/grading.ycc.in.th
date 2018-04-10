@@ -19,6 +19,12 @@ const Notes = styled.div`
   word-break: break-word;
 `
 
+const Answer = styled.small`
+  white-space: pre-line;
+  word-break: break-word;
+  word-wrap: break-word;
+`
+
 const Grading = ({data}) => {
   if (data) {
     return (
@@ -124,7 +130,7 @@ const fields = {
   school: 'โรงเรียน',
   address: {
     title: 'ที่อยู่',
-    render: text => <small>{text}</small>,
+    render: text => <Answer>{text}</Answer>,
   },
   phone: 'เบอร์โทรศัพท์',
   email: 'อีเมล',
@@ -135,7 +141,7 @@ const fields = {
   activity: {
     title: 'กิจกรรมที่ทำ',
     width: 300,
-    render: text => <small>{text}</small>,
+    render: text => <Answer>{text}</Answer>,
   },
   parentFirstName: 'ชื่อผู้ปกครอง',
   parentLastName: 'นามสกุลผู้ปกครอง',
@@ -154,37 +160,32 @@ const fields = {
   generalAnswer1: {
     title: 'คำถามกลาง 1',
     width: 300,
-    render: text => <small>{text}</small>,
+    render: text => <Answer>{text}</Answer>,
   },
   generalAnswer2: {
     title: 'คำถามกลาง 2',
     width: 300,
-    render: text => <small>{text}</small>,
+    render: text => <Answer>{text}</Answer>,
   },
   generalAnswer3: {
     title: 'คำถามกลาง 3',
     width: 300,
-    render: text => <small>{text}</small>,
+    render: text => <Answer>{text}</Answer>,
   },
   majorAnswer1: {
     title: 'คำถามสาขา 1',
     width: 300,
-    render: text => <small>{text}</small>,
+    render: text => <Answer>{text}</Answer>,
   },
   majorAnswer2: {
     title: 'คำถามสาขา 2',
     width: 300,
-    render: text => <small>{text}</small>,
+    render: text => <Answer>{text}</Answer>,
   },
   majorAnswer3: {
     title: 'คำถามสาขา 3',
     width: 300,
-    render: text => <small>{text}</small>,
-  },
-  action: {
-    title: 'ทำรายการ',
-    render: text => <u>แก้ไข</u>,
-    fixed: 'right',
+    render: text => <Answer>{text}</Answer>,
   },
 }
 
