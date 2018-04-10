@@ -1,3 +1,11 @@
+export const religions = {
+  atheist: 'ไม่นับถือศาสนา',
+  buddhist: 'ศาสนาพุทธ',
+  christianity: 'ศาสนาคริสต์',
+  islam: 'ศาสนาอิสลาม',
+  other: 'ศาสนาอื่นๆ',
+}
+
 export const grades = {
   m3: 'มัธยมศึกษาปีที่ 3',
   m4: 'มัธยมศึกษาปีที่ 4',

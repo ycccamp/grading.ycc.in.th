@@ -30,7 +30,7 @@ const enhance = withProps(props => {
     .map(([dataIndex, data]) => {
       return data.title ? {dataIndex, ...data} : {dataIndex, title: data}
     })
-    .map(col => ({...col, width: col.width || 150}))
+    .map(col => ({...col, width: col.width || props.maxWidth || 150}))
 
   return {
     cols,

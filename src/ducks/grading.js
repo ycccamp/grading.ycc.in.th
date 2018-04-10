@@ -77,8 +77,8 @@ export const submissionSelector = createSelector(
       const grading = grades.find(entry => entry.id === camper.id)
 
       return {
-        ...camper,
         ...computeGrading(grading, name, role),
+        ...camper,
       }
     })
   },
