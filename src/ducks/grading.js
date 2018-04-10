@@ -10,6 +10,7 @@ import {createReducer, Creator} from './helper'
 import {updateGrading, computeGrading, getGrading} from '../core/grading'
 
 export const SET_PAGE = '@GRADING/SET_PAGE'
+export const PROCEED = '@GRADING/PROCEED'
 export const RESUME_PAGINATION = '@GRADING/RESUME_PAGINATION'
 
 export const SUBMIT = '@GRADING/SUBMIT'
@@ -19,6 +20,7 @@ export const SYNC_GRADING = '@GRADING/SYNC'
 export const STORE_GRADING = '@GRADING/STORE'
 
 export const setPage = Creator(SET_PAGE)
+export const proceed = Creator(PROCEED)
 export const resumePagination = Creator(RESUME_PAGINATION)
 
 export const submit = Creator(SUBMIT, 'id', 'data')
@@ -33,6 +35,18 @@ export const entrySelector = createSelector(
   s => s.camper.campers,
   (s, p) => p.match.params.id,
   (entries, id) => entries.find(camper => camper.id === id),
+)
+
+export const delistedSelector = createSelector(
+  s => s.grading.data,
+  (s, p) => p.id || p.match.params.id,
+  (entries, id) => {
+    const entry = entries.find(grading => grading.id === id)
+
+    if (entry.delisted) {
+      return entry.delistedBy
+    }
+  },
 )
 
 export const gradingSelector = createSelector(
@@ -69,7 +83,9 @@ export const submissionSelector = createSelector(
 )
 
 // Proceed to next entries
-export function* proceedSaga(id) {
+export function* proceedSaga(payload) {
+  const id = payload.id || payload
+
   const entries = yield select(state => submissionSelector(state))
   yield put(reset('grading'))
 
@@ -88,6 +104,13 @@ export function* proceedSaga(id) {
 }
 
 export function* submitGradingSaga({payload: {id, data}}) {
+  const isDelisted = yield select(s => delistedSelector(s, {id}))
+
+  if (isDelisted) {
+    yield fork(proceedSaga, id)
+    return
+  }
+
   const {name, role} = yield select(s => s.user)
   const type = role === 'core' ? 'core' : 'major'
   const hide = message.loading('กำลังบันทึกผลการให้คะแนน กรุณารอสักครู่...', 0)
@@ -160,6 +183,7 @@ export function* resumePaginationSaga() {
 export function* gradingWatcherSaga() {
   yield takeEvery(SYNC_GRADING, syncGradingSaga)
   yield takeEvery(RESUME_PAGINATION, resumePaginationSaga)
+  yield takeEvery(PROCEED, proceedSaga)
   yield takeEvery(SUBMIT, submitGradingSaga)
   yield takeEvery(DELIST, delistSaga)
 }

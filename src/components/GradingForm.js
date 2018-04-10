@@ -48,7 +48,7 @@ function isIgnored(role, index) {
   return role === 'design' && index === 2
 }
 
-const GradingForm = ({handleSubmit, delist, data, role}) => (
+const GradingForm = ({handleSubmit, delist, data, role, disabled}) => (
   <form onSubmit={handleSubmit}>
     {getQuestions(role).map((item, index) => {
       if (isIgnored(role, index)) return null
@@ -59,36 +59,49 @@ const GradingForm = ({handleSubmit, delist, data, role}) => (
             {item.question} (Points: {item.max})
           </Question>
           <PreviewAnswer data={data} role={role} index={index} />
-          <Field
-            name={`scores.${index}`}
-            component={TextField}
-            placeholder={`คะแนน (เต็ม ${item.max})`}
-            autoFocus={index === 0}
-          />
+
+          {!disabled && (
+            <Field
+              name={`scores.${index}`}
+              component={TextField}
+              placeholder={`คะแนน (เต็ม ${item.max})`}
+              autoFocus={index === 0}
+            />
+          )}
         </Card>
       )
     })}
 
-    <Field
-      name="notes"
-      rows={3}
-      component={TextAreaField}
-      placeholder="บันทึกเพิ่มเติม"
-    />
+    {!disabled && (
+      <div>
+        <Field
+          name="notes"
+          rows={3}
+          component={TextAreaField}
+          placeholder="บันทึกเพิ่มเติม"
+        />
 
-    <Button htmlType="submit" size="large" type="primary" style={posStyle}>
-      ยืนยันการให้คะแนน <Icon type="right" />
-    </Button>
+        <Button htmlType="submit" size="large" type="primary" style={posStyle}>
+          ยืนยันการให้คะแนน <Icon type="right" />
+        </Button>
 
-    <Popconfirm
-      title="คุณต้องการคัดผู้สมัครดังกล่าวออกหรือไม่"
-      onConfirm={delist}
-      okText="คัดออก"
-      cancelText="ยกเลิก">
-      <Button size="large" type="danger">
-        คัดออก <Icon type="trash" />
+        <Popconfirm
+          title="คุณต้องการคัดผู้สมัครดังกล่าวออกหรือไม่"
+          onConfirm={delist}
+          okText="คัดออก"
+          cancelText="ยกเลิก">
+          <Button size="large" type="danger">
+            คัดออก <Icon type="trash" />
+          </Button>
+        </Popconfirm>
+      </div>
+    )}
+
+    {disabled && (
+      <Button htmlType="submit" size="large" type="primary">
+        ไปยังผู้สมัครคนถัดไป <Icon type="right" />
       </Button>
-    </Popconfirm>
+    )}
   </form>
 )
 
@@ -104,10 +117,12 @@ function allowExtra(role, index) {
   return false
 }
 
-function validate(values, {role}) {
+function validate(values, {role, disabled}) {
   const errors = {
     scores: [],
   }
+
+  if (disabled) return
 
   const fields = role === 'content' ? [0, 1] : [0, 1, 2]
   const max = maxScores[role]

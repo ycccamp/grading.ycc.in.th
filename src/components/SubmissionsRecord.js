@@ -73,13 +73,11 @@ const fields = {
   action: {
     title: 'ตรวจให้คะแนน',
     render: (text, record) => {
-      if (record.delisted) {
-        return `ถูกคัดออกโดย ${record.delistedBy}`
-      }
-
       return (
         <Link to={`/grade/${record.id}`}>
-          <Button>ตรวจให้คะแนน</Button>
+          <Button type={record.delisted && 'dashed'} style={{width: '100%'}}>
+            {record.delisted ? 'ดูคำตอบ' : 'ตรวจให้คะแนน'}
+          </Button>
         </Link>
       )
     },
