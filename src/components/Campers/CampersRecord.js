@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import * as R from 'ramda'
 import styled, {css} from 'react-emotion'
 import {connect} from 'react-redux'
@@ -13,38 +13,78 @@ const Meta = styled.div`
   word-break: break-word;
 `
 
-const Notes = styled.div`
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  word-break: break-word;
+const Trigger = styled.div`
+  cursor: pointer;
 `
 
-const Answer = styled.small`
+const Text = styled.small`
+  cursor: pointer;
+
   white-space: pre-line;
   word-break: break-word;
   word-wrap: break-word;
 `
 
-const Grading = ({data}) => {
-  if (data) {
-    return (
-      <div>
-        {Object.entries(data).map(([gradedBy, entry]) => (
-          <div style={{marginBottom: '0.5em'}} key={gradedBy}>
-            <strong>
-              <small>{gradedBy}:</small>
-            </strong>
-            <div>
-              {entry.scores.join(' + ')} = {R.sum(entry.scores)}
-            </div>
-            <Notes>{entry.notes}</Notes>
-          </div>
-        ))}
-      </div>
-    )
+const truncate = text => {
+  if (typeof text !== 'string') return null
+
+  if (text.length < 150) {
+    return text
   }
 
-  return null
+  return text.substring(0, 150) + '...'
+}
+
+class Answer extends Component {
+  state = {shown: false}
+
+  toggle = () => this.setState({shown: !this.state.shown})
+
+  render() {
+    const {shown} = this.state
+    const {children} = this.props
+
+    if (children) {
+      return (
+        <Text onClick={this.toggle} title="กดเพื่อดูข้อความเต็ม">
+          {shown ? children : truncate(children)}
+        </Text>
+      )
+    }
+
+    return null
+  }
+}
+
+class Grading extends Component {
+  state = {shown: false}
+
+  toggle = () => this.setState({shown: !this.state.shown})
+
+  render() {
+    const {shown} = this.state
+    const {data} = this.props
+
+    if (data) {
+      return (
+        <Trigger onClick={this.toggle} title="กดเพื่อดูคอมเม้นต์ของกรรมการ">
+          {Object.entries(data).map(([gradedBy, entry]) => (
+            <div style={{marginBottom: '0.5em'}} key={gradedBy}>
+              <strong>
+                <small>{gradedBy}:</small>
+              </strong>
+              <div>
+                {entry.scores.join(' + ')} = {R.sum(entry.scores)}
+              </div>
+              {shown && <Text>{entry.notes}</Text>}
+            </div>
+          ))}
+        </Trigger>
+      )
+    }
+
+    return null
+  }
 }
 
 const fields = {
@@ -199,16 +239,15 @@ function highlightRows(record, index) {
   }
 }
 
-const CampersRecord = ({campers, ...props}) =>
-  console.log(props.data) || (
-    <Records
-      fields={fields}
-      maxWidth={120}
-      rowClassName={highlightRows}
-      rowKey="id"
-      {...props}
-    />
-  )
+const CampersRecord = ({campers, ...props}) => (
+  <Records
+    fields={fields}
+    maxWidth={120}
+    rowClassName={highlightRows}
+    rowKey="id"
+    {...props}
+  />
+)
 
 const mapStateToProps = state => ({
   data: submissionSelector(state),
