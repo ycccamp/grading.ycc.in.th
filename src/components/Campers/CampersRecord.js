@@ -28,11 +28,11 @@ const Text = styled.small`
 const truncate = text => {
   if (typeof text !== 'string') return null
 
-  if (text.length < 150) {
+  if (text.length < 100) {
     return text
   }
 
-  return text.substring(0, 150) + '...'
+  return text.substring(0, 100) + '...'
 }
 
 class Answer extends Component {
@@ -76,7 +76,7 @@ class Grading extends Component {
               <div>
                 {entry.scores.join(' + ')} = {R.sum(entry.scores)}
               </div>
-              {shown && <Text>{entry.notes}</Text>}
+              <Text>{shown ? entry.notes : truncate(entry.notes)}</Text>
             </div>
           ))}
         </Trigger>
