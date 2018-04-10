@@ -7,11 +7,12 @@ import Record from '../components/SubmissionsRecord'
 
 import {resumePagination} from '../ducks/grading'
 
-const Submissions = ({graded, total, user}) => (
+const Submissions = ({graded, total, delisted, user}) => (
   <div>
     <h1>
+      <span>รายชื่อตรวจคำถาม </span>
       <span>
-        รายชื่อตรวจคำถาม (ตรวจแล้ว {graded} จาก {total} คน)
+        (ตรวจแล้ว {graded} จาก {total} คน | คัดออก {delisted} คน)
       </span>
     </h1>
 
@@ -26,14 +27,27 @@ const gradedSelector = createSelector(
   (entries, role, name) => {
     const type = role === 'core' ? 'core' : 'major'
 
-    return entries.filter(x => x[type] && x[type][name]).length
+    return entries.filter(x => x[type] && x[type][name] && !x.delisted).length
+  },
+)
+
+const totalSelector = createSelector(
+  s => s.camper.campers,
+  s => s.grading.data,
+  (campers, entries) => {
+    const delisted = entries.filter(x => x.delisted)
+
+    return {
+      total: campers.length - delisted.length,
+      delisted: delisted.length,
+    }
   },
 )
 
 const mapStateToProps = state => ({
   user: state.user,
   graded: gradedSelector(state),
-  total: state.camper.campers.length,
+  ...totalSelector(state),
 })
 
 const enhance = compose(
