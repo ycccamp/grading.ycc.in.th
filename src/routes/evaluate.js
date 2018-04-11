@@ -3,13 +3,13 @@ import {connect} from 'react-redux'
 import styled from 'react-emotion'
 import {Spin} from 'antd'
 
-import GradingForm from '../components/GradingForm'
+import EvaluationForm from '../components/EvaluationForm'
 
 import {submit, delist} from '../ducks/grading'
 
 import {
   evaluationSelector,
-  submissionsSelector,
+  submissionSelector,
   delistedSelector,
 } from '../ducks/grading.selector'
 
@@ -50,7 +50,7 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
           {genders[data.gender]}
         </SubHeading>
 
-        <GradingForm
+        <EvaluationForm
           role={role}
           data={data}
           delist={delist}
@@ -65,12 +65,16 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
   return <Spin />
 }
 
-const mapStateToProps = (state, props) => ({
-  role: state.user.role,
-  data: submissionsSelector(state, props),
-  initial: evaluationSelector(state, props),
-  delistedBy: delistedSelector(state, props),
-})
+const mapStateToProps = (state, {match}) => {
+  const {id} = match.params
+
+  return {
+    role: state.user.role,
+    data: submissionSelector(state, id),
+    initial: evaluationSelector(state, id),
+    delistedBy: delistedSelector(state, id),
+  }
+}
 
 const mapDispatchToProps = (dispatch, {match}) => {
   const {id} = match.params

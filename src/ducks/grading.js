@@ -5,7 +5,7 @@ import {reset} from 'redux-form'
 
 import rsf, {app} from '../core/fire'
 import history from '../core/history'
-import {updateGrading} from '../core/submissions'
+import {updateGrading} from '../core/evaluation'
 
 import {createReducer, Creator} from './helper'
 
