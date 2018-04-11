@@ -4,11 +4,11 @@ import {Field, reduxForm} from 'redux-form'
 import {TextField, TextAreaField} from 'redux-form-antd'
 import {message, Icon, Popconfirm} from 'antd'
 
-import Button from './Button'
-import PreviewAnswer from './PreviewAnswer'
+import Button from '../Button'
+import PreviewAnswer from '../PreviewAnswer'
 
-import {maxScores} from '../core/scoring'
-import {getQuestions} from '../core/evaluation'
+import {maxScores} from '../../core/scoring'
+import {getQuestions} from '../../core/evaluation'
 
 const Card = styled.section`
   display: flex;

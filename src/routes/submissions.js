@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {compose, lifecycle} from 'recompose'
 
-import Record from '../components/SubmissionsRecord'
+import {Record} from '../components/Evaluation'
 
 import {resumePagination} from '../ducks/grading'
 import {gradedSelector, totalSelector} from '../ducks/grading.selector'

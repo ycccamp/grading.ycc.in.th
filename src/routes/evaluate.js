@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import styled from 'react-emotion'
 import {Spin} from 'antd'
 
-import EvaluationForm from '../components/EvaluationForm'
+import {Form} from '../components/Evaluation'
 
 import {submit, delist} from '../ducks/grading'
 
@@ -50,7 +50,7 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
           {genders[data.gender]}
         </SubHeading>
 
-        <EvaluationForm
+        <Form
           role={role}
           data={data}
           delist={delist}

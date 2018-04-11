@@ -1,8 +1,8 @@
 import React from 'react'
-import styled, {css} from 'react-emotion'
+import styled from 'react-emotion'
 
-import WebPreview from '../components/WebPreview'
-import ImagePreview from '../components/ImagePreview'
+import WebPreview from './WebPreview'
+import ImagePreview from './ImagePreview'
 
 const Answer = styled.p`
   color: #555;

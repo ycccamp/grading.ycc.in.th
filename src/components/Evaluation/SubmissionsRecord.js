@@ -4,13 +4,13 @@ import styled, {css} from 'react-emotion'
 import {connect} from 'react-redux'
 import {Link} from 'react-static'
 
-import Button from './Button'
-import Records from './Records'
+import Button from '../Button'
+import Records from '../Records'
 
-import {setPage} from '../ducks/grading'
-import {submissionsSelector} from '../ducks/grading.selector'
+import {setPage} from '../../ducks/grading'
+import {submissionsSelector} from '../../ducks/grading.selector'
 
-import {grades, genders} from '../core/options'
+import {grades, genders} from '../../core/options'
 
 const Note = styled.span`
   font-size: 0.95em;
