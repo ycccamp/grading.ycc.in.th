@@ -36,7 +36,13 @@ export const gradedSelector = createSelector(
     This selectors will be used to populate the data in SubmissionsRecord
 */
 
-const sortByGraded = (a, b) => (b.gradedAt || 0) - (a.gradedAt || 0)
+function sortByGraded(a, b) {
+  return (
+    !a.gradedAt - !b.gradedAt ||
+    +(a.gradedAt > b.gradedAt) ||
+    -(a.gradedAt < b.gradedAt)
+  )
+}
 
 // Joins the camper's information with your evaluation result.
 // This will be used in the list of submissions by the graders only.
