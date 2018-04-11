@@ -113,6 +113,14 @@ export function* syncGradingSaga() {
 const PAGE_SIZE = 10
 
 export function* resumePaginationSaga() {
+  // Abort if the user is an administrator, not a grader
+  const role = yield select(s => s.user.role)
+
+  if (role === 'admin') {
+    return
+  }
+
+  // Determine where the grader had left off previously, and resume to that page
   const entry = yield select(leftoffSelector)
 
   if (entry > -1) {
