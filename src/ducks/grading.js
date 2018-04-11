@@ -1,13 +1,19 @@
 import * as R from 'ramda'
 import {takeEvery, call, put, fork, select} from 'redux-saga/effects'
 import {message} from 'antd'
-import {createSelector} from 'reselect'
 import {reset} from 'redux-form'
 
 import rsf, {app} from '../core/fire'
 import history from '../core/history'
+import {updateGrading} from '../core/submissions'
+
 import {createReducer, Creator} from './helper'
-import {updateGrading, computeGrading, getGrading} from '../core/grading'
+
+import {
+  findEvaluation,
+  submissionsSelector,
+  delistedSelector,
+} from './grading.selector'
 
 export const SET_PAGE = '@GRADING/SET_PAGE'
 export const PROCEED = '@GRADING/PROCEED'
@@ -31,83 +37,11 @@ export const storeGrading = Creator(STORE_GRADING)
 
 const db = app.firestore()
 
-export const entrySelector = createSelector(
-  s => s.camper.campers,
-  (s, p) => p.match.params.id,
-  (entries, id) => entries.find(camper => camper.id === id),
-)
-
-export const totalSelector = createSelector(
-  s => s.camper.campers,
-  s => s.grading.data,
-  (campers, entries) => {
-    const delisted = entries.filter(x => x.delisted)
-
-    return {
-      total: campers.length - delisted.length,
-      delisted: delisted.length,
-    }
-  },
-)
-
-export const delistedSelector = createSelector(
-  s => s.grading.data,
-  (s, p) => p.id || p.match.params.id,
-  (entries, id) => {
-    const entry = entries.find(grading => grading.id === id)
-
-    if (entry) {
-      if (entry.delisted) {
-        return entry.delistedBy
-      }
-    }
-  },
-)
-
-export const gradingSelector = createSelector(
-  s => s.grading.data,
-  (s, p) => p.match.params.id,
-  s => s.user.name,
-  s => s.user.role,
-  (entries, id, name, role) => {
-    const grading = entries.find(grading => grading.id === id)
-
-    if (grading) {
-      return getGrading(grading, name, role, true)
-    }
-
-    return {}
-  },
-)
-
-export const submissionSelector = createSelector(
-  s => s.camper.campers,
-  s => s.grading.data,
-  s => s.user.name,
-  s => s.user.role,
-  (campers, grades, name, role) => {
-    return campers.map(camper => {
-      const grading = grades.find(entry => entry.id === camper.id)
-      const evaluation = computeGrading(grading, name, role)
-
-      if (!evaluation) {
-        return camper
-      }
-
-      return {
-        ...evaluation,
-        ...camper,
-        majorEvaluation: evaluation.major,
-      }
-    })
-  },
-)
-
 // Proceed to next entries
 export function* proceedSaga(payload) {
   const id = payload.id || payload
 
-  const entries = yield select(state => submissionSelector(state))
+  const entries = yield select(state => submissionsSelector(state))
   yield put(reset('grading'))
 
   const index = entries.findIndex(x => x.id === id)
@@ -181,12 +115,12 @@ export function* syncGradingSaga() {
 const PAGE_SIZE = 10
 
 export function* resumePaginationSaga() {
-  const entries = yield select(state => submissionSelector(state))
+  const entries = yield select(state => submissionsSelector(state))
   const {name, role} = yield select(state => state.user)
 
   // Determine where the grader previously left off
   const getLeftOff = R.findIndex(entry => {
-    const grading = getGrading(entry, name, role, true)
+    const grading = findEvaluation(entry, name, role)
 
     return !grading.delisted && !grading.scores
   })

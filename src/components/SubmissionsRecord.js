@@ -7,7 +7,8 @@ import {Link} from 'react-static'
 import Button from './Button'
 import Records from './Records'
 
-import {setPage, submissionSelector} from '../ducks/grading'
+import {setPage} from '../ducks/grading'
+import {submissionsSelector} from '../ducks/grading.selector'
 
 import {grades, genders} from '../core/options'
 
@@ -115,7 +116,7 @@ const SubmissionsRecord = ({current, setPage, ...props}) => (
 
 const mapStateToProps = state => ({
   current: state.grading.page,
-  data: submissionSelector(state),
+  data: submissionsSelector(state),
 })
 
 const enhance = connect(mapStateToProps, {setPage})

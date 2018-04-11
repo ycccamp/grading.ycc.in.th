@@ -7,7 +7,8 @@ import {message, Icon, Popconfirm} from 'antd'
 import Button from './Button'
 import PreviewAnswer from './PreviewAnswer'
 
-import {getQuestions, maxScores} from '../core/grading'
+import {maxScores} from '../core/scoring'
+import {getQuestions} from '../core/submissions'
 
 const Card = styled.section`
   display: flex;

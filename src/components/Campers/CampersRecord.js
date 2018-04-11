@@ -6,7 +6,7 @@ import {createSelector} from 'reselect'
 
 import Records from '../../components/Records'
 
-import {submissionSelector} from '../../ducks/grading'
+import {campersSelector} from '../../ducks/grading.selector'
 
 import {grades, genders, religions} from '../../core/options'
 
@@ -118,7 +118,7 @@ const fields = {
     title: 'คะแนนสาขา',
     render: num => num && num.toFixed(2),
   },
-  core: {
+  coreEvaluation: {
     title: 'การประเมินกลาง',
     render: data => <Grading data={data} />,
     width: 300,
@@ -250,14 +250,6 @@ const CampersRecord = ({campers, ...props}) => (
     {...props}
   />
 )
-
-const campersSelector = createSelector(submissionSelector, submissions => {
-  const sorted = submissions.sort((a, b) => {
-    return (b.totalScore || 0) - (a.totalScore || 0)
-  })
-
-  return sorted
-})
 
 const mapStateToProps = state => ({
   data: campersSelector(state),

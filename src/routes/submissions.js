@@ -5,7 +5,8 @@ import {createSelector} from 'reselect'
 
 import Record from '../components/SubmissionsRecord'
 
-import {resumePagination, totalSelector} from '../ducks/grading'
+import {resumePagination} from '../ducks/grading'
+import {totalSelector} from '../ducks/grading.selector'
 
 const Submissions = ({graded, total, delisted, user}) => (
   <div>

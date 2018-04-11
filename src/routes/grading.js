@@ -5,13 +5,9 @@ import {Spin} from 'antd'
 
 import GradingForm from '../components/GradingForm'
 
-import {
-  submit,
-  delist,
-  entrySelector,
-  gradingSelector,
-  delistedSelector,
-} from '../ducks/grading'
+import {submit, delist} from '../ducks/grading'
+
+import {submissionsSelector, delistedSelector} from '../ducks/grading.selector'
 
 import {grades, genders} from '../core/options'
 
@@ -55,7 +51,7 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
           data={data}
           delist={delist}
           onSubmit={submit}
-          initialValues={initial}
+          initialValues={data}
           disabled={!!delistedBy}
         />
       </div>
@@ -67,8 +63,7 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
 
 const mapStateToProps = (state, props) => ({
   role: state.user.role,
-  data: entrySelector(state, props),
-  initial: gradingSelector(state, props),
+  data: submissionsSelector(state, props),
   delistedBy: delistedSelector(state, props),
 })
 

@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import Container from '../components/Container'
 import {Filter, Record} from '../components/Campers'
 
-import {totalSelector} from '../ducks/grading'
+import {totalSelector} from '../ducks/grading.selector'
 
 const Campers = ({total, delisted}) => (
   <div>
