@@ -7,8 +7,7 @@
     "start": "react-static start",
     "stage": "react-static build --staging",
     "build": "react-static build",
-    "serve": "serve dist -p 3000",
-    "deploy": "react-static build && netlify deploy"
+    "serve": "serve dist -p 3000"
   },
   "dependencies": {
     "@firebase/firestore": "^0.3.7",
