@@ -3,7 +3,6 @@ import {createSelector} from 'reselect'
 const sortByScore = (a, b) => (b.totalScore || 0) - (a.totalScore || 0)
 
 // Joins the camper's information with the average grading result
-// LISTING - ADMIN
 export const campersSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,

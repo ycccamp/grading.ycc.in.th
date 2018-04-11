@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 import {createSelector} from 'reselect'
 
-const idSelector = (s, p) => p.id || p.match.params.id
+import {findEvaluation} from '../core/evaluation'
 
 // Calculate the total and delisted submissions
 // LISTING - SHARED
@@ -15,8 +15,12 @@ export const totalSelector = createSelector(
   },
 )
 
+/*
+  # Listing Selectors
+    These selectors will be used in routes/submissions
+*/
+
 // Show how many people have been graded
-// LISTING - GRADERS
 export const gradedSelector = createSelector(
   s => s.grading.data,
   s => s.user.role,
@@ -30,7 +34,6 @@ export const gradedSelector = createSelector(
 
 // Joins the camper's information with the current grading result.
 // This will be used in the list of submissions by the graders only.
-// LISTING - GRADERS
 export const submissionsSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
@@ -45,39 +48,47 @@ export const submissionsSelector = createSelector(
   },
 )
 
-// Retrieve the evaluation that matches the specific user ID.
-// DETAIL - GRADERS
-const gradingSelector = createSelector(
+/*
+  # Detail Selectors
+    These selectors will be used in routes/grading
+*/
+
+// Selects the user ID
+const idSelector = (s, p) => p.id || p.match.params.id
+
+// Retrieve the evaluations that matches the specific user ID.
+const evaluationsSelector = createSelector(
   s => s.grading.data,
   idSelector,
   (evaluations, id) => evaluations.find(evaluation => evaluation.id === id),
 )
 
 // Selects the evaluation result that you had submitted beforehand
-// DETAIL - GRADERS
 export const evaluationSelector = createSelector(
-  gradingSelector,
+  evaluationsSelector,
   s => s.user.name,
   s => s.user.role,
   (evaluation, name, role) => findEvaluation(evaluation, name, role),
 )
 
 // Determines if the camper is delisted or not. Returns the evaluator's name.
-// DETAIL - GRADERS
 export const delistedSelector = createSelector(
-  gradingSelector,
+  evaluationsSelector,
   evaluation => evaluation && evaluation.delisted && evaluation.delistedBy,
 )
 
-// DETAIL - GRADERS
 export const submissionSelector = createSelector(
   submissionsSelector,
   idSelector,
   (submissions, id) => submissions.find(submission => submission.id === id),
 )
 
+/*
+  Internal Selectors
+*/
+
 // Determine where the grader previously left off
-// INTERNAL - GRADERS
+// INTERNAL
 export const leftoffSelector = createSelector(
   submissionsSelector,
   s => s.user.name,
