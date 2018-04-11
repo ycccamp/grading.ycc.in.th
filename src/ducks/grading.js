@@ -16,7 +16,6 @@ import {
 } from './grading.selector'
 
 export const SET_PAGE = '@GRADING/SET_PAGE'
-export const PROCEED = '@GRADING/PROCEED'
 export const RESUME_PAGINATION = '@GRADING/RESUME_PAGINATION'
 
 export const SUBMIT = '@GRADING/SUBMIT'
@@ -26,7 +25,6 @@ export const SYNC_GRADING = '@GRADING/SYNC'
 export const STORE_GRADING = '@GRADING/STORE'
 
 export const setPage = Creator(SET_PAGE)
-export const proceed = Creator(PROCEED)
 export const resumePagination = Creator(RESUME_PAGINATION)
 
 export const submit = Creator(SUBMIT, 'id', 'data')
@@ -38,9 +36,7 @@ export const storeGrading = Creator(STORE_GRADING)
 const db = app.firestore()
 
 // Proceed to the next submission entry
-export function* proceedSaga(payload) {
-  const id = payload.id || payload
-
+export function* proceedSaga(id) {
   const entries = yield select(submissionsSelector)
   yield put(reset('grading'))
 
@@ -61,7 +57,7 @@ export function* proceedSaga(payload) {
 
 // Submit the evaluation result
 export function* submitGradingSaga({payload: {id, data}}) {
-  const isDelisted = yield select(s => delistedSelector(s, {id}))
+  const isDelisted = yield select(s => delistedSelector(s, id))
 
   if (isDelisted) {
     yield fork(proceedSaga, id)
@@ -130,7 +126,6 @@ export function* resumePaginationSaga() {
 export function* gradingWatcherSaga() {
   yield takeEvery(SYNC_GRADING, syncGradingSaga)
   yield takeEvery(RESUME_PAGINATION, resumePaginationSaga)
-  yield takeEvery(PROCEED, proceedSaga)
   yield takeEvery(SUBMIT, submitGradingSaga)
   yield takeEvery(DELIST, delistSaga)
 }

@@ -9,12 +9,16 @@ const db = app.firestore()
 const evaluationProps = ['scores', 'notes', 'gradedAt']
 
 // Select an evaluation based on grader and major from the entries
-export function getEvaluation(entries, gradedBy, major) {
-  if (major && entries) {
+export function getEvaluation(evaluations, gradedBy, major) {
+  if (evaluations && gradedBy && major) {
     const type = major === 'core' ? 'core' : 'major'
-    const select = R.path([type, gradedBy])
 
-    return R.pick(evaluationProps, select(entries))
+    const select = R.path([type, gradedBy])
+    const evaluation = select(evaluations)
+
+    if (evaluation) {
+      return R.pick(evaluationProps, evaluation)
+    }
   }
 }
 

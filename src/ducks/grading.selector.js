@@ -27,7 +27,7 @@ export const gradedSelector = createSelector(
   (entries, role, name) => {
     const type = role === 'core' ? 'core' : 'major'
 
-    return entries.filter(x => x[type] && x[type][name] && !x.delisted).length
+    return entries.filter(x => !x.delisted && x[type] && x[type][name]).length
   },
 )
 
@@ -36,18 +36,29 @@ export const gradedSelector = createSelector(
     This selectors will be used to populate the data in SubmissionsRecord
 */
 
-// Joins the camper's information with the your evaluation result.
+// Joins the camper's information with your evaluation result.
 // This will be used in the list of submissions by the graders only.
 export const submissionsSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
   s => s.user.name,
-  (campers, entries, gradedBy) =>
+  s => s.user.role,
+  (campers, entries, gradedBy, role) =>
     campers.map(camper => {
-      const entry = entries.find(entry => entry.id === camper.id)
-      const evaluation = getEvaluation(entry, gradedBy, camper.major)
+      const evaluations = entries.find(entry => entry.id === camper.id)
 
-      return {...evaluation, ...camper}
+      if (!evaluations) {
+        return camper
+      }
+
+      const evaluation = getEvaluation(evaluations, gradedBy, role)
+
+      return {
+        delisted: evaluations.delisted,
+        delistedBy: evaluations.delistedBy,
+        ...evaluation,
+        ...camper,
+      }
     }),
 )
 
@@ -57,7 +68,7 @@ export const submissionsSelector = createSelector(
 */
 
 // Selects the user ID
-const idSelector = (s, p) => p.id || p.match.params.id
+const idSelector = (s, id) => id
 
 // Retrieve all evaluations from every graders for a user.
 const gradingSelector = createSelector(
