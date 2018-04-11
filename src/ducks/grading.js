@@ -41,7 +41,7 @@ const db = app.firestore()
 export function* proceedSaga(payload) {
   const id = payload.id || payload
 
-  const entries = yield select(state => submissionsSelector(state))
+  const entries = yield select(submissionsSelector)
   yield put(reset('grading'))
 
   const index = entries.findIndex(x => x.id === id)
@@ -117,6 +117,8 @@ const PAGE_SIZE = 10
 export function* resumePaginationSaga() {
   const entries = yield select(state => submissionsSelector(state))
   const {name, role} = yield select(state => state.user)
+
+  console.log('Entries', entries)
 
   // Determine where the grader previously left off
   const getLeftOff = R.findIndex(entry => {

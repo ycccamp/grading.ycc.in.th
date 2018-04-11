@@ -19,12 +19,9 @@ export const totalSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
   (campers, entries) => {
-    const delisted = entries.filter(x => x.delisted)
+    const delisted = entries.filter(x => x.delisted).length
 
-    return {
-      total: campers.length - delisted.length,
-      delisted: delisted.length,
-    }
+    return {total: campers.length - delisted, delisted}
   },
 )
 
@@ -32,9 +29,15 @@ export const totalSelector = createSelector(
 const gradingSelector = createSelector(
   s => s.grading.data,
   (s, p) => p.id || p.match.params.id,
-  (evaluations, id) => {
-    return evaluations.find(evaluation => evaluation.id === id)
-  },
+  (evaluations, id) => evaluations.find(evaluation => evaluation.id === id),
+)
+
+// Selects the evaluation result that you had submitted beforehand
+export const evaluationSelector = createSelector(
+  gradingSelector,
+  s => s.user.name,
+  s => s.user.role,
+  (evaluation, name, role) => findEvaluation(evaluation, name, role),
 )
 
 // Determines if the camper is delisted or not. Returns the evaluator's name.
@@ -43,14 +46,6 @@ export const delistedSelector = createSelector(gradingSelector, evaluation => {
     return evaluation.delistedBy
   }
 })
-
-// Selects the evaluation result that you had submitted beforehand
-export const selfEvaluatedSelector = createSelector(
-  gradingSelector,
-  s => s.user.name,
-  s => s.user.role,
-  (evaluation, name, role) => findEvaluation(evaluation, name, role),
-)
 
 // Joins the camper's information with the current grading result.
 // This will be used in the submissions route by the graders only.
@@ -68,9 +63,7 @@ export const submissionsSelector = createSelector(
   },
 )
 
-const sortByScore = (a, b) => {
-  return (b.totalScore || 0) - (a.totalScore || 0)
-}
+const sortByScore = (a, b) => (b.totalScore || 0) - (a.totalScore || 0)
 
 // Joins the camper's information with the average grading result
 export const campersSelector = createSelector(
