@@ -13,7 +13,7 @@ import {submissionsSelector} from '../../ducks/grading.selector'
 import {grades, genders} from '../../core/options'
 
 const Note = styled.span`
-  font-size: 0.95em;
+  font-size: 0.85em;
   word-break: break-word;
 `
 
@@ -33,6 +33,7 @@ const fields = {
   },
   notes: {
     title: 'จดบันทึก',
+    width: 350,
     render: text => <Note>{text}</Note>,
   },
   updatedAt: {
