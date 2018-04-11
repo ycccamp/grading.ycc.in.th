@@ -112,8 +112,16 @@ export function* syncGradingSaga() {
 
 const PAGE_SIZE = 10
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+const ResumePaginationNotice = `กำลังจัดเรียงข้อมูลใหม่ กรุณารอสักครู่...`
+
 export function* resumePaginationSaga() {
+  const hide = message.loading(ResumePaginationNotice, 0)
+  yield call(delay, 2000)
+
   const entry = yield select(leftoffSelector)
+  console.log('Entry is', entry)
 
   if (entry > -1) {
     const page = Math.ceil(entry / PAGE_SIZE)
@@ -121,6 +129,8 @@ export function* resumePaginationSaga() {
 
     yield put(setPage(page))
   }
+
+  yield call(hide)
 }
 
 export function* gradingWatcherSaga() {

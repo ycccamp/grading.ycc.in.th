@@ -36,6 +36,8 @@ export const gradedSelector = createSelector(
     This selectors will be used to populate the data in SubmissionsRecord
 */
 
+const sortByGraded = (a, b) => (b.gradedAt || 0) - (a.gradedAt || 0)
+
 // Joins the camper's information with your evaluation result.
 // This will be used in the list of submissions by the graders only.
 export const submissionsSelector = createSelector(
@@ -61,7 +63,7 @@ export const submissionsSelector = createSelector(
       }
     })
 
-    return submissions
+    return submissions.sort(sortByGraded)
   },
 )
 
@@ -105,20 +107,10 @@ export const submissionSelector = createSelector(
   Internal Selectors
 */
 
+const isLeftOff = evaluation =>
+  evaluation && !evaluation.delisted && !evaluation.scores
+
 // Determine where the grader previously left off
-export const leftoffSelector = createSelector(
-  submissionsSelector,
-  s => s.user.name,
-  s => s.user.role,
-  (entries, name, role) => {
-    const getLeftOff = R.findIndex(entry => {
-      const grading = getEvaluation(entry, name, role)
-
-      if (grading) {
-        return !grading.delisted && !grading.scores
-      }
-    })
-
-    return getLeftOff(entries)
-  },
+export const leftoffSelector = createSelector(submissionsSelector, entries =>
+  entries.findIndex(isLeftOff),
 )
