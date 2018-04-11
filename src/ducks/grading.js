@@ -10,9 +10,9 @@ import {updateGrading} from '../core/submissions'
 import {createReducer, Creator} from './helper'
 
 import {
-  findEvaluation,
   submissionsSelector,
   delistedSelector,
+  leftoffSelector,
 } from './grading.selector'
 
 export const SET_PAGE = '@GRADING/SET_PAGE'
@@ -37,7 +37,7 @@ export const storeGrading = Creator(STORE_GRADING)
 
 const db = app.firestore()
 
-// Proceed to next entries
+// Proceed to the next submission entry
 export function* proceedSaga(payload) {
   const id = payload.id || payload
 
@@ -46,6 +46,7 @@ export function* proceedSaga(payload) {
 
   const index = entries.findIndex(x => x.id === id)
 
+  // If index of the next entry is found, navigate to that entry
   if (Number.isInteger(index)) {
     const entry = entries[index + 1]
 
@@ -58,6 +59,7 @@ export function* proceedSaga(payload) {
   yield call(history.push, `/`)
 }
 
+// Submit the evaluation result
 export function* submitGradingSaga({payload: {id, data}}) {
   const isDelisted = yield select(s => delistedSelector(s, {id}))
 
@@ -115,19 +117,7 @@ export function* syncGradingSaga() {
 const PAGE_SIZE = 10
 
 export function* resumePaginationSaga() {
-  const entries = yield select(state => submissionsSelector(state))
-  const {name, role} = yield select(state => state.user)
-
-  console.log('Entries', entries)
-
-  // Determine where the grader previously left off
-  const getLeftOff = R.findIndex(entry => {
-    const grading = findEvaluation(entry, name, role)
-
-    return !grading.delisted && !grading.scores
-  })
-
-  const entry = getLeftOff(entries)
+  const entry = yield select(leftoffSelector)
 
   if (entry > -1) {
     const page = Math.ceil(entry / PAGE_SIZE)

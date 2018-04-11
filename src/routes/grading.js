@@ -7,7 +7,11 @@ import GradingForm from '../components/GradingForm'
 
 import {submit, delist} from '../ducks/grading'
 
-import {submissionsSelector, delistedSelector} from '../ducks/grading.selector'
+import {
+  evaluationSelector,
+  submissionsSelector,
+  delistedSelector,
+} from '../ducks/grading.selector'
 
 import {grades, genders} from '../core/options'
 
@@ -51,7 +55,7 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
           data={data}
           delist={delist}
           onSubmit={submit}
-          initialValues={data}
+          initialValues={initial}
           disabled={!!delistedBy}
         />
       </div>
@@ -64,6 +68,7 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
 const mapStateToProps = (state, props) => ({
   role: state.user.role,
   data: submissionsSelector(state, props),
+  initial: evaluationSelector(state, props),
   delistedBy: delistedSelector(state, props),
 })
 

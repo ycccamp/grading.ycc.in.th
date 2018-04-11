@@ -1,20 +1,10 @@
 import * as R from 'ramda'
 import {createSelector} from 'reselect'
 
-const evaluationProps = ['scores', 'notes', 'gradedAt']
-
-// Select an evaluation based on grader and major from the entries
-export function findEvaluation(entries, gradedBy, major) {
-  if (major && entries) {
-    const type = major === 'core' ? 'core' : 'major'
-    const select = R.path([type, gradedBy])
-
-    return R.pick(evaluationProps, select(entries))
-  }
-}
+const idSelector = (s, p) => p.id || p.match.params.id
 
 // Calculate the total and delisted submissions
-// This will be used for listing pages
+// LISTING - SHARED
 export const totalSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
@@ -25,30 +15,22 @@ export const totalSelector = createSelector(
   },
 )
 
-// Retrieve the evaluation that matches the specific user ID.
-const gradingSelector = createSelector(
+// Show how many people have been graded
+// LISTING - GRADERS
+export const gradedSelector = createSelector(
   s => s.grading.data,
-  (s, p) => p.id || p.match.params.id,
-  (evaluations, id) => evaluations.find(evaluation => evaluation.id === id),
-)
-
-// Selects the evaluation result that you had submitted beforehand
-export const evaluationSelector = createSelector(
-  gradingSelector,
-  s => s.user.name,
   s => s.user.role,
-  (evaluation, name, role) => findEvaluation(evaluation, name, role),
-)
+  s => s.user.name,
+  (entries, role, name) => {
+    const type = role === 'core' ? 'core' : 'major'
 
-// Determines if the camper is delisted or not. Returns the evaluator's name.
-export const delistedSelector = createSelector(gradingSelector, evaluation => {
-  if (evaluation && evaluation.delisted) {
-    return evaluation.delistedBy
-  }
-})
+    return entries.filter(x => x[type] && x[type][name] && !x.delisted).length
+  },
+)
 
 // Joins the camper's information with the current grading result.
-// This will be used in the submissions route by the graders only.
+// This will be used in the list of submissions by the graders only.
+// LISTING - GRADERS
 export const submissionsSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
@@ -63,23 +45,52 @@ export const submissionsSelector = createSelector(
   },
 )
 
-const sortByScore = (a, b) => (b.totalScore || 0) - (a.totalScore || 0)
-
-// Joins the camper's information with the average grading result
-export const campersSelector = createSelector(
-  s => s.camper.campers,
+// Retrieve the evaluation that matches the specific user ID.
+// DETAIL - GRADERS
+const gradingSelector = createSelector(
   s => s.grading.data,
-  (campers, entries) => {
-    const submissions = campers.map(camper => {
-      const evaluation = entries.find(entry => entry.id === camper.id)
+  idSelector,
+  (evaluations, id) => evaluations.find(evaluation => evaluation.id === id),
+)
 
-      return {
-        ...camper,
-        coreEvaluation: evaluation.core,
-        majorEvaluation: evaluation.major,
+// Selects the evaluation result that you had submitted beforehand
+// DETAIL - GRADERS
+export const evaluationSelector = createSelector(
+  gradingSelector,
+  s => s.user.name,
+  s => s.user.role,
+  (evaluation, name, role) => findEvaluation(evaluation, name, role),
+)
+
+// Determines if the camper is delisted or not. Returns the evaluator's name.
+// DETAIL - GRADERS
+export const delistedSelector = createSelector(
+  gradingSelector,
+  evaluation => evaluation && evaluation.delisted && evaluation.delistedBy,
+)
+
+// DETAIL - GRADERS
+export const submissionSelector = createSelector(
+  submissionsSelector,
+  idSelector,
+  (submissions, id) => submissions.find(submission => submission.id === id),
+)
+
+// Determine where the grader previously left off
+// INTERNAL - GRADERS
+export const leftoffSelector = createSelector(
+  submissionsSelector,
+  s => s.user.name,
+  s => s.user.role,
+  (entries, name, role) => {
+    const getLeftOff = R.findIndex(entry => {
+      const grading = findEvaluation(entry, name, role)
+
+      if (grading) {
+        return !grading.delisted && !grading.scores
       }
     })
 
-    return submissions.sort(sortByScore)
+    return getLeftOff(entries)
   },
 )
