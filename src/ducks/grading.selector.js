@@ -43,8 +43,8 @@ export const submissionsSelector = createSelector(
   s => s.grading.data,
   s => s.user.name,
   s => s.user.role,
-  (campers, entries, gradedBy, role) =>
-    campers.map(camper => {
+  (campers, entries, gradedBy, role) => {
+    const submissions = campers.map(camper => {
       const evaluations = entries.find(entry => entry.id === camper.id)
 
       if (!evaluations) {
@@ -59,7 +59,10 @@ export const submissionsSelector = createSelector(
         ...evaluation,
         ...camper,
       }
-    }),
+    })
+
+    return submissions
+  },
 )
 
 /*
