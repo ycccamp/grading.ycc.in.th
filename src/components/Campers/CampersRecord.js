@@ -25,8 +25,30 @@ const Text = styled.small`
   word-wrap: break-word;
 `
 
-const truncate = text => {
-  if (typeof text !== 'string') return null
+function getStatus(record) {
+  if (record.delisted) {
+    return `ถูกคัดออกแล้วโดย ${record.delistedBy}`
+  }
+
+  if (!record.coreEvaluation && !record.majorEvaluation) {
+    return 'ยังไม่ได้รับการประเมินผล'
+  }
+
+  if (!record.coreEvaluation) {
+    return 'ยังไม่ได้ตรวจคำถามสาขา'
+  }
+
+  if (!record.majorEvaluation) {
+    return 'ยังไม่ได้ตรวจคำถามกลาง'
+  }
+
+  return 'ประเมินผลไปบ้างแล้ว'
+}
+
+function truncate(text) {
+  if (typeof text !== 'string') {
+    return null
+  }
 
   if (text.length < 100) {
     return text
@@ -129,25 +151,7 @@ const fields = {
   },
   status: {
     title: 'สถานะผู้สมัคร',
-    render: (text, record) => {
-      if (record.delisted) {
-        return `ถูกคัดออกแล้วโดย ${record.delistedBy}`
-      }
-
-      if (record.core || !record.majorEvaluation) {
-        return 'ยังไม่ได้ตรวจคำถามสาขา'
-      }
-
-      if (!record.core || record.majorEvaluation) {
-        return 'ยังไม่ได้ตรวจคำถามกลาง'
-      }
-
-      if (record.core && record.majorEvaluation) {
-        return 'มีการตรวจไปบ้างแล้ว'
-      }
-
-      return 'ยังไม่มีการตรวจ'
-    },
+    render: (text, record) => <Meta>{getStatus(record)}</Meta>,
   },
   age: {
     title: 'อายุ',
