@@ -1,12 +1,11 @@
-import axios from 'axios'
 import * as R from 'ramda'
 import {message} from 'antd'
 import {untouch} from 'redux-form'
-import {takeEvery, call, put, fork, select} from 'redux-saga/effects'
+import {takeEvery, call, put, fork} from 'redux-saga/effects'
 
 import {createReducer, Creator} from './helper'
 import {syncCampers} from './campers'
-import {syncGrading, resumePagination} from './grading'
+import {syncGrading} from './grading'
 
 import rsf, {app} from '../core/fire'
 import history from '../core/history'

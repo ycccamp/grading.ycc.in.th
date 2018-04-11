@@ -1,98 +1,121 @@
 import * as R from 'ramda'
 import {createSelector} from 'reselect'
 
-const evaluationProps = ['scores', 'notes', 'gradedAt']
+import {getEvaluation} from '../core/evaluation'
 
-// Select an evaluation based on grader and major from the entries
-export function findEvaluation(entries, gradedBy, major) {
-  if (major && entries) {
-    const type = major === 'core' ? 'core' : 'major'
-    const select = R.path([type, gradedBy])
-
-    return R.pick(evaluationProps, select(entries))
-  }
-}
+/*
+  # Counting Selectors
+    These selectors will be used for counting submissions in routes/submissions
+*/
 
 // Calculate the total and delisted submissions
 export const totalSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
   (campers, entries) => {
-    const delisted = entries.filter(x => x.delisted)
+    const delisted = entries.filter(x => x.delisted).length
 
-    return {
-      total: campers.length - delisted.length,
-      delisted: delisted.length,
-    }
+    return {total: campers.length - delisted, delisted}
   },
 )
 
-// Determines if the camper is delisted or not; returns the grader's name
-export const delistedSelector = createSelector(
+// Show how many people have been graded
+export const gradedSelector = createSelector(
   s => s.grading.data,
-  (s, p) => p.id || p.match.params.id,
-  (entries, id) => {
-    const entry = entries.find(grading => grading.id === id)
-
-    if (entry) {
-      if (entry.delisted) {
-        return entry.delistedBy
-      }
-    }
-  },
-)
-
-// Selects the previous evaluation result for the grading route
-export const evaluationSelector = createSelector(
-  s => s.grading.data,
-  (s, p) => p.match.params.id,
-  s => s.user.name,
   s => s.user.role,
-  (entries, id, name, role) => {
-    const grading = entries.find(grading => grading.id === id)
+  s => s.user.name,
+  (entries, role, name) => {
+    const type = role === 'core' ? 'core' : 'major'
 
-    if (grading) {
-      return findEvaluation(grading, name, role)
-    }
-
-    return {}
+    return entries.filter(x => !x.delisted && x[type] && x[type][name]).length
   },
 )
 
-// Joins the camper's information with the current grading result to use in the submissions page
+/*
+  # Submissions Record Selectors
+    This selectors will be used to populate the data in SubmissionsRecord
+*/
+
+// Joins the camper's information with your evaluation result.
+// This will be used in the list of submissions by the graders only.
 export const submissionsSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
   s => s.user.name,
-  (campers, entries, gradedBy) => {
-    return campers.map(camper => {
-      const grading = entries.find(entry => entry.id === camper.id)
-      const evaluation = findEvaluation(grading, gradedBy, camper.major)
+  s => s.user.role,
+  (campers, entries, gradedBy, role) =>
+    campers.map(camper => {
+      const evaluations = entries.find(entry => entry.id === camper.id)
 
-      return {...evaluation, ...camper}
-    })
-  },
-)
+      if (!evaluations) {
+        return camper
+      }
 
-const sortByScore = (a, b) => {
-  return (b.totalScore || 0) - (a.totalScore || 0)
-}
-
-// Joins the camper's information with the average grading result
-export const campersSelector = createSelector(
-  s => s.camper.campers,
-  s => s.grading.data,
-  (campers, entries) => {
-    const submissions = campers.map(camper => {
-      const grading = entries.find(entry => entry.id === camper.id)
+      const evaluation = getEvaluation(evaluations, gradedBy, role)
 
       return {
-        coreEvaluation: grading.core,
-        majorEvaluation: grading.core,
+        delisted: evaluations.delisted,
+        delistedBy: evaluations.delistedBy,
+        ...evaluation,
         ...camper,
+      }
+    }),
+)
+
+/*
+  # Detail Selectors
+    These selectors will be used in routes/evaluate
+*/
+
+// Selects the user ID
+const idSelector = (s, id) => id
+
+// Retrieve all evaluations from every graders for a user.
+const gradingSelector = createSelector(
+  s => s.grading.data,
+  idSelector,
+  (evaluations, id) => evaluations.find(evaluation => evaluation.id === id),
+)
+
+// Selects the evaluation result that you had submitted beforehand
+export const evaluationSelector = createSelector(
+  gradingSelector,
+  s => s.user.name,
+  s => s.user.role,
+  (evaluation, name, role) => getEvaluation(evaluation, name, role),
+)
+
+// Determines if the camper is delisted or not. Returns the evaluator's name.
+export const delistedSelector = createSelector(
+  gradingSelector,
+  evaluation => evaluation && evaluation.delisted && evaluation.delistedBy,
+)
+
+// Retrieves the camper's evaluation
+export const submissionSelector = createSelector(
+  submissionsSelector,
+  idSelector,
+  (submissions, id) => submissions.find(submission => submission.id === id),
+)
+
+/*
+  Internal Selectors
+*/
+
+// Determine where the grader previously left off
+export const leftoffSelector = createSelector(
+  submissionsSelector,
+  s => s.user.name,
+  s => s.user.role,
+  (entries, name, role) => {
+    const getLeftOff = R.findIndex(entry => {
+      const grading = getEvaluation(entry, name, role)
+
+      if (grading) {
+        return !grading.delisted && !grading.scores
       }
     })
 
-    return submissions.sort(sortByScore)
+    return getLeftOff(entries)
   },
 )

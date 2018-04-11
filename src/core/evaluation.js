@@ -6,8 +6,25 @@ import {maxScores} from '../core/scoring'
 
 const db = app.firestore()
 
+const evaluationProps = ['scores', 'notes', 'gradedAt']
+
+// Select an evaluation based on grader and major from the entries
+export function getEvaluation(evaluations, gradedBy, major) {
+  if (evaluations && gradedBy && major) {
+    const type = major === 'core' ? 'core' : 'major'
+
+    const select = R.path([type, gradedBy])
+    const evaluation = select(evaluations)
+
+    if (evaluation) {
+      return R.pick(evaluationProps, evaluation)
+    }
+  }
+}
+
 const zipQuestion = R.zipWith((q, m) => ({question: q, max: m}))
 
+// Retrieve the questions along with maximum scores
 export const getQuestions = (type = 'core') =>
   zipQuestion(questions[type], maxScores[type])
 

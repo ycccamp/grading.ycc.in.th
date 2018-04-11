@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import styled from 'react-emotion'
 
-import Button from '../components/Button'
+import Button from '../../components/Button'
 
 const Frame = styled.iframe`
   display: flex;

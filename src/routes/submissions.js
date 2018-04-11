@@ -1,12 +1,11 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {compose, lifecycle} from 'recompose'
-import {createSelector} from 'reselect'
 
-import Record from '../components/SubmissionsRecord'
+import {Record} from '../components/Evaluation'
 
 import {resumePagination} from '../ducks/grading'
-import {totalSelector} from '../ducks/grading.selector'
+import {gradedSelector, totalSelector} from '../ducks/grading.selector'
 
 const Submissions = ({graded, total, delisted, user}) => (
   <div>
@@ -19,17 +18,6 @@ const Submissions = ({graded, total, delisted, user}) => (
 
     <Record />
   </div>
-)
-
-const gradedSelector = createSelector(
-  s => s.grading.data,
-  s => s.user.role,
-  s => s.user.name,
-  (entries, role, name) => {
-    const type = role === 'core' ? 'core' : 'major'
-
-    return entries.filter(x => x[type] && x[type][name] && !x.delisted).length
-  },
 )
 
 const mapStateToProps = state => ({

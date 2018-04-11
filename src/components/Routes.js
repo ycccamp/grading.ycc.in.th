@@ -10,7 +10,7 @@ import Login from '../routes/login'
 import Dashboard from '../routes/dashboard'
 import Campers from '../routes/campers'
 import Submissions from '../routes/submissions'
-import Grading from '../routes/grading'
+import Grading from '../routes/evaluate'
 import NotFound from '../routes/404'
 
 import history from '../core/history'

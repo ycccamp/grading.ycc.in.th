@@ -3,11 +3,15 @@ import {connect} from 'react-redux'
 import styled from 'react-emotion'
 import {Spin} from 'antd'
 
-import GradingForm from '../components/GradingForm'
+import {Form} from '../components/Evaluation'
 
 import {submit, delist} from '../ducks/grading'
 
-import {submissionsSelector, delistedSelector} from '../ducks/grading.selector'
+import {
+  evaluationSelector,
+  submissionSelector,
+  delistedSelector,
+} from '../ducks/grading.selector'
 
 import {grades, genders} from '../core/options'
 
@@ -46,12 +50,12 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
           {genders[data.gender]}
         </SubHeading>
 
-        <GradingForm
+        <Form
           role={role}
           data={data}
           delist={delist}
           onSubmit={submit}
-          initialValues={data}
+          initialValues={initial}
           disabled={!!delistedBy}
         />
       </div>
@@ -61,11 +65,16 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
   return <Spin />
 }
 
-const mapStateToProps = (state, props) => ({
-  role: state.user.role,
-  data: submissionsSelector(state, props),
-  delistedBy: delistedSelector(state, props),
-})
+const mapStateToProps = (state, {match}) => {
+  const {id} = match.params
+
+  return {
+    role: state.user.role,
+    data: submissionSelector(state, id),
+    initial: evaluationSelector(state, id),
+    delistedBy: delistedSelector(state, id),
+  }
+}
 
 const mapDispatchToProps = (dispatch, {match}) => {
   const {id} = match.params

@@ -2,11 +2,10 @@ import React, {Component} from 'react'
 import * as R from 'ramda'
 import styled, {css} from 'react-emotion'
 import {connect} from 'react-redux'
-import {createSelector} from 'reselect'
 
 import Records from '../../components/Records'
 
-import {campersSelector} from '../../ducks/grading.selector'
+import {campersSelector} from '../../ducks/campers.selector'
 
 import {grades, genders, religions} from '../../core/options'
 
@@ -107,15 +106,15 @@ const fields = {
   },
   major: 'สาขา',
   totalScore: {
-    title: 'คะแนนเฉลี่ย',
+    title: 'คะแนนเฉลี่ย 100',
     render: num => num && num.toFixed(2),
   },
   coreScore: {
-    title: 'คะแนนกลาง',
+    title: 'คะแนนกลาง 40',
     render: num => num && num.toFixed(2),
   },
   majorScore: {
-    title: 'คะแนนสาขา',
+    title: 'คะแนนสาขา 60',
     render: num => num && num.toFixed(2),
   },
   coreEvaluation: {
@@ -244,7 +243,7 @@ function highlightRows(record, index) {
 const CampersRecord = ({campers, ...props}) => (
   <Records
     fields={fields}
-    maxWidth={120}
+    maxWidth={130}
     rowClassName={highlightRows}
     rowKey="id"
     {...props}

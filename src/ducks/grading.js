@@ -5,18 +5,17 @@ import {reset} from 'redux-form'
 
 import rsf, {app} from '../core/fire'
 import history from '../core/history'
-import {updateGrading} from '../core/submissions'
+import {updateGrading} from '../core/evaluation'
 
 import {createReducer, Creator} from './helper'
 
 import {
-  findEvaluation,
   submissionsSelector,
   delistedSelector,
+  leftoffSelector,
 } from './grading.selector'
 
 export const SET_PAGE = '@GRADING/SET_PAGE'
-export const PROCEED = '@GRADING/PROCEED'
 export const RESUME_PAGINATION = '@GRADING/RESUME_PAGINATION'
 
 export const SUBMIT = '@GRADING/SUBMIT'
@@ -26,7 +25,6 @@ export const SYNC_GRADING = '@GRADING/SYNC'
 export const STORE_GRADING = '@GRADING/STORE'
 
 export const setPage = Creator(SET_PAGE)
-export const proceed = Creator(PROCEED)
 export const resumePagination = Creator(RESUME_PAGINATION)
 
 export const submit = Creator(SUBMIT, 'id', 'data')
@@ -37,15 +35,14 @@ export const storeGrading = Creator(STORE_GRADING)
 
 const db = app.firestore()
 
-// Proceed to next entries
-export function* proceedSaga(payload) {
-  const id = payload.id || payload
-
-  const entries = yield select(state => submissionsSelector(state))
+// Proceed to the next submission entry
+export function* proceedSaga(id) {
+  const entries = yield select(submissionsSelector)
   yield put(reset('grading'))
 
   const index = entries.findIndex(x => x.id === id)
 
+  // If index of the next entry is found, navigate to that entry
   if (Number.isInteger(index)) {
     const entry = entries[index + 1]
 
@@ -58,8 +55,9 @@ export function* proceedSaga(payload) {
   yield call(history.push, `/`)
 }
 
+// Submit the evaluation result
 export function* submitGradingSaga({payload: {id, data}}) {
-  const isDelisted = yield select(s => delistedSelector(s, {id}))
+  const isDelisted = yield select(s => delistedSelector(s, id))
 
   if (isDelisted) {
     yield fork(proceedSaga, id)
@@ -115,17 +113,7 @@ export function* syncGradingSaga() {
 const PAGE_SIZE = 10
 
 export function* resumePaginationSaga() {
-  const entries = yield select(state => submissionsSelector(state))
-  const {name, role} = yield select(state => state.user)
-
-  // Determine where the grader previously left off
-  const getLeftOff = R.findIndex(entry => {
-    const grading = findEvaluation(entry, name, role)
-
-    return !grading.delisted && !grading.scores
-  })
-
-  const entry = getLeftOff(entries)
+  const entry = yield select(leftoffSelector)
 
   if (entry > -1) {
     const page = Math.ceil(entry / PAGE_SIZE)
@@ -138,7 +126,6 @@ export function* resumePaginationSaga() {
 export function* gradingWatcherSaga() {
   yield takeEvery(SYNC_GRADING, syncGradingSaga)
   yield takeEvery(RESUME_PAGINATION, resumePaginationSaga)
-  yield takeEvery(PROCEED, proceedSaga)
   yield takeEvery(SUBMIT, submitGradingSaga)
   yield takeEvery(DELIST, delistSaga)
 }

@@ -4,11 +4,11 @@ import {Field, reduxForm} from 'redux-form'
 import {TextField, TextAreaField} from 'redux-form-antd'
 import {message, Icon, Popconfirm} from 'antd'
 
-import Button from './Button'
-import PreviewAnswer from './PreviewAnswer'
+import Button from '../Button'
+import PreviewAnswer from '../PreviewAnswer'
 
-import {maxScores} from '../core/scoring'
-import {getQuestions} from '../core/submissions'
+import {maxScores} from '../../core/scoring'
+import {getQuestions} from '../../core/evaluation'
 
 const Card = styled.section`
   display: flex;
@@ -49,7 +49,7 @@ function isIgnored(role, index) {
   return role === 'design' && index === 2
 }
 
-const GradingForm = ({handleSubmit, delist, data, role, disabled}) => (
+const EvaluationForm = ({handleSubmit, delist, data, role, disabled}) => (
   <form onSubmit={handleSubmit}>
     {getQuestions(role).map((item, index) => {
       if (isIgnored(role, index)) return null
@@ -166,4 +166,4 @@ const enhance = reduxForm({
   keepDirtyOnReinitialize: true,
 })
 
-export default enhance(GradingForm)
+export default enhance(EvaluationForm)
