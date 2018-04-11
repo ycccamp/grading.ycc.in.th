@@ -14,6 +14,7 @@ export function findEvaluation(entries, gradedBy, major) {
 }
 
 // Calculate the total and delisted submissions
+// This will be used for listing pages
 export const totalSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
@@ -27,39 +28,32 @@ export const totalSelector = createSelector(
   },
 )
 
-// Determines if the camper is delisted or not; returns the grader's name
-export const delistedSelector = createSelector(
+// Retrieve the evaluation that matches the specific user ID.
+const gradingSelector = createSelector(
   s => s.grading.data,
   (s, p) => p.id || p.match.params.id,
-  (entries, id) => {
-    const entry = entries.find(grading => grading.id === id)
-
-    if (entry) {
-      if (entry.delisted) {
-        return entry.delistedBy
-      }
-    }
+  (evaluations, id) => {
+    return evaluations.find(evaluation => evaluation.id === id)
   },
 )
 
-// Selects the previous evaluation result for the grading route
-export const evaluationSelector = createSelector(
-  s => s.grading.data,
-  (s, p) => p.match.params.id,
+// Determines if the camper is delisted or not. Returns the evaluator's name.
+export const delistedSelector = createSelector(gradingSelector, evaluation => {
+  if (evaluation && evaluation.delisted) {
+    return evaluation.delistedBy
+  }
+})
+
+// Selects the evaluation result that you had submitted beforehand
+export const selfEvaluatedSelector = createSelector(
+  gradingSelector,
   s => s.user.name,
   s => s.user.role,
-  (entries, id, name, role) => {
-    const grading = entries.find(grading => grading.id === id)
-
-    if (grading) {
-      return findEvaluation(grading, name, role)
-    }
-
-    return {}
-  },
+  (evaluation, name, role) => findEvaluation(evaluation, name, role),
 )
 
-// Joins the camper's information with the current grading result to use in the submissions page
+// Joins the camper's information with the current grading result.
+// This will be used in the submissions route by the graders only.
 export const submissionsSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
@@ -84,12 +78,12 @@ export const campersSelector = createSelector(
   s => s.grading.data,
   (campers, entries) => {
     const submissions = campers.map(camper => {
-      const grading = entries.find(entry => entry.id === camper.id)
+      const evaluation = entries.find(entry => entry.id === camper.id)
 
       return {
-        coreEvaluation: grading.core,
-        majorEvaluation: grading.core,
         ...camper,
+        coreEvaluation: evaluation.core,
+        majorEvaluation: evaluation.major,
       }
     })
 
