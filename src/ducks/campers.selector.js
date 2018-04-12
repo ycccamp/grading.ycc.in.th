@@ -1,5 +1,6 @@
 import {createSelector} from 'reselect'
 
+import {withIndex} from '../core/util'
 import {computeScores} from '../core/scoring'
 
 const sortByScore = (a, b) => (b.totalScore || 0) - (a.totalScore || 0)
@@ -28,6 +29,6 @@ export const campersSelector = createSelector(
       }
     })
 
-    return submissions.sort(sortByScore)
+    return submissions.sort(sortByScore).map(withIndex)
   },
 )

@@ -1,6 +1,7 @@
 import * as R from 'ramda'
 import {createSelector} from 'reselect'
 
+import {withIndex} from '../core/util'
 import {getEvaluation} from '../core/evaluation'
 
 /*
@@ -69,7 +70,7 @@ export const submissionsSelector = createSelector(
       }
     })
 
-    return submissions.sort(sortByGraded)
+    return submissions.sort(sortByGraded).map(withIndex)
   },
 )
 

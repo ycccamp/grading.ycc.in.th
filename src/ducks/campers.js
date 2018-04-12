@@ -48,18 +48,14 @@ const initial = {
   campers: [],
 }
 
-const retrieveData = (doc, number) => ({
-  number: number + 1,
-  id: doc.id,
-  ...doc.data(),
-})
+const retrieveData = doc => ({id: doc.id, ...doc.data()})
 
 const sortBySubmitted = (a, b) => a.updatedAt - b.updatedAt
 
 export default createReducer(initial, state => ({
   [STORE_CAMPER]: camper => ({...state, camper}),
   [STORE_CAMPERS]: ({docs}) => {
-    const campers = docs.map(retrieveData).sort(sortBySubmitted)
+    const campers = docs.sort(sortBySubmitted).map(retrieveData)
     console.info('Retrieved', campers.length, 'Submissions')
 
     return {...state, campers}
