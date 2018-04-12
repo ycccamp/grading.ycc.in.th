@@ -13,6 +13,7 @@
     "@firebase/firestore": "^0.3.7",
     "antd": "^3.4.0",
     "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
     "emotion": "^9.1.1",
     "emotion-server": "^9.1.1",
     "firebase": "^4.12.1",
