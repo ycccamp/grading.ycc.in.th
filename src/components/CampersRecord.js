@@ -139,6 +139,10 @@ const fields = {
     title: 'คะแนนสาขา 60',
     render: num => num && num.toFixed(2),
   },
+  extraScore: {
+    title: 'คะแนนเพิ่มเติม',
+    render: num => num && num.toFixed(2),
+  },
   coreEvaluation: {
     title: 'การประเมินกลาง',
     render: data => <Grading data={data} />,
