@@ -128,10 +128,15 @@ function validate(values, {role, disabled}) {
   const fields = role === 'content' ? [0, 1] : [0, 1, 2]
   const max = maxScores[role]
 
+  if (!values.scores) {
+      errors.scores[0] = 'กรุณาระบุคะแนน'
+      return
+  }
+
   fields.forEach(index => {
     if (isIgnored(role, index)) return
 
-    if (!values.scores) {
+    if (values.scores && !values.scores[index]) {
       errors.scores[index] = 'กรุณาระบุคะแนน'
       return
     }
