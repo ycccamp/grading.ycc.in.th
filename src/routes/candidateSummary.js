@@ -19,6 +19,7 @@ const personalFields = Object.entries({
   firstname: 'ชื่อ',
   lastname: 'นามสกุล',
   age: 'อายุ',
+  major: 'สาขา',
   birthdate: 'วันเกิด',
   gender: 'เพศ',
   religion: 'ศาสนา',
@@ -78,39 +79,29 @@ function format(name, data) {
   return '-'
 }
 
+const Text = styled.Text`
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+`
+
 const Section = ({data, title, fields}) => (
   <Card>
     <Title>{title}</Title>
 
     {fields.map(([name, label]) => (
       <Item key={name}>
-        <Label>{label}:</Label> {format(name, data)}
+        <Label>{label}:</Label> <Text>{format(name, data)}</Text>
       </Item>
     ))}
   </Card>
 )
-
-const imageStyle = css`
-  position: relative;
-  z-index: 2;
-
-  width: 100%;
-  min-height: 400px;
-  max-width: 100%;
-
-  margin-top: 0.8em;
-  margin-bottom: 0.8em;
-  box-shadow: 0 1px 1.5px 1px rgba(0, 0, 0, 0.12);
-
-  background-color: #efefef;
-`
 
 const avatarStyle = css`
   position: relative;
   z-index: 2;
 
   width: 100%;
-  max-width: 500px;
   min-height: 500px;
 
   margin: 0 auto;
