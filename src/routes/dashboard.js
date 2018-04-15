@@ -60,6 +60,11 @@ const Landing = ({username, role = 'none', logout}) => (
     </h1>
 
     <Row gutter={32} style={{marginTop: '1em'}}>
+      <MenuItem to="/choose" icon="select" title="คัดเลือกผู้สมัคร" />
+      <MenuItem to="/candidates" icon="trophy" title="ผู้ผ่านการคัดเลือก" />
+    </Row>
+
+    <Row gutter={32} style={{marginTop: '1em'}}>
       <MenuItem to="/campers" icon="contacts" title="สรุปรายชื่อ" />
       <MenuItem onClick={logout} icon="logout" title="ออกจากระบบ" />
     </Row>

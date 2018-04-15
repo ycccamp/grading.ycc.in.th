@@ -34,10 +34,13 @@ export const campersSelector = createSelector(
   },
 )
 
-// Select only the top twenty campers for each major
-export const topTwentySelector = createSelector(
+// Select only the top 30 campers for each major
+export const topCampersSelector = createSelector(
   campersSelector,
-  s => s.campers.currentMajor,
-  (entries, major) =>
-    entries.filter(entry => entry.major === major).slice(0, 20),
+  s => s.camper.currentMajor,
+  (candidates, major) =>
+    candidates
+      .filter(entry => !entry.delisted && entry.major === major)
+      .slice(0, 30)
+      .map(withIndex),
 )

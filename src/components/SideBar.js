@@ -26,6 +26,12 @@ const menus = [
     role: 'grader',
   },
   {
+    title: 'คัดเลือกผู้สมัคร',
+    path: '/choose',
+    icon: 'select',
+    role: 'admin',
+  },
+  {
     title: 'สรุปรายชื่อ',
     path: '/campers',
     icon: 'contacts',

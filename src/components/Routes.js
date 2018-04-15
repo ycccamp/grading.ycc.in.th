@@ -11,6 +11,7 @@ import Dashboard from '../routes/dashboard'
 import Campers from '../routes/campers'
 import Submissions from '../routes/submissions'
 import Grading from '../routes/evaluate'
+import Choose from '../routes/choose'
 import NotFound from '../routes/404'
 
 import history from '../core/history'
@@ -55,6 +56,7 @@ const AuthRoutes = ({user}) => {
         <Route path="/" component={getByRole(user.role)} exact />
         <Route path="/grade/:id" component={Grading} />
         <Route path="/campers" component={Campers} />
+        <Route path="/choose" component={Choose} />
       </Layout>
     )
   }

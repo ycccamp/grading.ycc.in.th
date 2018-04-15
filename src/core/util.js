@@ -1,1 +1,1 @@
-export const withIndex = (item, i) => ({number: i + 1, ...item})
+export const withIndex = (item, i) => ({...item, number: i + 1})

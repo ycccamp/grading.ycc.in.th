@@ -1,4 +1,3 @@
-import * as R from 'ramda'
 import {takeEvery, call, put, fork, select} from 'redux-saga/effects'
 import {message} from 'antd'
 import {reset} from 'redux-form'
