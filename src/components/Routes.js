@@ -12,6 +12,7 @@ import Candidates from '../routes/candidates'
 
 import Submissions from '../routes/submissions'
 import Grading from '../routes/evaluate'
+import Gallery from '../routes/gallery'
 import Choose from '../routes/choose'
 import Chosen from '../routes/chosen'
 
@@ -62,6 +63,7 @@ const AuthRoutes = ({user}) => {
         <Route path="/grade/:id" component={Grading} />
         <Route path="/preview/:id" component={CandidatePreview} />
         <Route path="/summary/:id" component={CandidateSummary} />
+        <Route path="/gallery" component={Gallery} />
         <Route path="/candidates" component={Candidates} />
         <Route path="/choose" component={Choose} />
         <Route path="/chosen" component={Chosen} />

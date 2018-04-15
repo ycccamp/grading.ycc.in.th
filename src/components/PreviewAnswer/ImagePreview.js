@@ -66,7 +66,12 @@ class ImagePreview extends Component {
   render() {
     let src = this.state.preview || this.props.src
 
-    return <Image image={{src, className: imageStyle}} imageZoom={{src}} />
+    return (
+      <Image
+        image={{src, className: this.props.imageStyle || imageStyle}}
+        imageZoom={{src}}
+      />
+    )
   }
 }
 

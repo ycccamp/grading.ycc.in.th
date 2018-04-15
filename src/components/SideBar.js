@@ -26,6 +26,12 @@ const menus = [
     role: 'grader',
   },
   {
+    title: 'ให้คะแนนรูปวาด',
+    path: '/gallery',
+    icon: 'picture',
+    role: 'design',
+  },
+  {
     title: 'คัดเลือกผู้สมัคร',
     path: '/choose',
     icon: 'select',
