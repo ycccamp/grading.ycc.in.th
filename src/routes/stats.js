@@ -10,7 +10,7 @@ import {getEvaluation} from '../core/evaluation'
 
 const Name = styled.div`
   color: #555;
-  font-size: 1.28em;
+  font-size: 1.18em;
   font-weight: 400;
 `
 
@@ -23,11 +23,32 @@ const Progress = styled.div`
 const Info = styled.div`
   color: #555;
   font-size: 1.04em;
+  text-transform: capitalize;
 `
 
-const Stats = ({data}) => (
+const properties = [
+  'total',
+  'delisted',
+  'content',
+  'marketing',
+  'design',
+  'programming',
+]
+
+const Stats = ({data, ...count}) => (
   <div>
     <h1>สถิติการตรวจคำถาม</h1>
+
+    <Row type="flex" justify="center" align="middle" gutter={16}>
+      {properties.map(property => (
+        <Col span={4} key={property}>
+          <Card>
+            <Info>{property}</Info>
+            <Progress>{count[property]}</Progress>
+          </Card>
+        </Col>
+      ))}
+    </Row>
 
     <Row type="flex" justify="start" gutter={32}>
       {data.map(staff => (
@@ -54,8 +75,16 @@ const Stats = ({data}) => (
 
 const countSelector = createSelector(
   s => s.camper.campers,
-  candidates => {
+  s => s.grading.data,
+  (campers, entries) => {
+    const candidates = campers.map(camper => {
+      const entry = entries.find(entry => entry.id === camper.id)
+
+      return {...entry, ...camper}
+    })
+
     const list = candidates.filter(x => !x.delisted)
+    const delisted = candidates.filter(x => x.delisted).length
 
     const total = list.length
     const design = list.filter(x => x.major === 'design').length
@@ -63,7 +92,7 @@ const countSelector = createSelector(
     const programming = list.filter(x => x.major === 'programming').length
     const content = list.filter(x => x.major === 'content').length
 
-    return {total, design, marketing, programming, content}
+    return {total, delisted, design, marketing, programming, content}
   },
 )
 
@@ -98,6 +127,7 @@ const statsSelector = createSelector(
 
 const mapStateToProps = state => ({
   data: statsSelector(state),
+  ...countSelector(state),
 })
 
 const enhance = connect(mapStateToProps)
