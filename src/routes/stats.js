@@ -103,6 +103,7 @@ const statsSelector = createSelector(
   (grading, staffs, count) => {
     const stats = staffs.filter(staff => staff.role !== 'admin').map(staff => {
       const evaluations = grading
+        .filter(x => !x.delisted)
         .map(item => getEvaluation(item, staff.name, staff.role))
         .filter(x => x)
 
