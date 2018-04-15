@@ -1,6 +1,7 @@
 import React from 'react'
 import {css} from 'react-emotion'
 import {connect} from 'react-redux'
+import {Link} from 'react-static'
 
 import Button from '../components/Button'
 import Records from '../components/Records'
@@ -29,8 +30,12 @@ const fields = {
     render: num => num && num.toFixed(2),
   },
   more: {
-    title: 'More',
-    render: () => <Button>ดูเพิ่มเติม</Button>,
+    title: 'ดูเพิ่มเติม',
+    render: (text, record) => (
+      <Link to={`/preview/${record.id}`}>
+        <Button icon="export" />,
+      </Link>
+    ),
   },
 }
 

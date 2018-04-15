@@ -65,7 +65,7 @@ const Landing = ({username, role = 'none', logout}) => (
     </Row>
 
     <Row gutter={32} style={{marginTop: '1em'}}>
-      <MenuItem to="/campers" icon="contacts" title="สรุปรายชื่อ" />
+      <MenuItem to="/candidates" icon="contacts" title="สรุปรายชื่อ" />
       <MenuItem onClick={logout} icon="logout" title="ออกจากระบบ" />
     </Row>
   </div>

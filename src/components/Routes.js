@@ -8,10 +8,14 @@ import Layout from '../components/Dashboard'
 
 import Login from '../routes/login'
 import Dashboard from '../routes/dashboard'
-import Campers from '../routes/campers'
+import Candidates from '../routes/candidates'
+
 import Submissions from '../routes/submissions'
 import Grading from '../routes/evaluate'
 import Choose from '../routes/choose'
+
+import CandidatePreview from '../routes/candidatePreview'
+import CandidateSummary from '../routes/candidateSummary'
 import NotFound from '../routes/404'
 
 import history from '../core/history'
@@ -55,7 +59,9 @@ const AuthRoutes = ({user}) => {
       <Layout>
         <Route path="/" component={getByRole(user.role)} exact />
         <Route path="/grade/:id" component={Grading} />
-        <Route path="/campers" component={Campers} />
+        <Route path="/preview/:id" component={CandidatePreview} />
+        <Route path="/summary/:id" component={CandidateSummary} />
+        <Route path="/candidates" component={Candidates} />
         <Route path="/choose" component={Choose} />
       </Layout>
     )

@@ -33,7 +33,7 @@ const menus = [
   },
   {
     title: 'สรุปรายชื่อ',
-    path: '/campers',
+    path: '/candidates',
     icon: 'contacts',
     role: 'admin',
   },

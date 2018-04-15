@@ -248,7 +248,7 @@ function highlightRows(record, index) {
   }
 }
 
-const CampersRecord = ({campers, ...props}) => (
+const CandidatesRecord = ({campers, ...props}) => (
   <Records
     fields={fields}
     maxWidth={130}
@@ -264,4 +264,4 @@ const mapStateToProps = state => ({
 
 const enhance = connect(mapStateToProps)
 
-export default enhance(CampersRecord)
+export default enhance(CandidatesRecord)
