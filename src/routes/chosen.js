@@ -15,7 +15,7 @@ const Row = styled.div`
   justify-content: space-between;
 `
 
-const Campers = ({delisted, major, setMajor, setAlternate}) => (
+const Campers = ({delisted, major, setMajor, alternate, setAlternate}) => (
   <div>
     <h1>ผู้ที่ได้รับการคัดเลือกสำหรับสาขา {major}</h1>
 
@@ -32,8 +32,16 @@ const Campers = ({delisted, major, setMajor, setAlternate}) => (
       </ButtonGroup>
 
       <ButtonGroup style={{marginBottom: '2em'}}>
-        <Button onClick={() => setAlternate(true)}>ตัวสำรอง</Button>
-        <Button onClick={() => setAlternate(false)}>ตัวจริง</Button>
+        <Button
+          type={alternate && 'primary'}
+          onClick={() => setAlternate(true)}>
+          ตัวสำรอง
+        </Button>
+        <Button
+          type={!alternate && 'primary'}
+          onClick={() => setAlternate(false)}>
+          ตัวจริง
+        </Button>
       </ButtonGroup>
     </Row>
 
@@ -43,6 +51,7 @@ const Campers = ({delisted, major, setMajor, setAlternate}) => (
 
 const mapStateToProps = state => ({
   major: state.camper.currentMajor,
+  alternate: state.camper.alternate,
 })
 
 const enhance = connect(mapStateToProps, {setMajor, setAlternate})
