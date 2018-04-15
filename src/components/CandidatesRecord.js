@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import * as R from 'ramda'
 import styled, {css} from 'react-emotion'
 import {connect} from 'react-redux'
+import {Link} from 'react-static'
 
+import Button from '../components/Button'
 import Records from '../components/Records'
 
 import {campersSelector} from '../ducks/campers.selector'
@@ -114,6 +116,7 @@ const fields = {
     title: '　',
     width: 60,
     render: (text, record, index) => <code>{index + 1}</code>,
+    fixed: 'left',
   },
   id: {
     title: 'รหัสอ้างอิง',
@@ -236,6 +239,16 @@ const fields = {
     title: 'คำถามสาขา 3',
     width: 300,
     render: text => <Answer>{text}</Answer>,
+  },
+  more: {
+    title: 'ดูเพิ่มเติม',
+    render: (text, record) => (
+      <Link to={`/summary/${record.id}`}>
+        <Button icon="export" />,
+      </Link>
+    ),
+    width: 100,
+    fixed: 'right',
   },
 }
 
