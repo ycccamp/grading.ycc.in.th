@@ -1,9 +1,11 @@
 import React from 'react'
+import * as R from 'ramda'
 import {connect} from 'react-redux'
 import {reduxForm, Field} from 'redux-form'
 import {compose} from 'recompose'
 import styled, {css} from 'react-emotion'
 import {TextField} from 'redux-form-antd'
+import {createSelector} from 'reselect'
 
 import ImagePreview from './PreviewAnswer/ImagePreview'
 
@@ -37,8 +39,8 @@ const Col = styled.div`
   justify-content: space-between;
 
   flex: 1;
-  min-width: 23%;
-  max-width: 23%;
+  min-width: 24%;
+  max-width: 24%;
 `
 
 const GalleryForm = ({data}) => (
@@ -54,21 +56,45 @@ const GalleryForm = ({data}) => (
         <Field
           name={entry.id}
           component={TextField}
-          placeholder={`คะแนน (เต็ม 25)`}
+          placeholder="คะแนน (เต็ม 25)"
         />
       </Col>
     ))}
   </Row>
 )
 
+const initialSelector = createSelector(
+  submissionsSelector,
+  s => s.user.name,
+  (entries, name) => {
+    const scores = entries
+      .filter(x => !x.delisted)
+      .map(entry => {
+        if (entry.major) {
+          const evaluation = entry.major[name]
+
+          if (evaluation) {
+            return {[entry.id]: evaluation.scores[2]}
+          }
+        }
+
+        return {[entry.id]: 0}
+      })
+      .reduce(R.merge)
+
+    return scores
+  },
+)
+
 const mapStateToProps = state => ({
   data: submissionsSelector(state).filter(x => !x.delisted),
+  initialValues: initialSelector(state),
 })
 
 const enhance = compose(
   connect(mapStateToProps),
   reduxForm({
-    form: 'grading',
+    form: 'gallery',
     enableReinitialize: true,
     keepDirtyOnReinitialize: true,
   }),
