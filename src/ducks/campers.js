@@ -11,6 +11,7 @@ export const CHOOSE_CAMPER = 'CHOOSE_CAMPER'
 export const CHOOSE_CAMPERS = 'CHOOSE_CAMPERS'
 
 export const SET_MAJOR = 'SET_MAJOR'
+export const SET_ALTERNATE = 'SET_ALTERNATE'
 export const SET_SELECTED = 'SET_SELECTED'
 export const STORE_CAMPER = 'STORE_CAMPER'
 
@@ -23,6 +24,7 @@ export const chooseCamper = Creator(CHOOSE_CAMPER, 'id', 'mode')
 export const chooseCampers = Creator(CHOOSE_CAMPERS)
 
 export const setMajor = Creator(SET_MAJOR)
+export const setAlternate = Creator(SET_ALTERNATE)
 export const setSelected = Creator(SET_SELECTED)
 export const storeCamper = Creator(STORE_CAMPER)
 
@@ -123,6 +125,7 @@ export function* camperWatcherSaga() {
 }
 
 const initial = {
+  alternate: false,
   currentMajor: 'content',
   camper: {},
   campers: [],
@@ -137,6 +140,7 @@ export default createReducer(initial, state => ({
   [STORE_CAMPER]: camper => ({...state, camper}),
   [SET_MAJOR]: currentMajor => ({...state, currentMajor}),
   [SET_SELECTED]: selected => ({...state, selected}),
+  [SET_ALTERNATE]: alternate => ({...state, alternate}),
   [STORE_CAMPERS]: ({docs}) => {
     const campers = docs.sort(sortBySubmitted).map(retrieveData)
     console.info('Retrieved', campers.length, 'Submissions')

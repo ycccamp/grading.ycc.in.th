@@ -32,6 +32,12 @@ const menus = [
     role: 'admin',
   },
   {
+    title: 'ผู้ที่ผ่านการคัดเลือก',
+    path: '/chosen',
+    icon: 'trophy',
+    role: 'admin',
+  },
+  {
     title: 'สรุปรายชื่อ',
     path: '/candidates',
     icon: 'contacts',

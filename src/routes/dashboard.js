@@ -61,7 +61,7 @@ const Landing = ({username, role = 'none', logout}) => (
 
     <Row gutter={32} style={{marginTop: '1em'}}>
       <MenuItem to="/choose" icon="select" title="คัดเลือกผู้สมัคร" />
-      <MenuItem to="/candidates" icon="trophy" title="ผู้ผ่านการคัดเลือก" />
+      <MenuItem to="/chosen" icon="trophy" title="ผู้ผ่านการคัดเลือก" />
     </Row>
 
     <Row gutter={32} style={{marginTop: '1em'}}>

@@ -45,6 +45,19 @@ export const topCampersSelector = createSelector(
       .slice(0, 30),
 )
 
+export const chosenSelector = createSelector(
+  campersSelector,
+  s => s.camper.currentMajor,
+  s => s.camper.alternate,
+  (candidates, major, isAlternate) =>
+    candidates.filter(
+      entry =>
+        entry.selected &&
+        entry.alternate === isAlternate &&
+        entry.major === major,
+    ),
+)
+
 export const candidateSelector = createSelector(
   campersSelector,
   (s, id) => id,
