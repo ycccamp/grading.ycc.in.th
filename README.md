@@ -1,10 +1,15 @@
-# React-Static - Basic Example
+# TODO:
 
-This example is the most basic version of react-static available. It includes:
-- Babel
-- CSS imports
-- Image imports
-- File imports
-- Automatic Routing
+1.  DONE -- หน้าเลือกน้อง 20 คน
 
-To get started, run `react-static create` and use the `basic` template.
+    * DONE -- กดสลับสาขาได้
+
+2.  DONE -- หน้าแสดงผลน้องที่ผ่านการคัดเลือก
+
+    * Generate ID น้อง (D01)
+
+3.  ดีไซน์ข้อสาม (Gallery)
+
+4.  แสดงผลว่าแต่ละคนตรวจไปแล้วกี่ข้อ
+
+    * Fixed List
