@@ -44,6 +44,12 @@ const menus = [
     role: 'admin',
   },
   {
+    title: 'สถิติการตรวจ',
+    path: '/stats',
+    icon: 'line-chart',
+    role: 'admin',
+  },
+  {
     title: 'สรุปรายชื่อ',
     path: '/candidates',
     icon: 'contacts',

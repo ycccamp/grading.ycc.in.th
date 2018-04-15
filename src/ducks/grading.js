@@ -25,6 +25,9 @@ export const SAVE_PHOTO_SCORE = '@GRADING/SAVE_PHOTO_SCORE'
 export const SYNC_GRADING = '@GRADING/SYNC'
 export const STORE_GRADING = '@GRADING/STORE'
 
+export const SYNC_STAFFS = '@STAFFS/SYNC'
+export const STORE_STAFFS = '@STAFFS/STORE'
+
 export const setPage = Creator(SET_PAGE)
 export const resumePagination = Creator(RESUME_PAGINATION)
 
@@ -34,6 +37,9 @@ export const savePhotoScore = Creator(SAVE_PHOTO_SCORE, 'id', 'score')
 
 export const syncGrading = Creator(SYNC_GRADING)
 export const storeGrading = Creator(STORE_GRADING)
+
+export const syncStaffs = Creator(SYNC_STAFFS)
+export const storeStaffs = Creator(STORE_STAFFS)
 
 const db = app.firestore()
 
@@ -133,6 +139,14 @@ export function* syncGradingSaga() {
   })
 }
 
+export function* syncStaffsSaga() {
+  const records = db.collection('staffs')
+
+  yield fork(rsf.firestore.syncCollection, records, {
+    successActionCreator: storeStaffs,
+  })
+}
+
 const PAGE_SIZE = 10
 
 export function* resumePaginationSaga() {
@@ -156,6 +170,7 @@ export function* resumePaginationSaga() {
 
 export function* gradingWatcherSaga() {
   yield takeEvery(SYNC_GRADING, syncGradingSaga)
+  yield takeEvery(SYNC_STAFFS, syncStaffsSaga)
   yield takeEvery(RESUME_PAGINATION, resumePaginationSaga)
   yield takeEvery(SUBMIT, submitGradingSaga)
   yield takeEvery(DELIST, delistSaga)
@@ -165,6 +180,7 @@ export function* gradingWatcherSaga() {
 const initial = {
   page: 1,
   data: [],
+  staffs: [],
 }
 
 export default createReducer(initial, state => ({
@@ -173,5 +189,10 @@ export default createReducer(initial, state => ({
     const data = docs.map(doc => ({id: doc.id, ...doc.data()}))
 
     return {...state, data}
+  },
+  [STORE_STAFFS]: ({docs}) => {
+    const staffs = docs.map(doc => ({id: doc.id, ...doc.data()}))
+
+    return {...state, staffs}
   },
 }))

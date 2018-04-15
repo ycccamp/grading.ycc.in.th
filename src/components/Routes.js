@@ -18,6 +18,7 @@ import Chosen from '../routes/chosen'
 
 import CandidatePreview from '../routes/candidatePreview'
 import CandidateSummary from '../routes/candidateSummary'
+import Stats from '../routes/stats'
 import NotFound from '../routes/404'
 
 import history from '../core/history'
@@ -67,6 +68,7 @@ const AuthRoutes = ({user}) => {
         <Route path="/candidates" component={Candidates} />
         <Route path="/choose" component={Choose} />
         <Route path="/chosen" component={Chosen} />
+        <Route path="/stats" component={Stats} />
       </Layout>
     )
   }

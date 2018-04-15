@@ -5,7 +5,7 @@ import {takeEvery, call, put, fork} from 'redux-saga/effects'
 
 import {createReducer, Creator} from './helper'
 import {syncCampers} from './campers'
-import {syncGrading} from './grading'
+import {syncGrading, syncStaffs} from './grading'
 
 import rsf, {app} from '../core/fire'
 import history from '../core/history'
@@ -104,6 +104,10 @@ export function* authRoutineSaga(user) {
     yield put(storeUser(data))
     yield put(syncCampers())
     yield put(syncGrading())
+
+    if (record.role === 'admin') {
+      yield put(syncStaffs())
+    }
 
     yield put(setLoading(false))
   } catch (err) {
