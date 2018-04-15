@@ -2,6 +2,7 @@ import React from 'react'
 import {css} from 'react-emotion'
 import {connect} from 'react-redux'
 import {Link} from 'react-static'
+import {Checkbox} from 'antd'
 
 import Button from '../components/Button'
 import Records from '../components/Records'
@@ -11,7 +12,13 @@ import {topCampersSelector} from '../ducks/campers.selector'
 const fields = {
   number: {
     title: '　',
-    width: 60,
+    width: 50,
+    render: (text, record, index) => <code>{index + 1}</code>,
+  },
+  selected: {
+    title: 'เลือก',
+    render: () => <Checkbox />,
+    width: 50,
   },
   id: {
     title: 'รหัสอ้างอิง',
@@ -36,6 +43,7 @@ const fields = {
         <Button icon="export" />,
       </Link>
     ),
+    width: 100,
   },
 }
 

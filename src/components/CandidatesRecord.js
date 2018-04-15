@@ -113,6 +113,7 @@ const fields = {
   number: {
     title: '　',
     width: 60,
+    render: (text, record, index) => <code>{index + 1}</code>,
   },
   id: {
     title: 'รหัสอ้างอิง',

@@ -1,7 +1,6 @@
 import * as R from 'ramda'
 import {createSelector} from 'reselect'
 
-import {withIndex} from '../core/util'
 import {computeScores} from '../core/scoring'
 
 const sortByScore = (a, b) => (b.totalScore || 0) - (a.totalScore || 0)
@@ -30,7 +29,7 @@ export const campersSelector = createSelector(
       }
     })
 
-    return submissions.sort(sortByScore).map(withIndex)
+    return submissions.sort(sortByScore)
   },
 )
 
@@ -41,6 +40,5 @@ export const topCampersSelector = createSelector(
   (candidates, major) =>
     candidates
       .filter(entry => !entry.delisted && entry.major === major)
-      .slice(0, 30)
-      .map(withIndex),
+      .slice(0, 30),
 )

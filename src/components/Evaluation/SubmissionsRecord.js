@@ -22,6 +22,7 @@ const fields = {
     title: '　',
     width: 60,
     fixed: 'left',
+    render: (text, record, index) => <code>{index + 1}</code>,
   },
   id: {
     title: 'รหัสอ้างอิง',
