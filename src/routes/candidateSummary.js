@@ -1,4 +1,5 @@
 import React from 'react'
+import {Spin} from 'antd'
 import {connect} from 'react-redux'
 import styled, {css} from 'react-emotion'
 import Image from 'react-medium-image-zoom'
@@ -120,29 +121,35 @@ const avatarStyle = css`
   background-color: #fbfcff;
 `
 
-const CandidateSummary = ({data = {}, submit}) => (
-  <div>
-    <Image
-      image={{src: data.photo, className: avatarStyle}}
-      imageZoom={{src: data.photo}}
-    />
+const CandidateSummary = ({data}) => {
+  if (data) {
+    return (
+      <div>
+        <Image
+          image={{src: data.photo, className: avatarStyle}}
+          imageZoom={{src: data.photo}}
+        />
 
-    <Section title="ข้อมูลส่วนตัว" fields={personalFields} data={data} />
-    <Section title="ข้อมูลผู้ปกครอง" fields={parentFields} data={data} />
+        <Section title="ข้อมูลส่วนตัว" fields={personalFields} data={data} />
+        <Section title="ข้อมูลผู้ปกครอง" fields={parentFields} data={data} />
 
-    <h1>คำถามกลาง</h1>
-    <Answers data={data} type="core" />
+        <h1>คำถามกลาง</h1>
+        <Answers data={data} type="core" />
 
-    <h2>การประเมินผลสำหรับคำถามกลาง</h2>
-    <Evaluation data={data.coreEvaluation} />
+        <h2>การประเมินผลสำหรับคำถามกลาง</h2>
+        <Evaluation data={data.coreEvaluation} />
 
-    <h1>คำถามสาขา</h1>
-    <Answers data={data} type={data.major} />
+        <h1>คำถามสาขา</h1>
+        <Answers data={data} type={data.major} />
 
-    <h2>การประเมินผลสำหรับคำถามสาขา</h2>
-    <Evaluation data={data.majorEvaluation} />
-  </div>
-)
+        <h2>การประเมินผลสำหรับคำถามสาขา</h2>
+        <Evaluation data={data.majorEvaluation} />
+      </div>
+    )
+  }
+
+  return <Spin />
+}
 
 const mapStateToProps = (state, {match}) => ({
   data: candidateSelector(state, match.params.id),

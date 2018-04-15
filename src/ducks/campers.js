@@ -6,7 +6,9 @@ import rsf, {app} from '../core/fire'
 import {majorRoles} from '../core/roles'
 
 export const ADD_CAMPER = 'ADD_CAMPER'
+
 export const CHOOSE_CAMPER = 'CHOOSE_CAMPER'
+export const CHOOSE_CAMPERS = 'CHOOSE_CAMPERS'
 
 export const SET_MAJOR = 'SET_MAJOR'
 export const SET_SELECTED = 'SET_SELECTED'
@@ -16,7 +18,9 @@ export const SYNC_CAMPERS = 'SYNC_CAMPERS'
 export const STORE_CAMPERS = 'STORE_CAMPERS'
 
 export const addCamper = Creator(ADD_CAMPER)
-export const chooseCamper = Creator(CHOOSE_CAMPER)
+
+export const chooseCamper = Creator(CHOOSE_CAMPER, 'id', 'mode')
+export const chooseCampers = Creator(CHOOSE_CAMPERS)
 
 export const setMajor = Creator(SET_MAJOR)
 export const setSelected = Creator(SET_SELECTED)
@@ -46,8 +50,37 @@ export function* syncCampersSaga() {
   })
 }
 
-// Nominate the camper to be chosen for JWCx
-export function* chooseCamperSaga({payload: mode}) {
+export function* chooseCamperSaga({payload: {id, mode}}) {
+  const hide = message.loading('กำลังเลือกผู้สมัคร กรุณารอสักครู่...', 0)
+
+  const isAlternate = mode === 'alternate'
+  const isSelected = mode !== 'cancel'
+
+  const payload = {
+    selected: isSelected,
+    alternate: isSelected && isAlternate,
+  }
+
+  const doc = db.collection('grading').doc(id)
+  yield call(rsf.firestore.setDocument, doc, payload, {merge: true})
+
+  yield call(hide)
+
+  let msg = `เลือกตัวจริงเรียบร้อยแล้ว`
+
+  if (isAlternate) {
+    msg = `เลือกตัวสำรองเรียบร้อยแล้ว`
+  }
+
+  if (!isSelected) {
+    msg = `ยกเลิกการเลือกผู้สมัครเรียบร้อยแล้ว`
+  }
+
+  yield call(message.success, msg)
+}
+
+// Nominate the selected campers to be chosen for JWCx
+export function* chooseCampersSaga({payload: mode}) {
   const selected = yield select(s => s.camper.selected)
   const hide = message.loading('กำลังเลือกผู้สมัคร กรุณารอสักครู่...', 0)
 
@@ -69,22 +102,23 @@ export function* chooseCamperSaga({payload: mode}) {
 
   yield call(hide)
 
-  let message = `เลือกตัวจริง ${selected.length} คนเรียบร้อยแล้ว`
+  let msg = `เลือกตัวจริง ${selected.length} คนเรียบร้อยแล้ว`
 
   if (isAlternate) {
-    message = `เลือกตัวสำรอง ${selected.length} คนเรียบร้อยแล้ว`
+    msg = `เลือกตัวสำรอง ${selected.length} คนเรียบร้อยแล้ว`
   }
 
   if (!isSelected) {
-    message = `ยกเลิกการเลือกผู้สมัคร ${selected.length} คนเรียบร้อยแล้ว`
+    msg = `ยกเลิกการเลือกผู้สมัคร ${selected.length} คนเรียบร้อยแล้ว`
   }
 
   // prettier-ignore
-  yield call(message.success, message)
+  yield call(message.success, msg)
 }
 
 export function* camperWatcherSaga() {
   yield takeEvery(CHOOSE_CAMPER, chooseCamperSaga)
+  yield takeEvery(CHOOSE_CAMPERS, chooseCampersSaga)
   yield takeEvery(SYNC_CAMPERS, syncCampersSaga)
 }
 
