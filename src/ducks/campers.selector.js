@@ -1,3 +1,4 @@
+import * as R from 'ramda'
 import {createSelector} from 'reselect'
 
 import {withIndex} from '../core/util'
@@ -31,4 +32,12 @@ export const campersSelector = createSelector(
 
     return submissions.sort(sortByScore).map(withIndex)
   },
+)
+
+// Select only the top twenty campers for each major
+export const topTwentySelector = createSelector(
+  campersSelector,
+  s => s.campers.currentMajor,
+  (entries, major) =>
+    entries.filter(entry => entry.major === major).slice(0, 20),
 )
