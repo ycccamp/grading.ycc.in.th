@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Image from 'react-medium-image-zoom'
 import styled, {css} from 'react-emotion'
 import firebase from 'firebase'
+import {Spin} from 'antd'
 
 const imageStyle = css`
   position: relative;
@@ -25,18 +26,18 @@ class ImagePreview extends Component {
   }
 
   async componentDidMount() {
-    const {src, id} = this.props
+    const {id} = this.props
 
-    if (src === true && id) {
+    if (id) {
       await this.loadPreview(id)
     }
   }
 
   async componentWillReceiveProps(props) {
     if (this.props.id !== props.id) {
-      const {src, id} = props
+      const {id} = props
 
-      if (src === true && id) {
+      if (id) {
         await this.loadPreview(id)
       }
     }
@@ -50,12 +51,11 @@ class ImagePreview extends Component {
       const url = await designs.getDownloadURL()
 
       if (url) {
-        console.log('Design URL', url)
         this.setState({preview: url})
       }
     } catch (err) {
       if (err.code === 'storage/object-not-found') {
-        console.info('Camper', uid, 'has no designs! This should not happen.')
+        console.warn('Camper', uid, 'has no designs! This should NOT happen.')
         return
       }
 
@@ -64,7 +64,11 @@ class ImagePreview extends Component {
   }
 
   render() {
-    let src = this.state.preview || this.props.src
+    const src = this.state.preview
+
+    if (!src) {
+      return <Spin />
+    }
 
     return (
       <Image

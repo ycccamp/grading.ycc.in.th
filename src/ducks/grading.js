@@ -10,6 +10,7 @@ import {createReducer, Creator} from './helper'
 
 import {
   submissionsSelector,
+  evaluationSelector,
   delistedSelector,
   leftoffSelector,
 } from './grading.selector'
@@ -19,6 +20,7 @@ export const RESUME_PAGINATION = '@GRADING/RESUME_PAGINATION'
 
 export const SUBMIT = '@GRADING/SUBMIT'
 export const DELIST = '@GRADING/DELIST'
+export const SAVE_PHOTO_SCORE = '@GRADING/SAVE_PHOTO_SCORE'
 
 export const SYNC_GRADING = '@GRADING/SYNC'
 export const STORE_GRADING = '@GRADING/STORE'
@@ -28,6 +30,7 @@ export const resumePagination = Creator(RESUME_PAGINATION)
 
 export const submit = Creator(SUBMIT, 'id', 'data')
 export const delist = Creator(DELIST)
+export const savePhotoScore = Creator(SAVE_PHOTO_SCORE, 'id', 'score')
 
 export const syncGrading = Creator(SYNC_GRADING)
 export const storeGrading = Creator(STORE_GRADING)
@@ -79,6 +82,27 @@ export function* submitGradingSaga({payload: {id, data}}) {
   } finally {
     hide()
     yield fork(proceedSaga, id)
+  }
+}
+
+export function* savePhotoScoreSaga({payload: {id, score}}) {
+  const {scores} = yield select(s => evaluationSelector(s, id))
+  scores[2] = parseInt(score) || 0
+
+  const name = yield select(s => s.user.name)
+
+  if (scores[2] > 25) {
+    yield call(message.error, 'คะแนนต้องน้อยกว่า 25')
+
+    return
+  }
+
+  try {
+    yield call(updateGrading, id, {scores}, name, 'major')
+    yield call(message.success, `บันทึกผลการให้คะแนนเรียบร้อยแล้ว`)
+  } catch (err) {
+    console.warn('Grading Submission Error', err)
+    message.error(err.message)
   }
 }
 
@@ -135,6 +159,7 @@ export function* gradingWatcherSaga() {
   yield takeEvery(RESUME_PAGINATION, resumePaginationSaga)
   yield takeEvery(SUBMIT, submitGradingSaga)
   yield takeEvery(DELIST, delistSaga)
+  yield takeEvery(SAVE_PHOTO_SCORE, savePhotoScoreSaga)
 }
 
 const initial = {

@@ -32,6 +32,31 @@ export const gradedSelector = createSelector(
 )
 
 /*
+  # Evaluations Selector
+*/
+
+export const evaluationsSelector = createSelector(
+  s => s.camper.campers,
+  s => s.grading.data,
+  s => s.user.name,
+  s => s.user.role,
+  (campers, entries, gradedBy, role) => {
+    const submissions = campers.map(camper => {
+      const evaluations = entries.find(entry => entry.id === camper.id)
+
+      const evaluation = getEvaluation(evaluations, gradedBy, role)
+
+      return {
+        id: camper.id,
+        ...evaluation,
+      }
+    })
+
+    return submissions.filter(x => !x.delisted)
+  },
+)
+
+/*
   # Submissions Record Selectors
     This selectors will be used to populate the data in SubmissionsRecord
 */

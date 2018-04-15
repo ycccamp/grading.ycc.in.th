@@ -6,16 +6,19 @@ import {compose} from 'recompose'
 import styled, {css} from 'react-emotion'
 import {TextField} from 'redux-form-antd'
 import {createSelector} from 'reselect'
+import LazyLoad from 'react-lazyload'
 
 import ImagePreview from './PreviewAnswer/ImagePreview'
 
-import {submissionsSelector} from '../ducks/grading.selector'
+import {savePhotoScore} from '../ducks/grading'
+import {evaluationsSelector} from '../ducks/grading.selector'
 
 const imageStyle = css`
   position: relative;
   z-index: 2;
 
   width: 100%;
+  min-height: 300;
 
   margin-top: 0.8em;
   margin-bottom: 0.8em;
@@ -43,56 +46,42 @@ const Col = styled.div`
   max-width: 24%;
 `
 
-const GalleryForm = ({data}) => (
+const GalleryForm = ({data, save}) => (
   <Row>
     {data.map(entry => (
       <Col key={entry.id}>
-        <ImagePreview
-          src={entry.majorAnswer3}
-          id={entry.id}
-          imageStyle={imageStyle}
-        />
+        <LazyLoad height={600} once>
+          <ImagePreview id={entry.id} imageStyle={imageStyle} />
+        </LazyLoad>
 
         <Field
           name={entry.id}
           component={TextField}
           placeholder="คะแนน (เต็ม 25)"
+          onBlur={save}
         />
       </Col>
     ))}
   </Row>
 )
 
-const initialSelector = createSelector(
-  submissionsSelector,
-  s => s.user.name,
-  (entries, name) => {
-    const scores = entries
-      .filter(x => !x.delisted)
-      .map(entry => {
-        if (entry.major) {
-          const evaluation = entry.major[name]
-
-          if (evaluation) {
-            return {[entry.id]: evaluation.scores[2]}
-          }
-        }
-
-        return {[entry.id]: 0}
-      })
-      .reduce(R.merge)
-
-    return scores
-  },
+const initialSelector = createSelector(evaluationsSelector, entries =>
+  entries
+    .map(entry => ({[entry.id]: entry.scores ? entry.scores[2] : 0}))
+    .reduce(R.merge),
 )
 
 const mapStateToProps = state => ({
-  data: submissionsSelector(state).filter(x => !x.delisted),
+  data: evaluationsSelector(state),
   initialValues: initialSelector(state),
 })
 
+const mapDispatchToProps = dispatch => ({
+  save: (event, value, _, id) => dispatch(savePhotoScore(id, value)),
+})
+
 const enhance = compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   reduxForm({
     form: 'gallery',
     enableReinitialize: true,
