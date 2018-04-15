@@ -2,23 +2,18 @@ import React from 'react'
 import {css} from 'react-emotion'
 import {connect} from 'react-redux'
 import {Link} from 'react-static'
-import {Checkbox} from 'antd'
 
 import Button from '../components/Button'
 import Records from '../components/Records'
 
+import {setSelected} from '../ducks/campers'
 import {topCampersSelector} from '../ducks/campers.selector'
 
 const fields = {
   number: {
-    title: '　',
+    title: 'no.',
     width: 50,
     render: (text, record, index) => <code>{index + 1}</code>,
-  },
-  selected: {
-    title: 'เลือก',
-    render: () => <Checkbox />,
-    width: 50,
   },
   id: {
     title: 'รหัสอ้างอิง',
@@ -36,6 +31,21 @@ const fields = {
     title: 'คะแนนสาขา 60',
     render: num => num && num.toFixed(2),
   },
+  status: {
+    title: 'สถานะ',
+    render: (text, record) => {
+      if (record.alternate) {
+        return 'สำรอง'
+      }
+
+      if (record.selected) {
+        return 'ตัวจริง'
+      }
+
+      return '-'
+    },
+    width: 80,
+  },
   more: {
     title: 'ดูเพิ่มเติม',
     render: (text, record) => (
@@ -48,11 +58,11 @@ const fields = {
 }
 
 const alternateStyle = css`
-  background: #dfe4ea;
+  background: #81ecec;
 `
 
 const selectedStyle = css`
-  background: #dfe4ea;
+  background: #55efc4;
 `
 
 function highlightRows(record, index) {
@@ -65,9 +75,10 @@ function highlightRows(record, index) {
   }
 }
 
-const CampersRecord = ({campers, ...props}) => (
+const CampersRecord = ({campers, setSelected, ...props}) => (
   <Records
     fields={fields}
+    rowSelection={{onChange: setSelected}}
     maxWidth={130}
     rowClassName={highlightRows}
     rowKey="id"
@@ -80,6 +91,6 @@ const mapStateToProps = state => ({
   data: topCampersSelector(state),
 })
 
-const enhance = connect(mapStateToProps)
+const enhance = connect(mapStateToProps, {setSelected})
 
 export default enhance(CampersRecord)

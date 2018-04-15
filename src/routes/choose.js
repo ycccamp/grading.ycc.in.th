@@ -1,29 +1,42 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Button} from 'antd'
+import styled from 'react-emotion'
 
 import CamperSelector from '../components/CamperSelector'
 
-import {setMajor} from '../ducks/campers'
-
+import {setMajor, chooseCamper} from '../ducks/campers'
 import {majorRoles} from '../core/roles'
 
 const ButtonGroup = Button.Group
 
-const Campers = ({delisted, major, setMajor}) => (
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const Campers = ({delisted, major, setMajor, chooseCamper}) => (
   <div>
     <h1>คัดเลือกผู้สมัครสำหรับสาขา {major}</h1>
 
-    <ButtonGroup style={{marginBottom: '2em'}}>
-      {majorRoles.map(role => (
-        <Button
-          onClick={() => setMajor(role)}
-          key={role}
-          type={role === major && 'primary'}>
-          {role}
-        </Button>
-      ))}
-    </ButtonGroup>
+    <Row>
+      <ButtonGroup style={{marginBottom: '2em'}}>
+        {majorRoles.map(role => (
+          <Button
+            onClick={() => setMajor(role)}
+            key={role}
+            type={role === major && 'primary'}>
+            {role}
+          </Button>
+        ))}
+      </ButtonGroup>
+
+      <ButtonGroup style={{marginBottom: '2em'}}>
+        <Button onClick={() => chooseCamper('cancel')}>ยกเลิกการเลือก</Button>
+        <Button onClick={() => chooseCamper('alternate')}>เลือกตัวสำรอง</Button>
+        <Button onClick={() => chooseCamper()}>เลือกตัวจริง</Button>
+      </ButtonGroup>
+    </Row>
 
     <CamperSelector />
   </div>
@@ -33,6 +46,6 @@ const mapStateToProps = state => ({
   major: state.camper.currentMajor,
 })
 
-const enhance = connect(mapStateToProps, {setMajor})
+const enhance = connect(mapStateToProps, {setMajor, chooseCamper})
 
 export default enhance(Campers)

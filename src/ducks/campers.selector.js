@@ -24,6 +24,8 @@ export const campersSelector = createSelector(
         ...scores,
         delisted: evaluations.delisted,
         delistedBy: evaluations.delistedBy,
+        selected: evaluations.selected,
+        alternate: evaluations.alternate,
         coreEvaluation: evaluations.core,
         majorEvaluation: evaluations.major,
       }
