@@ -1,9 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Row, Col} from 'antd'
 import {reduxForm, Field} from 'redux-form'
 import {compose} from 'recompose'
-import {css} from 'react-emotion'
+import styled, {css} from 'react-emotion'
+import {TextField} from 'redux-form-antd'
 
 import ImagePreview from './PreviewAnswer/ImagePreview'
 
@@ -23,14 +23,38 @@ const imageStyle = css`
   background-color: #fbfcff;
 `
 
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  overflow: hidden;
+`
+
+const Col = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  flex: 1;
+  min-width: 23%;
+  max-width: 23%;
+`
+
 const GalleryForm = ({data}) => (
-  <Row type="flex" justify="start" gutter={16}>
+  <Row>
     {data.map(entry => (
-      <Col span={6} key={entry.id}>
+      <Col key={entry.id}>
         <ImagePreview
           src={entry.majorAnswer3}
           id={entry.id}
           imageStyle={imageStyle}
+        />
+
+        <Field
+          name={entry.id}
+          component={TextField}
+          placeholder={`คะแนน (เต็ม 25)`}
         />
       </Col>
     ))}
@@ -38,7 +62,7 @@ const GalleryForm = ({data}) => (
 )
 
 const mapStateToProps = state => ({
-  data: submissionsSelector(state),
+  data: submissionsSelector(state).filter(x => !x.delisted),
 })
 
 const enhance = compose(
