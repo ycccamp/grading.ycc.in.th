@@ -22,7 +22,7 @@ const fields = {
     title: '　',
     width: 60,
     fixed: 'left',
-    render: (text, record, index) => <code>{index + 1}</code>,
+    render: (text, record) => <code>{record.number}</code>,
   },
   id: {
     title: 'รหัสอ้างอิง',

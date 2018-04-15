@@ -44,6 +44,8 @@ function sortByGraded(a, b) {
   )
 }
 
+const withIndex = (item, i) => ({...item, number: i + 1})
+
 // Joins the camper's information with your evaluation result.
 // This will be used in the list of submissions by the graders only.
 export const submissionsSelector = createSelector(
@@ -69,7 +71,7 @@ export const submissionsSelector = createSelector(
       }
     })
 
-    return submissions.sort(sortByGraded)
+    return submissions.sort(sortByGraded).map(withIndex)
   },
 )
 
