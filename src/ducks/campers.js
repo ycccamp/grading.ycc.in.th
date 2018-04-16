@@ -133,8 +133,8 @@ export function* exportCampersSaga() {
   const alternate = candidates.filter(x => x.alternate)
 
   const data = {
-    selected: generateCamperData(selected),
-    alternate: generateCamperData(alternate),
+    real: generateCamperData(selected),
+    unreal: generateCamperData(alternate),
   }
 
   yield call(Modal.success, {
