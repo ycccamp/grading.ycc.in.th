@@ -34,6 +34,9 @@ const personalFields = Object.entries({
   drugAllergy: 'ยาที่แพ้',
   shirtSize: 'ขนาดเสื้อ',
   activity: 'กิจกรรมหรือผลงานที่น้องๆ เคยทำหรือเข้าร่วม',
+  facebookDisplayName: 'ชื่อ Facebook',
+  facebookEmail: 'อีเมล์ Facebook',
+  facebookPhotoURL: 'รูปภาพ Facebook',
 })
 
 const parentFields = Object.entries({
