@@ -6,7 +6,7 @@ import {createReducer, Creator} from './helper'
 import rsf, {app} from '../core/fire'
 import {majorRoles} from '../core/roles'
 
-import {chosenSelector} from './campers.selector'
+import {campersSelector} from './campers.selector'
 
 export const ADD_CAMPER = 'ADD_CAMPER'
 
@@ -86,14 +86,45 @@ export function* chooseCamperSaga({payload: {id, mode}}) {
   yield call(message.success, msg)
 }
 
-export function* exportCampersSaga() {
-  const campers = yield select(chosenSelector)
+const withIndex = (item, index) => ({...item, index})
 
-  const data = campers.map((camper, index) => ({
-    id: index,
-    name: `${camper.firstname} ${camper.lastname}`,
-    amount: parseFloat(`200.${index.toFixed(2)}`),
-  }))
+const withMajorIndex = (item, index) => ({
+  ...item,
+  majorIndex: index,
+})
+
+const withData = item => ({
+  id: item.majorIndex + 1,
+  name: `${item.firstname} ${item.lastname}`,
+  amount: parseFloat(`200.${item.index}`),
+})
+
+function filterCandidate(data, major) {
+  return data
+    .filter(x => x.major === major)
+    .map(withMajorIndex)
+    .map(withData)
+}
+
+function generateCamperData(data) {
+  return {
+    design: filterCandidate(data, 'design'),
+    marketing: filterCandidate(data, 'marketing'),
+    content: filterCandidate(data, 'content'),
+    programming: filterCandidate(data, 'programming'),
+  }
+}
+
+export function* exportCampersSaga() {
+  const candidates = yield select(campersSelector)
+
+  const selected = candidates.filter(x => x.selected).map(withIndex)
+  const alternate = candidates.filter(x => x.alternate).map(withIndex)
+
+  const data = {
+    selected: generateCamperData(selected),
+    alternate: generateCamperData(alternate),
+  }
 
   yield call(Modal.success, {
     content: (
