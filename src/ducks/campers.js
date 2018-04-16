@@ -1,14 +1,18 @@
-import {message} from 'antd'
+import React from 'react'
+import {message, Modal} from 'antd'
 import {takeEvery, call, fork, select, all} from 'redux-saga/effects'
 
 import {createReducer, Creator} from './helper'
 import rsf, {app} from '../core/fire'
 import {majorRoles} from '../core/roles'
 
+import {chosenSelector} from './campers.selector'
+
 export const ADD_CAMPER = 'ADD_CAMPER'
 
 export const CHOOSE_CAMPER = 'CHOOSE_CAMPER'
 export const CHOOSE_CAMPERS = 'CHOOSE_CAMPERS'
+export const EXPORT_CAMPERS = 'EXPORT_CAMPERS'
 
 export const SET_MAJOR = 'SET_MAJOR'
 export const SET_ALTERNATE = 'SET_ALTERNATE'
@@ -22,6 +26,7 @@ export const addCamper = Creator(ADD_CAMPER)
 
 export const chooseCamper = Creator(CHOOSE_CAMPER, 'id', 'mode')
 export const chooseCampers = Creator(CHOOSE_CAMPERS)
+export const exportCampers = Creator(EXPORT_CAMPERS)
 
 export const setMajor = Creator(SET_MAJOR)
 export const setAlternate = Creator(SET_ALTERNATE)
@@ -81,6 +86,24 @@ export function* chooseCamperSaga({payload: {id, mode}}) {
   yield call(message.success, msg)
 }
 
+export function* exportCampersSaga() {
+  const campers = yield select(chosenSelector)
+
+  const data = campers.map((camper, index) => ({
+    id: index,
+    name: `${camper.firstname} ${camper.lastname}`,
+    amount: parseFloat(`200.${index.toFixed(2)}`),
+  }))
+
+  yield call(Modal.success, {
+    content: (
+      <div style={{whiteSpace: 'pre-wrap'}}>
+        {JSON.stringify(data, null, 2)}
+      </div>
+    ),
+  })
+}
+
 // Nominate the selected campers to be chosen for JWCx
 export function* chooseCampersSaga({payload: mode}) {
   const selected = yield select(s => s.camper.selected)
@@ -121,6 +144,7 @@ export function* chooseCampersSaga({payload: mode}) {
 export function* camperWatcherSaga() {
   yield takeEvery(CHOOSE_CAMPER, chooseCamperSaga)
   yield takeEvery(CHOOSE_CAMPERS, chooseCampersSaga)
+  yield takeEvery(EXPORT_CAMPERS, exportCampersSaga)
   yield takeEvery(SYNC_CAMPERS, syncCampersSaga)
 }
 
