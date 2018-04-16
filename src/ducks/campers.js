@@ -112,6 +112,7 @@ const withData = item => ({
 function filterCandidate(data, major) {
   return data
     .filter(x => x.major === major)
+    .sort((a, b) => a.firstname.localeCompare(b.firstname))
     .map(withMajorIndex)
     .map(withData)
 }
