@@ -96,7 +96,7 @@ const withMajorIndex = (item, index) => ({
 const withData = item => ({
   id: item.majorIndex + 1,
   name: `${item.firstname} ${item.lastname}`,
-  amount: parseFloat(`200.${item.index}`),
+  amount: parseFloat(`200.${item.index + 1}`).toFixed(2),
 })
 
 function filterCandidate(data, major) {
