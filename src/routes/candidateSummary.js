@@ -7,6 +7,7 @@ import Image from 'react-medium-image-zoom'
 import {Evaluation} from './candidatePreview'
 
 import Card from '../components/Card'
+import Photo from '../components/Photo'
 import Answers from '../components/Answers'
 
 import {candidateSelector} from '../ducks/campers.selector'
@@ -100,29 +101,11 @@ const Section = ({data, title, fields}) => (
   </Card>
 )
 
-const avatarStyle = css`
-  position: relative;
-  z-index: 2;
-
-  width: 100%;
-  min-height: 500px;
-
-  margin: 0 auto;
-  margin-top: 0.8em;
-  margin-bottom: 1.8em;
-
-  box-shadow: 0 1px 1.5px 1px rgba(0, 0, 0, 0.12);
-  background-color: #fbfcff;
-`
-
 const CandidateSummary = ({data}) => {
   if (data) {
     return (
       <div>
-        <Image
-          image={{src: data.photo, className: avatarStyle}}
-          imageZoom={{src: data.photo}}
-        />
+        <Photo id={data.id} />
 
         <Section title="ข้อมูลส่วนตัว" fields={personalFields} data={data} />
         <Section title="ข้อมูลผู้ปกครอง" fields={parentFields} data={data} />
