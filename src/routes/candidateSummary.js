@@ -2,7 +2,6 @@ import React from 'react'
 import {Spin} from 'antd'
 import {connect} from 'react-redux'
 import styled, {css} from 'react-emotion'
-import Image from 'react-medium-image-zoom'
 
 import {Evaluation} from './candidatePreview'
 

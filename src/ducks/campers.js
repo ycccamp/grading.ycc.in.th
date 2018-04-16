@@ -86,17 +86,27 @@ export function* chooseCamperSaga({payload: {id, mode}}) {
   yield call(message.success, msg)
 }
 
-const withIndex = (item, index) => ({...item, index})
-
 const withMajorIndex = (item, index) => ({
   ...item,
   majorIndex: index,
 })
 
+// 1 - 12
+// 13 - 24
+// 25 - 36
+// 37 - 48
+const majorAmt = {
+  design: 0,
+  marketing: 0.12,
+  content: 0.24,
+  programming: 0.36,
+}
+
+// prettier-ignore
 const withData = item => ({
   id: item.majorIndex + 1,
   name: `${item.firstname} ${item.lastname}`,
-  amount: parseFloat(`200.${item.index + 1}`).toFixed(2),
+  amount: (200 + 0.01 * (item.majorIndex + 1) + majorAmt[item.major]).toFixed(2),
 })
 
 function filterCandidate(data, major) {
@@ -118,8 +128,8 @@ function generateCamperData(data) {
 export function* exportCampersSaga() {
   const candidates = yield select(campersSelector)
 
-  const selected = candidates.filter(x => x.selected).map(withIndex)
-  const alternate = candidates.filter(x => x.alternate).map(withIndex)
+  const selected = candidates.filter(x => x.selected && !x.alternate)
+  const alternate = candidates.filter(x => x.alternate)
 
   const data = {
     selected: generateCamperData(selected),
