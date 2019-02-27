@@ -43,7 +43,7 @@ export function* loginSaga({payload: {username, password}}) {
   const hide = message.loading(`กำลังเข้าสู่ระบบด้วยชื่อผู้ใช้ ${username}`, 0)
 
   try {
-    const mail = `${username}@jwc.in.th`
+    const mail = `${username}@ycc.in.th`
     const user = yield call(rsf.auth.signInWithEmailAndPassword, mail, password)
 
     yield call(hide)
@@ -98,7 +98,7 @@ export function* authRoutineSaga(user) {
     const data = {
       ...userProps(user),
       ...record,
-      name: user.email.replace('@jwc.in.th', ''),
+      name: user.email.replace('@ycc.in.th', ''),
     }
 
     yield put(storeUser(data))

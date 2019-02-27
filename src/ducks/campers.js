@@ -147,7 +147,7 @@ export function* exportCampersSaga() {
   })
 }
 
-// Nominate the selected campers to be chosen for JWCx
+// Nominate the selected campers to be chosen for YCC
 export function* chooseCampersSaga({payload: mode}) {
   const selected = yield select(s => s.camper.selected)
   const hide = message.loading('กำลังเลือกผู้สมัคร กรุณารอสักครู่...', 0)
