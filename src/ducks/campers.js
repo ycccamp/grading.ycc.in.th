@@ -39,7 +39,8 @@ export const storeCampers = Creator(STORE_CAMPERS)
 const db = app.firestore()
 
 function getCollection(role) {
-  let campers = db.collection('campers').where('submitted', '==', true)
+  // .where('submitted', '==', true)
+  let campers = db.collection('campers')
 
   if (majorRoles.includes(role)) {
     campers = campers.where('major', '==', role)
@@ -208,7 +209,11 @@ export default createReducer(initial, state => ({
   [SET_SELECTED]: selected => ({...state, selected}),
   [SET_ALTERNATE]: alternate => ({...state, alternate}),
   [STORE_CAMPERS]: ({docs}) => {
-    const campers = docs.sort(sortBySubmitted).map(retrieveData)
+    const campers = docs
+      .sort(sortBySubmitted)
+      .map(retrieveData)
+      .filter(x => x.generalAnswer1)
+
     console.info('Retrieved', campers.length, 'Submissions')
 
     return {...state, campers}
