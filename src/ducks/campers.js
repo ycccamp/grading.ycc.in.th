@@ -39,7 +39,6 @@ export const storeCampers = Creator(STORE_CAMPERS)
 const db = app.firestore()
 
 function getCollection(role) {
-  // .where('submitted', '==', true)
   let campers = db.collection('campers')
 
   if (majorRoles.includes(role)) {
@@ -212,7 +211,9 @@ export default createReducer(initial, state => ({
     const campers = docs
       .sort(sortBySubmitted)
       .map(retrieveData)
-      .filter(x => x.generalAnswer1)
+      .filter(x => x.majorAnswer1)
+
+    // .filter(x => x.generalAnswer1)
 
     console.info('Retrieved', campers.length, 'Submissions')
 
