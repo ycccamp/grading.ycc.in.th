@@ -21,8 +21,8 @@ const Code = styled.code`
   white-space: pre-wrap;
 `
 
-const coreFields = ['generalAnswer1', 'generalAnswer2', 'generalAnswer3']
-const majorFields = ['majorAnswer1', 'majorAnswer2', 'majorAnswer3']
+const coreFields = ['generalAnswer1']
+const majorFields = ['majorAnswer1', 'majorAnswer2']
 
 function getAnswer(data, role, index) {
   let field = majorFields[index]
@@ -37,7 +37,7 @@ function getAnswer(data, role, index) {
 const PreviewAnswer = ({data, role, index}) => {
   const answer = getAnswer(data, role, index)
 
-  if (role === 'programming' && index === 2) {
+  if (role === 'programming' && index === 1) {
     return (
       <div>
         <WebPreview src={answer} />
@@ -46,20 +46,8 @@ const PreviewAnswer = ({data, role, index}) => {
     )
   }
 
-  if (role === 'design' && index === 2) {
+  if (role === 'design' && index === 0) {
     return <ImagePreview id={data.id} />
-  }
-
-  if (role === 'content' && index === 1) {
-    return (
-      <div>
-        <Answer>{data.majorAnswer2}</Answer>
-
-        {data.majorAnswer3 && (
-          <Answer style={{marginTop: '0.8em'}}>{data.majorAnswer3}</Answer>
-        )}
-      </div>
-    )
   }
 
   return <Answer>{answer}</Answer>
