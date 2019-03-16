@@ -208,9 +208,10 @@ export default createReducer(initial, state => ({
   [SET_SELECTED]: selected => ({...state, selected}),
   [SET_ALTERNATE]: alternate => ({...state, alternate}),
   [STORE_CAMPERS]: ({docs}) => {
-    const campers = docs.sort(sortBySubmitted).map(retrieveData)
-    // .filter(x => x.majorAnswer1)
-    // .filter(x => x.generalAnswer1)
+    const campers = docs
+      .sort(sortBySubmitted)
+      .map(retrieveData)
+      .filter(x => x.majorAnswer1)
 
     console.info('Retrieved', campers.length, 'Submissions')
 
