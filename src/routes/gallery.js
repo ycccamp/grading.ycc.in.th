@@ -4,7 +4,7 @@ import GalleryForm from '../components/GalleryForm'
 
 const Gallery = () => (
   <div>
-    <h1>ให้คะแนนรูปวาดสาขาดีไซน์ (ข้อ 3: 25 คะแนน)</h1>
+    <h1>ให้คะแนนรูปวาดสาขาดีไซน์ (10 คะแนน)</h1>
 
     <GalleryForm />
   </div>

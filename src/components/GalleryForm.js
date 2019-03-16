@@ -67,7 +67,7 @@ const GalleryForm = ({data, save}) => (
 
 const initialSelector = createSelector(evaluationsSelector, entries =>
   entries
-    .map(entry => ({[entry.id]: entry.scores ? entry.scores[2] : 0}))
+    .map(entry => ({[entry.id]: entry.scores ? entry.scores[1] : 0}))
     .reduce(R.merge),
 )
 
