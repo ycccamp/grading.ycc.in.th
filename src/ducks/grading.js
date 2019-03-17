@@ -47,7 +47,7 @@ function findNextGradingIndex(entries, index) {
   const entry = entries[index + 1]
 
   if (entry) {
-    if (entry.delisted) return findNextGradingIndex(entries, index + 1)
+    if (entry.delisted) return findNextGradingIndex(entries, index + 2)
 
     return entry
   }
