@@ -12,6 +12,7 @@ const Name = styled.div`
   color: #555;
   font-size: 1.18em;
   font-weight: 400;
+  text-transform: capitalize;
 `
 
 const Progress = styled.div`
@@ -96,6 +97,14 @@ const countSelector = createSelector(
   },
 )
 
+function getStaffName(staff) {
+  if (!staff) return null
+
+  if (staff.name === 'Phoom CORE') return 'phoom.general'
+
+  return staff.name.toLowerCase()
+}
+
 const statsSelector = createSelector(
   s => s.grading.data,
   s => s.grading.staffs,
@@ -104,7 +113,7 @@ const statsSelector = createSelector(
     const stats = staffs.filter(staff => staff.role !== 'admin').map(staff => {
       const evaluations = grading
         .filter(x => !x.delisted)
-        .map(item => getEvaluation(item, staff.name, staff.role))
+        .map(item => getEvaluation(item, getStaffName(staff), staff.role))
         .filter(x => x)
 
       const role = staff.role === 'core' ? 'total' : staff.role
