@@ -111,7 +111,7 @@ const withData = item => ({
 
 function filterCandidate(data, track) {
   return data
-    .filter(x => x.track === major)
+    .filter(x => x.track === track)
     .sort((a, b) => a.firstname.localeCompare(b.firstname))
     .map(withMajorIndex)
     .map(withData)
@@ -192,7 +192,7 @@ export function* camperWatcherSaga() {
 
 const initial = {
   alternate: false,
-  currentMajor: 'content',
+  currentMajor: 'creative',
   camper: {},
   campers: [],
   selected: [],
