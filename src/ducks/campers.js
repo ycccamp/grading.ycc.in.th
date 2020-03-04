@@ -198,7 +198,12 @@ const initial = {
   selected: [],
 }
 
-const retrieveData = doc => ({id: doc.id, ...doc.data()})
+const retrieveData = doc => ({
+    id: doc.id, 
+    general_ans: doc.collection('forms').doc('general'),
+    track_ans: doc.collection('forms').doc('track'),
+    ...doc.data()
+})
 
 const sortBySubmitted = (a, b) => a.updatedAt - b.updatedAt
 
