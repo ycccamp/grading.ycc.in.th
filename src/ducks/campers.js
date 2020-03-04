@@ -200,8 +200,8 @@ const initial = {
 
 const retrieveData = doc => ({
     id: doc.id, 
-    general_ans: doc.collection('forms').doc('general'),
-    track_ans: doc.collection('forms').doc('track'),
+    general_ans: doc.collection('forms').doc('general').data(),
+    track_ans: doc.collection('forms').doc('track').data(),
     ...doc.data()
 })
 
