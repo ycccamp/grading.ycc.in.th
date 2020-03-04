@@ -122,7 +122,7 @@ function generateCamperData(data) {
     design: filterCandidate(data, 'design'),
     marketing: filterCandidate(data, 'marketing'),
     content: filterCandidate(data, 'content'),
-    programming: filterCandidate(data, 'programming'),
+    developer: filterCandidate(data, 'developer'),
   }
 }
 
