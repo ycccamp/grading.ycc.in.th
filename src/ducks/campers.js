@@ -39,10 +39,10 @@ export const storeCampers = Creator(STORE_CAMPERS)
 const db = app.firestore()
 
 function getCollection(role) {
-  let campers = db.collection('campers').where('submitted', '==', true)
+  let campers = db.collection('registration').where('isLocked', '==', true)
 
   if (majorRoles.includes(role)) {
-    campers = campers.where('major', '==', role)
+    campers = campers.where('track', '==', role)
   }
 
   return campers
@@ -109,9 +109,9 @@ const withData = item => ({
   amount: (200 + 0.01 * (item.majorIndex + 1) + majorAmt[item.major]).toFixed(2),
 })
 
-function filterCandidate(data, major) {
+function filterCandidate(data, track) {
   return data
-    .filter(x => x.major === major)
+    .filter(x => x.track === major)
     .sort((a, b) => a.firstname.localeCompare(b.firstname))
     .map(withMajorIndex)
     .map(withData)
@@ -161,7 +161,7 @@ export function* chooseCampersSaga({payload: mode}) {
 
   yield all(
     selected.map(id => {
-      const doc = db.collection('grading').doc(id)
+      const doc = db.collection('registration').doc(id)
 
       return call(rsf.firestore.setDocument, doc, payload, {merge: true})
     }),
