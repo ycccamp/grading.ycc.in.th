@@ -7,6 +7,7 @@
     "start": "react-static start",
     "stage": "react-static build --staging",
     "build": "react-static build",
+    "dev": "parcel index.html",
     "serve": "serve dist -p 3000"
   },
   "dependencies": {
@@ -14,12 +15,15 @@
     "antd": "^3.4.0",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "dotenv": "^8.2.0",
     "emotion": "^9.1.1",
     "emotion-server": "^9.1.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "firebase": "^7.9.3",
     "grpc": "^1.24.2",
     "luxon": "^1.0.0",
+    "parcel": "^1.12.4",
+    "parcel-bundler": "^1.12.4",
     "polished": "^1.9.2",
     "ramda": "^0.25.0",
     "re-reselect": "^1.0.1",
@@ -43,8 +47,11 @@
     "reselect": "^3.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "babel-eslint": "^8.2.2",
     "babel-plugin-import": "^1.7.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-react-tools": "^1.1.7",

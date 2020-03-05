@@ -1,15 +1,18 @@
 {
-  "extends": "react-static/.babelrc",
   "plugins": [["import", {"libraryName": "antd", "style": true}]],
   "env": {
     "production": {
       "plugins": [
-        ["emotion", {"sourceMap": false, "hoist": true, "autoLabel": true}]
+        ["emotion", {"sourceMap": false, "hoist": true, "autoLabel": true}],
+        "@babel/plugin-proposal-class-properties",
+        "transform-class-properties"
       ]
     },
     "development": {
       "plugins": [
-        ["emotion", {"sourceMap": true, "hoist": true, "autoLabel": true}]
+        ["emotion", {"sourceMap": true, "hoist": true, "autoLabel": true}],
+        "@babel/plugin-proposal-class-properties",
+        "transform-class-properties"
       ]
     }
   }
