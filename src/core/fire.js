@@ -1,9 +1,12 @@
 import firebase from 'firebase'
 import '@firebase/firestore'
 import SagaFirebase from 'redux-saga-firebase'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const config = {
-  apiKey: 'AIzaSyBoT3SIWbgGNf7QEqMIL8p3mHUWe7y-HuI',
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: 'ycc2020.firebaseapp.com',
   databaseURL: 'https://ycc2020.firebaseio.com',
   projectId: 'ycc2020',
