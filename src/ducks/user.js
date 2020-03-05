@@ -6,6 +6,7 @@ import firebase from 'firebase'
 import {createReducer, Creator} from './helper'
 import {syncCampers} from './campers'
 import {syncGrading, syncStaffs} from './grading'
+import 'firebase/auth'
 
 import rsf, {app} from '../core/fire'
 import history from '../core/history'

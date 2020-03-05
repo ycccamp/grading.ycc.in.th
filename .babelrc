@@ -1,18 +1,24 @@
 {
-  "plugins": [["import", {"libraryName": "antd", "style": true}]],
+  "presets": ["@babel/env", "@babel/react"],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-export-default-from",
+    "transform-class-properties",
+    ["import", {"libraryName": "antd", "style": true}]
+  ],
   "env": {
     "production": {
       "plugins": [
-        ["emotion", {"sourceMap": false, "hoist": true, "autoLabel": true}],
         "@babel/plugin-proposal-class-properties",
-        "transform-class-properties"
+        "transform-class-properties",
+        ["emotion", {"sourceMap": false, "hoist": true, "autoLabel": true}]
       ]
     },
     "development": {
       "plugins": [
-        ["emotion", {"sourceMap": true, "hoist": true, "autoLabel": true}],
         "@babel/plugin-proposal-class-properties",
-        "transform-class-properties"
+        "transform-class-properties",
+        ["emotion", {"sourceMap": true, "hoist": true, "autoLabel": true}]
       ]
     }
   }

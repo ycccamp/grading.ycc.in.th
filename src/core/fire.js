@@ -1,5 +1,6 @@
 import firebase from 'firebase'
-import '@firebase/firestore'
+import 'firebase/firestore'
+import 'firebase/auth'
 import SagaFirebase from 'redux-saga-firebase'
 import dotenv from 'dotenv'
 
