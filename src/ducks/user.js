@@ -2,7 +2,7 @@ import * as R from 'ramda'
 import {message} from 'antd'
 import {untouch} from 'redux-form'
 import {takeEvery, call, put, fork} from 'redux-saga/effects'
-
+import firebase from 'firebase'
 import {createReducer, Creator} from './helper'
 import {syncCampers} from './campers'
 import {syncGrading, syncStaffs} from './grading'
@@ -25,6 +25,7 @@ export const clearUser = Creator(CLEAR_USER)
 export const setLoading = Creator(SET_LOADING)
 
 const db = app.firestore()
+const provider = new firebase.auth.GoogleProvider()
 
 const userProps = R.pick([
   'uid',
@@ -43,8 +44,8 @@ export function* loginSaga({payload: {username, password}}) {
   const hide = message.loading(`กำลังเข้าสู่ระบบด้วยชื่อผู้ใช้ ${username}`, 0)
 
   try {
-    const mail = `${username}@ycc.in.th`
-    const user = yield call(rsf.auth.signInWithEmailAndPassword, mail, password)
+    // const mail = `${username}@ycc.in.th`
+    const user = yield call(rsf.auth.signInWithPopup, provider)
 
     yield call(hide)
     yield call(message.success, `${WelcomeNotice}, ${username}!`)
@@ -98,7 +99,7 @@ export function* authRoutineSaga(user) {
     const data = {
       ...userProps(user),
       ...record,
-      name: user.email.replace('@ycc.in.th', ''),
+      // name: user.email.replace('@ycc.in.th', ''),
     }
 
     yield put(storeUser(data))
@@ -127,7 +128,7 @@ export function* reauthSaga() {
     const user = yield call(getUserStatus)
 
     if (user) {
-      yield call(message.info, `ยินดีต้อนรับกลับ, ${user.email}!`)
+      yield call(message.info, `ยินดีต้อนรับกลับ, ${user.displayName}!`)
       yield fork(authRoutineSaga, user)
 
       return
