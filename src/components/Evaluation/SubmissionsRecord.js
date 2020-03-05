@@ -37,27 +37,13 @@ const fields = {
     width: 350,
     render: text => <Note>{text}</Note>,
   },
-  updatedAt: {
+  timestamp: {
     title: 'เวลาที่สมัครเข้าค่าย',
     render: time => time && <Note>{time.toLocaleString()}</Note>,
   },
   gradedAt: {
     title: 'เวลาที่ตรวจให้คะแนน',
     render: time => time && <Note>{time.toLocaleString()}</Note>,
-  },
-  age: {
-    title: 'อายุ',
-    width: 60,
-  },
-  class: {
-    title: 'ระดับชั้น',
-    render: text => grades[text] && <Note>{grades[text]}</Note>,
-    width: 130,
-  },
-  gender: {
-    title: 'เพศ',
-    render: text => genders[text] && <Note>{genders[text]}</Note>,
-    width: 80,
   },
   status: {
     title: 'สถานะ',
