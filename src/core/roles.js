@@ -11,7 +11,7 @@ const roleNames = {
 
 const roleName = role => roleNames[role] || role
 
-export const majorRoles = ['developer', 'designer','creative']
+export const majorRoles = ['developer', 'designer', 'creative']
 export const graderRoles = ['core', ...majorRoles]
 
 export const isGrader = role => graderRoles.includes(role)
