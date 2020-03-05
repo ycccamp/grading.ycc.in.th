@@ -43,7 +43,7 @@ export default {
       component: 'src/routes/login',
     },
     {
-      is404: true,
+      path: 404,
       component: 'src/routes/404',
     },
   ],
