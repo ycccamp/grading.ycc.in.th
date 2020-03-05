@@ -19,7 +19,7 @@ const personalFields = Object.entries({
   firstname: 'ชื่อ',
   lastname: 'นามสกุล',
   age: 'อายุ',
-  major: 'สาขา',
+  track: 'สาขา',
   birthdate: 'วันเกิด',
   gender: 'เพศ',
   religion: 'ศาสนา',

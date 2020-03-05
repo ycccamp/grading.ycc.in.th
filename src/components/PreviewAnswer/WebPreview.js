@@ -23,8 +23,7 @@ export default class WebPreview extends Component {
 
     if (ref) {
       const iframe =
-        ref.contentWindow ||
-        (ref.contentDocument.document || ref.contentDocument)
+        ref.contentWindow || ref.contentDocument.document || ref.contentDocument
 
       iframe.document.open()
       iframe.document.write(src)

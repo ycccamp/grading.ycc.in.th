@@ -37,7 +37,7 @@ function getAnswer(data, role, index) {
 const PreviewAnswer = ({data, role, index}) => {
   const answer = getAnswer(data, role, index)
 
-  if (role === 'programming' && index === 1) {
+  if (role === 'developer' && index === 1) {
     return (
       <div>
         <WebPreview src={answer} />
@@ -46,7 +46,7 @@ const PreviewAnswer = ({data, role, index}) => {
     )
   }
 
-  if (role === 'design' && index === 0) {
+  if (role === 'designer' && index === 0) {
     return <ImagePreview id={data.id} />
   }
 

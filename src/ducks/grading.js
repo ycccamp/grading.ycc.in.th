@@ -147,6 +147,7 @@ export function* delistSaga({payload: id}) {
   }
 }
 
+// Fix
 export function* syncGradingSaga() {
   const records = db.collection('grading')
 
@@ -156,7 +157,7 @@ export function* syncGradingSaga() {
 }
 
 export function* syncStaffsSaga() {
-  const records = db.collection('staffs')
+  const records = db.collection('grading')
 
   yield fork(rsf.firestore.syncCollection, records, {
     successActionCreator: storeStaffs,

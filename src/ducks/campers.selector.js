@@ -17,7 +17,7 @@ export const campersSelector = createSelector(
         return camper
       }
 
-      const scores = computeScores(evaluations, camper.major)
+      const scores = computeScores(evaluations, camper.track)
 
       return {
         ...camper,

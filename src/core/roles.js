@@ -1,16 +1,17 @@
 const roleNames = {
   admin: 'ผู้ดูแลระบบ',
   core: 'ผู้ตรวจคำถามกลาง',
-  design: 'ผู้ตรวจคำถามสาขา Design',
+  designer: 'ผู้ตรวจคำถามสาขา Designer',
   marketing: 'ผู้ตรวจคำถามสาขา Marketing',
+  creative: 'ผุ้ตรวจสาขา Creative',
   content: 'ผู้ตรวจคำถามสาขา Content',
-  programming: 'ผู้ตรวจคำถามสาขา Programming',
+  developer: 'ผู้ตรวจคำถามสาขา Developer',
   none: 'รอการยืนยันสิทธิ',
 }
 
 const roleName = role => roleNames[role] || role
 
-export const majorRoles = ['programming', 'design']
+export const majorRoles = ['developer', 'designer', 'creative']
 export const graderRoles = ['core', ...majorRoles]
 
 export const isGrader = role => graderRoles.includes(role)
