@@ -33,6 +33,7 @@ class ImagePreview extends Component {
     }
   }
 
+  // eslint-disable-next-line react/no-deprecated
   async componentWillReceiveProps(props) {
     if (this.props.id !== props.id) {
       const {id} = props
@@ -45,7 +46,12 @@ class ImagePreview extends Component {
 
   loadPreview = async uid => {
     const storage = firebase.storage().ref()
-    const designs = storage.child(`designs/${uid}.jpg`)
+    const designsFolder = storage.child(`registation/designs/${uid}/image`)
+
+    let designs
+    await designsFolder.listAll().then(res => {
+      designs = res.items[0]
+    })
 
     try {
       const url = await designs.getDownloadURL()
