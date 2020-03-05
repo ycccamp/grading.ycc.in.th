@@ -122,15 +122,7 @@ const fields = {
     title: 'รหัสอ้างอิง',
     render: text => <small>{text}</small>,
   },
-  firstname: {
-    title: 'ชื่อ',
-    width: 100,
-  },
-  lastname: {
-    title: 'นามสกุล',
-    width: 100,
-  },
-  major: 'สาขา',
+  track: 'สาขา',
   totalScore: {
     title: 'คะแนนเฉลี่ย 100',
     render: num => num && num.toFixed(2),
