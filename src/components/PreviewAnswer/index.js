@@ -21,21 +21,8 @@ const Code = styled.code`
   white-space: pre-wrap;
 `
 
-const coreFields = ['generalAnswer1']
-const majorFields = ['majorAnswer1', 'majorAnswer2']
-
-function getAnswer(data, role, index) {
-  let field = majorFields[index]
-
-  if (role === 'core') {
-    field = coreFields[index]
-  }
-
-  return data[field]
-}
-
 const PreviewAnswer = ({data, role, index}) => {
-  const answer = getAnswer(data, role, index)
+  const answer = JSON.stringify(data)
 
   if (role === 'developer' && index === 1) {
     return (

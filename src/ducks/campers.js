@@ -52,6 +52,8 @@ export function* syncCampersSaga() {
   const role = yield select(s => s.user.role)
   const records = yield call(getCollection, role)
 
+  console.log('Camper Records:', records)
+
   yield fork(rsf.firestore.syncCollection, records, {
     successActionCreator: storeCampers,
   })
@@ -96,10 +98,10 @@ const withMajorIndex = (item, index) => ({
 // 25 - 36
 // 37 - 48
 const majorAmt = {
-  design: 0,
+  designer: 0,
   marketing: 0.12,
   content: 0.24,
-  programming: 0.36,
+  developer: 0.36,
 }
 
 // prettier-ignore
@@ -119,7 +121,7 @@ function filterCandidate(data, track) {
 
 function generateCamperData(data) {
   return {
-    design: filterCandidate(data, 'design'),
+    designer: filterCandidate(data, 'designer'),
     marketing: filterCandidate(data, 'marketing'),
     content: filterCandidate(data, 'content'),
     developer: filterCandidate(data, 'developer'),

@@ -114,8 +114,7 @@ export function* savePhotoScoreSaga({payload: {id, score}}) {
   const name = yield select(s => s.user.name)
 
   if (scores[2] > 25) {
-    yield call(message.error, 'คะแนนต้องน้อยกว่า 25')
-
+    yield call(message.error, 'eะแนนต้องน้อยกว่า 25')
     return
   }
 

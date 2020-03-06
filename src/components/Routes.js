@@ -42,16 +42,11 @@ const Notice = styled.h1`
   width: 100%;
 `
 
-const graderRoles = ['core', 'design', 'marketing', 'programming', 'content']
+const graderRoles = ['core', 'designer', 'creative', 'developer']
 
 function getByRole(role) {
-  if (role === 'admin') {
-    return Dashboard
-  }
-
-  if (graderRoles.includes(role)) {
-    return Submissions
-  }
+  if (role === 'admin') return Dashboard
+  if (graderRoles.includes(role)) return Submissions
 
   return () => <Notice>สิทธิในการเข้าถึงไม่เพียงพอ</Notice>
 }

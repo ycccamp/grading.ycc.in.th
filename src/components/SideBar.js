@@ -29,7 +29,7 @@ const menus = [
     title: 'ให้คะแนนรูปวาด',
     path: '/gallery',
     icon: 'picture',
-    role: 'design',
+    role: 'designer',
   },
   {
     title: 'คัดเลือกผู้สมัคร',

@@ -1,7 +1,7 @@
 const roleNames = {
   admin: 'ผู้ดูแลระบบ',
   core: 'ผู้ตรวจคำถามกลาง',
-  designer: 'ผู้ตรวจคำถามสาขา Designer',
+  designer: 'ผู้ตรวจคำถามสาขา Design',
   marketing: 'ผู้ตรวจคำถามสาขา Marketing',
   creative: 'ผุ้ตรวจสาขา Creative',
   content: 'ผู้ตรวจคำถามสาขา Content',
