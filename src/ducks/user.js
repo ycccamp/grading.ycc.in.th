@@ -86,7 +86,7 @@ export function* logoutSaga() {
 // Routines to perform when the user begins or resumes their session
 export function* authRoutineSaga(user) {
   try {
-    const docRef = db.collection('staffs').doc(user.uid)
+    const docRef = db.collection('grading').doc(user.uid)
     const doc = yield call(rsf.firestore.getDocument, docRef)
 
     if (!doc.exists) {
@@ -107,7 +107,7 @@ export function* authRoutineSaga(user) {
     yield put(syncCampers())
     yield put(syncGrading())
 
-    if (record.role === 'admin') {
+    if (record.roles.includes('admin')) {
       yield put(syncStaffs())
     }
 
