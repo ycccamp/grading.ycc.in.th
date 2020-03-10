@@ -4,7 +4,8 @@ import Ink from 'react-ink'
 
 const RippleButton = ({children, ...props}) => (
   <Button {...props}>
-    <Ink />&nbsp;
+    <Ink />
+    &nbsp;
     {children}
   </Button>
 )

@@ -85,6 +85,9 @@ const mapDispatchToProps = (dispatch, {match}) => {
   }
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps)
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)
 
 export default enhance(Grading)

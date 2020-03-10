@@ -101,25 +101,27 @@ const statsSelector = createSelector(
   s => s.grading.staffs,
   countSelector,
   (grading, staffs, count) => {
-    const stats = staffs.filter(staff => staff.role !== 'admin').map(staff => {
-      const evaluations = grading
-        .map(item => getEvaluation(item, staff.name, staff.role))
-        .filter(x => x)
+    const stats = staffs
+      .filter(staff => staff.role !== 'admin')
+      .map(staff => {
+        const evaluations = grading
+          .map(item => getEvaluation(item, staff.name, staff.role))
+          .filter(x => x)
 
-      const role = staff.role === 'core' ? 'total' : staff.role
+        const role = staff.role === 'core' ? 'total' : staff.role
 
-      const evaluated = evaluations.length
-      const remaining = count[role] - evaluated
-      const progress = evaluated / count[role] * 100
+        const evaluated = evaluations.length
+        const remaining = count[role] - evaluated
+        const progress = (evaluated / count[role]) * 100
 
-      return {
-        ...staff,
-        evaluated,
-        remaining,
-        progress,
-        evaluations,
-      }
-    })
+        return {
+          ...staff,
+          evaluated,
+          remaining,
+          progress,
+          evaluations,
+        }
+      })
 
     return stats.sort((a, b) => b.progress - a.progress)
   },

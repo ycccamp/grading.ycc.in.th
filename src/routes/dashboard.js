@@ -80,6 +80,9 @@ const mapStateToProps = state => ({
   role: state.user.role,
 })
 
-const enhance = connect(mapStateToProps, {logout})
+const enhance = connect(
+  mapStateToProps,
+  {logout},
+)
 
 export default enhance(Landing)

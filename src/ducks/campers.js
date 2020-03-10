@@ -34,7 +34,7 @@ export const storeCampers = Creator(STORE_CAMPERS)
 const db = app.firestore()
 
 function getCollection(role) {
-  let campers = db.collection('campers').where('submitted', '==', true)
+  let campers = db.collection('registration').where('isLocked', '==', true)
 
   if (majorRoles.includes(role)) {
     campers = campers.where('major', '==', role)

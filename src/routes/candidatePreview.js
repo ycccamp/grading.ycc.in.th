@@ -118,6 +118,9 @@ const mapDispatchToProps = (dispatch, {match}) => ({
   choose: mode => dispatch(chooseCamper(match.params.id, mode)),
 })
 
-const enhance = connect(mapStateToProps, mapDispatchToProps)
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)
 
 export default enhance(CandidatePreview)

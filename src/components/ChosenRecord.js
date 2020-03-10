@@ -89,6 +89,9 @@ const mapStateToProps = state => ({
   data: chosenSelector(state),
 })
 
-const enhance = connect(mapStateToProps, {setSelected})
+const enhance = connect(
+  mapStateToProps,
+  {setSelected},
+)
 
 export default enhance(CampersRecord)

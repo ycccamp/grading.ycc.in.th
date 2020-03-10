@@ -121,6 +121,9 @@ const mapStateToProps = state => ({
   data: submissionsSelector(state),
 })
 
-const enhance = connect(mapStateToProps, {setPage})
+const enhance = connect(
+  mapStateToProps,
+  {setPage},
+)
 
 export default enhance(SubmissionsRecord)

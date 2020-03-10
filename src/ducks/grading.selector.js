@@ -144,6 +144,7 @@ const isLeftOff = evaluation =>
   evaluation && !evaluation.delisted && !evaluation.scores
 
 // Determine where the grader previously left off
-export const leftoffSelector = createSelector(submissionsSelector, entries =>
-  entries.findIndex(isLeftOff),
+export const leftoffSelector = createSelector(
+  submissionsSelector,
+  entries => entries.findIndex(isLeftOff),
 )

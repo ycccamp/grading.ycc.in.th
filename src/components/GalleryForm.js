@@ -65,10 +65,12 @@ const GalleryForm = ({data, save}) => (
   </Row>
 )
 
-const initialSelector = createSelector(evaluationsSelector, entries =>
-  entries
-    .map(entry => ({[entry.id]: entry.scores ? entry.scores[2] : 0}))
-    .reduce(R.merge),
+const initialSelector = createSelector(
+  evaluationsSelector,
+  entries =>
+    entries
+      .map(entry => ({[entry.id]: entry.scores ? entry.scores[2] : 0}))
+      .reduce(R.merge),
 )
 
 const mapStateToProps = state => ({
@@ -81,7 +83,10 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   reduxForm({
     form: 'gallery',
     enableReinitialize: true,

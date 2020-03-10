@@ -27,7 +27,10 @@ const mapStateToProps = state => ({
 })
 
 const enhance = compose(
-  connect(mapStateToProps, {resumePagination}),
+  connect(
+    mapStateToProps,
+    {resumePagination},
+  ),
   lifecycle({
     componentDidMount() {
       this.props.resumePagination()
