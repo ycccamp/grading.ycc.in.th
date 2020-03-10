@@ -84,14 +84,6 @@ const EvaluationForm = ({handleSubmit, delist, data, role, disabled}) => (
 )
 
 function allowExtra(role, index) {
-  if (role === 'creative') {
-    return true
-  }
-
-  if (role === 'developer' && index === 2) {
-    return true
-  }
-
   return false
 }
 
@@ -102,7 +94,7 @@ function validate(values, {role, disabled}) {
 
   if (disabled) return
 
-  const fields = role === 'content' ? [0, 1] : [0, 1, 2]
+  const fields = role === 'core' ? [0, 1, 2] : [0, 1]
   const max = maxScores[role]
 
   if (!values.scores) {
