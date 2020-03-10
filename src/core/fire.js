@@ -13,8 +13,8 @@ const config = {
   measurementId: 'G-C5LLV6B34N',
 }
 
-console.log(config)
-
 export const app = firebase.initializeApp(config)
+
+window.$app = app
 
 export default new SagaFirebase(app)

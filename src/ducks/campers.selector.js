@@ -10,12 +10,12 @@ export const campersSelector = createSelector(
   s => s.camper.campers,
   s => s.grading.data,
   (campers, entries) => {
+    console.log('> campers.selector', campers)
+
     const submissions = campers.map(camper => {
       const evaluations = entries.find(entry => entry.id === camper.id)
 
-      if (!evaluations) {
-        return camper
-      }
+      if (!evaluations) return camper
 
       const scores = computeScores(evaluations, camper.major)
 

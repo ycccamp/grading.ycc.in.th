@@ -1,5 +1,5 @@
 import {message} from 'antd'
-import {takeEvery, call, fork, select, all} from 'redux-saga/effects'
+import {takeEvery, call, put, select, all} from 'redux-saga/effects'
 
 import {createReducer, Creator} from './helper'
 import rsf, {app} from '../core/fire'
@@ -43,13 +43,37 @@ function getCollection(role) {
   return campers
 }
 
+const retrieveData = async doc => {
+  const $forms = await db
+    .collection('registration')
+    .doc(doc.id)
+    .collection('forms')
+    .get()
+
+  const forms = {}
+
+  for (let form of $forms.docs) {
+    let field = form.id
+    if (field === 'track') field = 'major'
+
+    forms[field] = form.data()
+  }
+
+  return {id: doc.id, ...forms, ...doc.data()}
+}
+
+const sortBySubmitted = (a, b) => a.timestamp - b.timestamp
+
 export function* syncCampersSaga() {
   const role = yield select(s => s.user.role)
-  const records = yield call(getCollection, role)
+  const collection = getCollection(role)
+  const data = yield call(() => collection.get())
 
-  yield fork(rsf.firestore.syncCollection, records, {
-    successActionCreator: storeCampers,
-  })
+  const dataB = yield call(() =>
+    Promise.all(data.docs.sort(sortBySubmitted).map(retrieveData)),
+  )
+
+  yield put(storeCampers(dataB))
 }
 
 export function* chooseCamperSaga({payload: {id, mode}}) {
@@ -132,18 +156,15 @@ const initial = {
   selected: [],
 }
 
-const retrieveData = doc => ({id: doc.id, ...doc.data()})
-
-const sortBySubmitted = (a, b) => a.updatedAt - b.updatedAt
-
 export default createReducer(initial, state => ({
   [STORE_CAMPER]: camper => ({...state, camper}),
   [SET_MAJOR]: currentMajor => ({...state, currentMajor}),
   [SET_SELECTED]: selected => ({...state, selected}),
   [SET_ALTERNATE]: alternate => ({...state, alternate}),
-  [STORE_CAMPERS]: ({docs}) => {
-    const campers = docs.sort(sortBySubmitted).map(retrieveData)
+  [STORE_CAMPERS]: campers => {
     console.info('Retrieved', campers.length, 'Submissions')
+
+    window.campers = campers
 
     return {...state, campers}
   },

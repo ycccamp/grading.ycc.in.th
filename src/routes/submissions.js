@@ -20,17 +20,18 @@ const Submissions = ({graded, total, delisted, user}) => (
   </div>
 )
 
-const mapStateToProps = state => ({
-  user: state.user,
-  graded: gradedSelector(state),
-  ...totalSelector(state),
-})
+const mapStateToProps = state => {
+  console.log('submissions.state>', state)
+
+  return {
+    user: state.user,
+    graded: gradedSelector(state),
+    ...totalSelector(state),
+  }
+}
 
 const enhance = compose(
-  connect(
-    mapStateToProps,
-    {resumePagination},
-  ),
+  connect(mapStateToProps, {resumePagination}),
   lifecycle({
     componentDidMount() {
       this.props.resumePagination()

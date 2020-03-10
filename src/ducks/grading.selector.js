@@ -41,6 +41,8 @@ export const evaluationsSelector = createSelector(
   s => s.user.name,
   s => s.user.role,
   (campers, entries, gradedBy, role) => {
+    console.log('> evaluations.selector', campers)
+
     const submissions = campers.map(camper => {
       const evaluations = entries.find(entry => entry.id === camper.id)
 
@@ -79,6 +81,8 @@ export const submissionsSelector = createSelector(
   s => s.user.name,
   s => s.user.role,
   (campers, entries, gradedBy, role) => {
+    console.log('> submissions.selector', campers)
+
     const submissions = campers.map(camper => {
       const evaluations = entries.find(entry => entry.id === camper.id)
 
@@ -144,7 +148,6 @@ const isLeftOff = evaluation =>
   evaluation && !evaluation.delisted && !evaluation.scores
 
 // Determine where the grader previously left off
-export const leftoffSelector = createSelector(
-  submissionsSelector,
-  entries => entries.findIndex(isLeftOff),
+export const leftoffSelector = createSelector(submissionsSelector, entries =>
+  entries.findIndex(isLeftOff),
 )

@@ -104,6 +104,9 @@ export function* authRoutineSaga(user) {
     }
 
     yield put(storeUser(data))
+
+    console.log('> Staff data:', data)
+
     yield put(syncCampers())
     yield put(syncGrading())
 
