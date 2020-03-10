@@ -44,11 +44,11 @@ const Grading = ({data, role, delist, delistedBy, submit, initial}) => {
           )}
         </Heading>
 
-        <SubHeading>
+        {/* <SubHeading>
           {role === 'core' && <span> สาขา: {data.major} | </span>}
           อายุ: {data.age} | ระดับชั้น: {grades[data.class]} | เพศ:{' '}
           {genders[data.gender]}
-        </SubHeading>
+        </SubHeading> */}
 
         <Form
           role={role}
@@ -85,9 +85,6 @@ const mapDispatchToProps = (dispatch, {match}) => {
   }
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)
+const enhance = connect(mapStateToProps, mapDispatchToProps)
 
 export default enhance(Grading)
