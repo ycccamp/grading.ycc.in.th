@@ -37,7 +37,7 @@ function getCollection(role) {
   let campers = db.collection('registration').where('isLocked', '==', true)
 
   if (majorRoles.includes(role)) {
-    campers = campers.where('major', '==', role)
+    campers = campers.where('track', '==', role)
   }
 
   return campers
@@ -81,7 +81,7 @@ export function* chooseCamperSaga({payload: {id, mode}}) {
   yield call(message.success, msg)
 }
 
-// Nominate the selected campers to be chosen for JWCx
+// Nominate the selected campers to be chosen for YCC
 export function* chooseCampersSaga({payload: mode}) {
   const selected = yield select(s => s.camper.selected)
   const hide = message.loading('กำลังเลือกผู้สมัคร กรุณารอสักครู่...', 0)
@@ -126,7 +126,7 @@ export function* camperWatcherSaga() {
 
 const initial = {
   alternate: false,
-  currentMajor: 'content',
+  currentMajor: 'developer',
   camper: {},
   campers: [],
   selected: [],

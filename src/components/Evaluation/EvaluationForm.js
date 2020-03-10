@@ -23,7 +23,7 @@ const Question = styled.p`
 const posStyle = {marginRight: '1em', marginBottom: '1.5em'}
 
 function isIgnored(role, index) {
-  return role === 'design' && index === 2
+  return role === 'designer' && index === 2
 }
 
 const EvaluationForm = ({handleSubmit, delist, data, role, disabled}) => (
@@ -84,11 +84,11 @@ const EvaluationForm = ({handleSubmit, delist, data, role, disabled}) => (
 )
 
 function allowExtra(role, index) {
-  if (role === 'marketing') {
+  if (role === 'creative') {
     return true
   }
 
-  if (role === 'programming' && index === 2) {
+  if (role === 'developer' && index === 2) {
     return true
   }
 

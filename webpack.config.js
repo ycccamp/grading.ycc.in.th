@@ -74,7 +74,7 @@ function getLessLoader(stage) {
   }
 }
 
-export default function webpack(config, {stage, defaultLoaders}) {
+export default function webpackConfig(config, {stage, defaultLoaders}) {
   config.resolve.extensions.push('.less')
   config.resolve.extensions.push('.css')
 
@@ -92,16 +92,9 @@ export default function webpack(config, {stage, defaultLoaders}) {
 
   config.plugins.push(extractTextPlugin)
 
-  const env = new webpack.EnvironmentPlugin([
-    'NODE_ENV',
-    'DEBUG',
-    'FIREBASE_API_KEY',
-  ])
-
-  config.plugins.push(env)
-
   const dotenv = new Dotenv({
     path: './.env',
+    systemvars: true,
   })
 
   config.plugins.push(dotenv)

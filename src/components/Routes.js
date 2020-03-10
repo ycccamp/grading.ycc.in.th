@@ -42,7 +42,7 @@ const Notice = styled.h1`
   width: 100%;
 `
 
-const graderRoles = ['core', 'design', 'marketing', 'programming', 'content']
+const graderRoles = ['core', 'designer', 'developer', 'creative']
 
 function getByRole(role) {
   if (role === 'admin') {

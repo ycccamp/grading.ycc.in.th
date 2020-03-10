@@ -30,9 +30,9 @@ const properties = [
   'total',
   'delisted',
   'content',
-  'marketing',
-  'design',
-  'programming',
+  'creative',
+  'designer',
+  'developer',
 ]
 
 const Stats = ({data, ...count}) => (
@@ -87,12 +87,12 @@ const countSelector = createSelector(
     const delisted = candidates.filter(x => x.delisted).length
 
     const total = list.length
-    const design = list.filter(x => x.major === 'design').length
-    const marketing = list.filter(x => x.major === 'marketing').length
-    const programming = list.filter(x => x.major === 'programming').length
+    const design = list.filter(x => x.major === 'designer').length
+    const creative = list.filter(x => x.major === 'creative').length
+    const developer = list.filter(x => x.major === 'developer').length
     const content = list.filter(x => x.major === 'content').length
 
-    return {total, delisted, design, marketing, programming, content}
+    return {total, delisted, design, creative, developer, content}
   },
 )
 
