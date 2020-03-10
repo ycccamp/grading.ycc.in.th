@@ -3,9 +3,12 @@ import path from 'path'
 import fs from 'fs'
 import * as R from 'ramda'
 
+import Dotenv from 'dotenv-webpack'
+
 import autoprefixer from 'autoprefixer'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import postcssFlexbugsFixes from 'postcss-flexbugs-fixes'
+import webpack from 'webpack'
 
 function getLessLoader(stage) {
   const overrideFile = path.join(__dirname, 'src/ant.less')
@@ -88,6 +91,20 @@ export default function webpack(config, {stage, defaultLoaders}) {
   })
 
   config.plugins.push(extractTextPlugin)
+
+  const env = new webpack.EnvironmentPlugin([
+    'NODE_ENV',
+    'DEBUG',
+    'FIREBASE_API_KEY',
+  ])
+
+  config.plugins.push(env)
+
+  const dotenv = new Dotenv({
+    path: './.env',
+  })
+
+  config.plugins.push(dotenv)
 
   return config
 }

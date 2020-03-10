@@ -1,4 +1,3 @@
-// Safari is a bitch
 import 'babel-polyfill'
 
 import React from 'react'
