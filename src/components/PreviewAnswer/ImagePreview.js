@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Image from 'react-medium-image-zoom'
-import styled, {css} from 'react-emotion'
+import {css} from 'react-emotion'
 import firebase from 'firebase'
 import {Spin} from 'antd'
 
@@ -26,26 +26,33 @@ class ImagePreview extends Component {
   }
 
   async componentDidMount() {
-    const {id} = this.props
+    const {path, uid} = this.props
 
-    if (id) {
-      await this.loadPreview(id)
+    if (path || uid) {
+      await this.loadPreview(path, uid)
     }
   }
 
   async componentWillReceiveProps(props) {
-    if (this.props.id !== props.id) {
-      const {id} = props
+    if (this.props.path !== props.path) {
+      const {path, uid} = props
 
-      if (id) {
-        await this.loadPreview(id)
+      if (path || uid) {
+        await this.loadPreview(path, uid)
       }
     }
   }
 
-  loadPreview = async uid => {
+  loadPreview = async (path, uid) => {
     const storage = firebase.storage().ref()
-    const designs = storage.child(`designs/${uid}.jpg`)
+
+    const fileList = await storage
+      .child(`registation/design/${uid}/image/`)
+      .listAll()
+
+    console.log('File List for uid', uid, 'is', fileList)
+
+    const designs = storage.child(path)
 
     try {
       const url = await designs.getDownloadURL()

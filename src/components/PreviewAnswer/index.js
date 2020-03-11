@@ -31,34 +31,13 @@ function getAnswer(data, role, index) {
   return field[qid]
 }
 
-// if (role === 'developer' && index === 2) {
-//   return (
-//     <div>
-//       <WebPreview src={answer} />
-//       <Code>{answer}</Code>
-//     </div>
-//   )
-// }
-
-// if (role === 'designer' && index === 2) {
-//   return <ImagePreview id={data.id} />
-// }
-
-// if (role === 'content' && index === 1) {
-//   return (
-//     <div>
-//       <Answer>{data.majorAnswer2}</Answer>
-
-//       {data.majorAnswer3 && (
-//         <Answer style={{marginTop: '0.8em'}}>{data.majorAnswer3}</Answer>
-//       )}
-//     </div>
-//   )
-// }
-
 const PreviewAnswer = ({data, role, index}) => {
   const answer = getAnswer(data, role, index)
   console.log('answer =', answer, {data, role, index})
+
+  if (role === 'designer' && index === 0) {
+    return <ImagePreview path={data.major.file} uid={data.id} />
+  }
 
   return <Answer>{answer}</Answer>
 }
