@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import Image from 'react-medium-image-zoom'
 import {css} from 'react-emotion'
 import firebase from 'firebase'
-import {Spin} from 'antd'
+import {message, Spin} from 'antd'
 
 const imageStyle = css`
   position: relative;
@@ -44,6 +44,11 @@ class ImagePreview extends Component {
   }
 
   loadPreview = async (path, uid) => {
+    const hide = message.loading(
+      'กำลังดาวน์โหลดรูปภาพสาขาดีไซน์ กรุณารอสักครู่...',
+      0,
+    )
+
     const storage = firebase.storage().ref()
 
     const {items: fileList} = await storage
@@ -65,7 +70,8 @@ class ImagePreview extends Component {
         if (url) {
           console.log('Design> Uploaded Path:', url)
 
-          this.setState({preview: url})
+          this.setState({preview: url}, hide)
+
           return
         }
       }
@@ -77,7 +83,7 @@ class ImagePreview extends Component {
 
         console.log('Design> First Image:', url)
 
-        this.setState({preview: url})
+        this.setState({preview: url}, hide)
       }
     } catch (err) {
       if (err.code === 'storage/object-not-found') {
