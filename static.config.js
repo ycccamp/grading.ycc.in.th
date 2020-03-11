@@ -3,7 +3,7 @@ import {extractCritical} from 'emotion-server'
 
 import webpack from './webpack.config.js'
 
-const siteRoot = 'https://ycc.netlify.com'
+const siteRoot = 'https://ycc-grading.netlify.com'
 
 class Document extends Component {
   render() {
