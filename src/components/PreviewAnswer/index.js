@@ -35,6 +35,15 @@ const PreviewAnswer = ({data, role, index}) => {
   const answer = getAnswer(data, role, index)
   console.log('answer =', answer, {data, role, index})
 
+  if (role === 'developer' && index === 1) {
+    return (
+      <div>
+        <Answer>{answer}</Answer>
+        <WebPreview src={answer} />
+      </div>
+    )
+  }
+
   if (role === 'designer' && index === 0) {
     return <ImagePreview path={data.major.file} uid={data.id} />
   }

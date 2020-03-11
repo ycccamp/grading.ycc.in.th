@@ -46,18 +46,38 @@ class ImagePreview extends Component {
   loadPreview = async (path, uid) => {
     const storage = firebase.storage().ref()
 
-    const fileList = await storage
-      .child(`registation/design/${uid}/image/`)
+    const {items: fileList} = await storage
+      .child(`registation/design/${uid}/image`)
       .listAll()
 
-    console.log('File List for uid', uid, 'is', fileList)
+    console.log(
+      'Designs for uid',
+      uid,
+      'is',
+      fileList.map(x => x.fullPath),
+    )
 
     const designs = storage.child(path)
 
     try {
-      const url = await designs.getDownloadURL()
+      if (path) {
+        const url = await designs.getDownloadURL()
 
-      if (url) {
+        if (url) {
+          console.log('Design> Uploaded Path:', url)
+
+          this.setState({preview: url})
+          return
+        }
+      }
+
+      const first = fileList[0]
+
+      if (first) {
+        const url = await first.getDownloadURL()
+
+        console.log('Design> First Image:', url)
+
         this.setState({preview: url})
       }
     } catch (err) {
