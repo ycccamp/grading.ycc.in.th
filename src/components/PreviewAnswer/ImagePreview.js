@@ -46,7 +46,7 @@ class ImagePreview extends Component {
   loadPreview = async (path, uid) => {
     const hide = message.loading(
       'กำลังดาวน์โหลดรูปภาพสาขาดีไซน์ กรุณารอสักครู่...',
-      0,
+      10000,
     )
 
     const storage = firebase.storage().ref()
