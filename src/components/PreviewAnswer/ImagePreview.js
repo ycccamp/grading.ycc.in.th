@@ -34,7 +34,7 @@ class ImagePreview extends Component {
   }
 
   async componentWillReceiveProps(props) {
-    if (this.props.path !== props.path) {
+    if (this.props.path !== props.path || this.props.uid !== props.uid) {
       const {path, uid} = props
 
       if (path || uid) {
