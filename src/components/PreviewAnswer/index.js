@@ -45,7 +45,13 @@ const PreviewAnswer = ({data, role, index}) => {
   }
 
   if (role === 'designer' && index === 0) {
-    return <ImagePreview path={data.major.file} uid={data.id} />
+    return (
+      <div>
+        <ImagePreview path={data.major.file} uid={data.id} />
+
+        <Answer>{data.major.Q1__Upload}</Answer>
+      </div>
+    )
   }
 
   return <Answer>{answer}</Answer>
