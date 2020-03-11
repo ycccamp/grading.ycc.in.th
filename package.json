@@ -60,6 +60,6 @@
     "less-loader": "^4.1.0",
     "less-vars-to-js": "^1.2.1",
     "prettier": "^1.11.1",
-    "serve": "^6.1.0"
+    "serve": "^7.1.3"
   }
 }
