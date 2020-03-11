@@ -26,12 +26,6 @@ const menus = [
     role: 'grader',
   },
   {
-    title: 'ให้คะแนนรูปวาด',
-    path: '/gallery',
-    icon: 'picture',
-    role: 'designer',
-  },
-  {
     title: 'คัดเลือกผู้สมัคร',
     path: '/choose',
     icon: 'select',
@@ -139,12 +133,6 @@ const mapStateToProps = state => ({
   role: state.user.role,
 })
 
-const enhance = compose(
-  connect(
-    mapStateToProps,
-    {logout},
-  ),
-  withRouter,
-)
+const enhance = compose(connect(mapStateToProps, {logout}), withRouter)
 
 export default enhance(SideBar)
