@@ -57,10 +57,9 @@ class ImagePreview extends Component {
       fileList.map(x => x.fullPath),
     )
 
-    const designs = storage.child(path)
-
     try {
       if (path) {
+        const designs = storage.child(path)
         const url = await designs.getDownloadURL()
 
         if (url) {
