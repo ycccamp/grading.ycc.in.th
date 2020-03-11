@@ -164,7 +164,9 @@ export default createReducer(initial, state => ({
   [STORE_CAMPERS]: campers => {
     console.info('Retrieved', campers.length, 'Submissions')
 
-    window.campers = campers
+    if (typeof window !== 'undefined') {
+      window.campers = campers
+    }
 
     return {...state, campers}
   },
