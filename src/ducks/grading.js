@@ -52,7 +52,7 @@ export function* proceedSaga(id) {
 
   // If index of the next entry is found, navigate to that entry
   if (Number.isInteger(index)) {
-    let idx = index
+    let idx = index + 1
     while (entries[idx] && entries[idx].delisted) idx++
 
     const entry = entries[idx]
