@@ -35,14 +35,14 @@ export const campersSelector = createSelector(
   },
 )
 
-// Select only the top 30 campers for each major
+// Select only the top 60 campers for each major
 export const topCampersSelector = createSelector(
   campersSelector,
   s => s.camper.currentMajor,
   (candidates, major) =>
     candidates
-      .filter(entry => !entry.delisted && entry.major === major)
-      .slice(0, 30),
+      .filter(entry => !entry.delisted && entry.track === major)
+      .slice(0, 60),
 )
 
 export const chosenSelector = createSelector(

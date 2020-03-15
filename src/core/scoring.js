@@ -5,10 +5,9 @@ const average = list => R.sum(list) / list.length
 
 // Scoring ratio used for normalizing the score for each majors
 export const scoringRatio = {
-  designer: 0.8,
-  content: 0.4,
-  creative: 1.0,
-  developer: 2.0,
+  designer: 1,
+  creative: 1,
+  developer: 1,
 }
 
 // Maximum scores for each type of questions
@@ -32,7 +31,7 @@ export function averageScore(evaluations) {
 
 // Compute the averaged and normalized scores for admins
 export function computeScores(evaluations, major) {
-  const ratio = scoringRatio[major]
+  // console.log('Evaluations>', evaluations)
 
   if (evaluations) {
     // First, we average the scores for core questions
@@ -40,20 +39,12 @@ export function computeScores(evaluations, major) {
 
     // Next, we average the scores for major questions
     let majorScore = averageScore(evaluations.major)
-    let extraScore = 0
-
-    // Then, we normalize the major score to 60
-    majorScore = majorScore * ratio
-
-    // If the major score exceeds 60, compute the extra score.
-    if (majorScore > 60) {
-      extraScore = majorScore - 60
-      majorScore = 60
-    }
 
     // Finally, we sum the scores
     const totalScore = coreScore + majorScore
 
-    return {coreScore, majorScore, extraScore, totalScore}
+    // console.log('Scoring>', coreScore, majorScore, totalScore)
+
+    return {coreScore, majorScore, extraScore: 0, totalScore}
   }
 }

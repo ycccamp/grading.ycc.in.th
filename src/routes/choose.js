@@ -48,9 +48,6 @@ const mapStateToProps = state => ({
   major: state.camper.currentMajor,
 })
 
-const enhance = connect(
-  mapStateToProps,
-  {setMajor, chooseCampers},
-)
+const enhance = connect(mapStateToProps, {setMajor, chooseCampers})
 
 export default enhance(Campers)
