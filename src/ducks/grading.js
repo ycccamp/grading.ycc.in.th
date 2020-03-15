@@ -52,7 +52,11 @@ export function* proceedSaga(id) {
 
   // If index of the next entry is found, navigate to that entry
   if (Number.isInteger(index)) {
-    const entry = entries[index + 1]
+    let idx = index
+    while (entries[idx] && entries[idx].delisted) idx++
+
+    const entry = entries[idx]
+    console.log(entry)
 
     if (entry) {
       yield call(history.push, `/grade/${entry.id}`)
@@ -77,11 +81,13 @@ export function* submitGradingSaga({payload: {id, data}}) {
   const hide = message.loading('กำลังบันทึกผลการให้คะแนน กรุณารอสักครู่...', 0)
 
   try {
-    data.scores = data.scores.map(score => parseInt(score))
-    console.info('Submitting Grading for', id, 'as', data)
+    if (data && data.scores) {
+      data.scores = data.scores.map(score => parseInt(score))
+      console.info('Submitting Grading for', id, 'as', data)
 
-    yield call(updateGrading, id, data, name, type)
-    yield call(message.success, `บันทึกผลการให้คะแนนเรียบร้อยแล้ว`)
+      yield call(updateGrading, id, data, name, type)
+      yield call(message.success, `บันทึกผลการให้คะแนนเรียบร้อยแล้ว`)
+    }
   } catch (err) {
     console.warn('Grading Submission Error', err)
     message.error(err.message)
