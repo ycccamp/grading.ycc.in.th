@@ -26,14 +26,7 @@ const Info = styled.div`
   text-transform: capitalize;
 `
 
-const properties = [
-  'total',
-  'delisted',
-  'content',
-  'creative',
-  'designer',
-  'developer',
-]
+const properties = ['total', 'delisted', 'creative', 'designer', 'developer']
 
 const Stats = ({data, ...count}) => (
   <div>
@@ -87,12 +80,11 @@ const countSelector = createSelector(
     const delisted = candidates.filter(x => x.delisted).length
 
     const total = list.length
-    const design = list.filter(x => x.major === 'designer').length
-    const creative = list.filter(x => x.major === 'creative').length
-    const developer = list.filter(x => x.major === 'developer').length
-    const content = list.filter(x => x.major === 'content').length
+    const designer = list.filter(x => x.track === 'designer').length
+    const creative = list.filter(x => x.track === 'creative').length
+    const developer = list.filter(x => x.track === 'developer').length
 
-    return {total, delisted, design, creative, developer, content}
+    return {total, delisted, designer, creative, developer}
   },
 )
 
@@ -101,18 +93,30 @@ const statsSelector = createSelector(
   s => s.grading.staffs,
   countSelector,
   (grading, staffs, count) => {
+    console.log('Staffs>', staffs)
+
     const stats = staffs
       .filter(staff => staff.role !== 'admin')
       .map(staff => {
         const evaluations = grading
-          .map(item => getEvaluation(item, staff.name, staff.role))
+          .map(item => {
+            let name = staff.name
+            if (name) name = name.toLowerCase()
+
+            console.log(name)
+
+            return getEvaluation(item, name, staff.role)
+          })
           .filter(x => x)
 
         const role = staff.role === 'core' ? 'total' : staff.role
 
         const evaluated = evaluations.length
-        const remaining = count[role] - evaluated
-        const progress = (evaluated / count[role]) * 100
+        let remaining = count[role] - evaluated
+        if (remaining < 0) remaining = 0
+
+        let progress = (evaluated / count[role]) * 100
+        if (progress > 100) progress = 100
 
         return {
           ...staff,
