@@ -12,7 +12,7 @@
   "dependencies": {
     "@firebase/firestore": "^0.3.7",
     "antd": "^3.4.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "dotenv": "^8.2.0",
     "emotion": "^9.1.1",
