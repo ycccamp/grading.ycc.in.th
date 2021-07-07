@@ -157,9 +157,9 @@ const PAGE_SIZE = 10
 
 export function* resumePaginationSaga() {
   // Abort if the user is an administrator, not a grader
-  const role = yield select(s => s.user.role)
+  const role = yield select(s => s.user.roles)
 
-  if (role === 'admin') {
+  if (role.includes('admin')) {
     return
   }
 
