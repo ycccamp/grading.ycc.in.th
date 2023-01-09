@@ -18,7 +18,7 @@
     "emotion": "^9.1.1",
     "emotion-server": "^9.1.1",
     "firebase": "^6",
-    "luxon": "^1.0.0",
+    "luxon": "^1.28.1",
     "polished": "^1.9.2",
     "ramda": "^0.25.0",
     "re-reselect": "^1.0.1",
